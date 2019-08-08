@@ -7,5 +7,6 @@ namespace PTB.Core
     public class FileSettings
     {
         public string DefaultLedgerName;
+        public string DefaultTitleRegexName;
     }
 }

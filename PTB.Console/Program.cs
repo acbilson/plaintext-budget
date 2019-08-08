@@ -5,34 +5,73 @@ using PTB.Core;
 using PTB.Core.Parsers;
 using PTB.Core.FileTypes;
 
-namespace PlaintextBudget
+namespace PTB.Console
 {
+    enum ConsoleActions
+    {
+        Import,
+        Categorize
+    }
+
     public class Program
     {
         static void Main(string[] args)
         {
-            string loadFilePath = @"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv";
+            var action = ConsoleActions.Categorize;
 
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
             var fileManager = FileManager.Instance;
             fileManager.Instantiate(baseDir);
-
-            var parser = new PNCParser();
             LedgerFile defaultLedgerFile = fileManager.GetDefaultLedgerFile();
 
-            using (var writer = new StreamWriter(defaultLedgerFile.FullName))
+            switch (action)
             {
-                using (var reader = new StreamReader(loadFilePath))
-                {
-                    string line = null;
+                case ConsoleActions.Import:
 
-                    while ((line = reader.ReadLine()) != null)
+                    string loadFilePath = @"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv";
+
+                    var pncParser = new PNCParser();
+
+                    using (var writer = new StreamWriter(defaultLedgerFile.FullName))
                     {
-                        Transaction transaction = parser.Parse(line);
-                        writer.WriteLine(transaction);
+                        using (var reader = new StreamReader(loadFilePath))
+                        {
+                            string line = null;
+
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                Transaction transaction = pncParser.Parse(line);
+                                writer.WriteLine(transaction);
+                            }
+                        }
                     }
-                }
+
+                    break;
+
+                case ConsoleActions.Categorize:
+
+                    List<TitleRegex> keys = new List<TitleRegex>();
+                    var titleParser = new TitleRegexParser();
+                    TitleRegexFile titleRegexFile = fileManager.GetDefaultTitleRegexFile();
+
+                    using (var reader = new StreamReader(titleRegexFile.FullName))
+                    {
+                        string line = null;
+
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            TitleRegex titleSubcategoriesKey = titleParser.Parse(line);
+                            System.Console.WriteLine(titleSubcategoriesKey.ToString());
+                            keys.Add(titleSubcategoriesKey);
+                        }
+                    }
+
+                    break;
+
+                default:
+
+                    break;
             }
         }
     }

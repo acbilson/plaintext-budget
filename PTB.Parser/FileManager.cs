@@ -12,12 +12,13 @@ namespace PTB.Core
     {
         private static readonly Lazy<FileManager> fileManager = new Lazy<FileManager>(() => new FileManager());
 
-        private readonly string[] DEFAULT_DIRECTORIES = new string[] { LedgerFile.DIRECTORY, CategoriesFile.DIRECTORY };
+        private readonly string[] DEFAULT_DIRECTORIES = new string[] { LedgerFile.DIRECTORY, CategoriesFile.DIRECTORY, TitleRegexFile.DIRECTORY };
         private const string SETTINGS_FILE = "settings.json";
 
         private List<CategoriesFile> CategoriesFiles = new List<CategoriesFile>();
         private List<LedgerFile> LedgerFiles = new List<LedgerFile>();
         private FileSettings Settings;
+        private TitleRegexFile TitleRegexFile;
 
         public static FileManager Instance { get { return fileManager.Value; } }
 
@@ -28,6 +29,7 @@ namespace PTB.Core
             FileSettings settings = LoadSettingsFile(baseDir);
             LoadCategoriesFiles(baseDir);
             LoadLedgerFiles(baseDir, settings);
+            LoadTitleRegexFiles(baseDir, settings);
             Settings = settings;
         }
 
@@ -93,11 +95,29 @@ namespace PTB.Core
                 }
             }
         }
+        private void LoadTitleRegexFiles(string baseDir, FileSettings settings)
+        {
+            string titleRegexDir = Path.Combine(baseDir, TitleRegexFile.DIRECTORY);
+            string titleRegexPath = Path.Combine(titleRegexDir, settings.DefaultTitleRegexName + Constant.FILE_EXTENSION);
+
+            if (!File.Exists(titleRegexPath))
+            {
+                string newTitleRegexFileName = TitleRegexFile.GetNewFileName();
+                string newTitleRegexFilePath = Path.Combine(titleRegexDir, newTitleRegexFileName);
+                File.Create(newTitleRegexFilePath);
+            } 
+
+            TitleRegexFile = new TitleRegexFile(titleRegexPath);
+        }
 
         public LedgerFile GetDefaultLedgerFile()
         {
             return LedgerFiles.FirstOrDefault((l) => l.LedgerName == Settings.DefaultLedgerName);
+        }
 
+        public TitleRegexFile GetDefaultTitleRegexFile()
+        {
+            return this.TitleRegexFile;
         }
     }
 }

@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 
 namespace PTB.Core.Parsers
 {
-    public class PNCParser : BaseParser
+    public class PNCParser
     {
         private const char DELIMITER = ',';
 
-        public override Transaction Parse(string line)
+        public Transaction Parse(string line)
         {
             string[] lines = line.Split(DELIMITER);
 
@@ -62,7 +62,7 @@ namespace PTB.Core.Parsers
             }
 
             amount = AddTrailingZeros(amount);
-            return PrependSpaces(amount, ColumnSize.AMOUNT);
+            return PrependSpaces(amount, TransactionColumnSize.AMOUNT);
         }
 
         private string ParseTitle(string value, string value2)
@@ -77,12 +77,12 @@ namespace PTB.Core.Parsers
 
             // crops title if it's too long
             // TODO: improve cropping logic
-            if (title.Length > ColumnSize.TITLE)
+            if (title.Length > TransactionColumnSize.TITLE)
             {
-                title = title.Substring(0, ColumnSize.TITLE);
+                title = title.Substring(0, TransactionColumnSize.TITLE);
             }
 
-            return PrependSpaces(title, ColumnSize.TITLE);
+            return PrependSpaces(title, TransactionColumnSize.TITLE);
         }
 
         private string ParseLocation(string value)
@@ -93,7 +93,7 @@ namespace PTB.Core.Parsers
             }
 
             string location = ParseNoiseChars(value);
-            return PrependSpaces(location, ColumnSize.LOCATION);
+            return PrependSpaces(location, TransactionColumnSize.LOCATION);
         }
 
         private char ParseType(string value)

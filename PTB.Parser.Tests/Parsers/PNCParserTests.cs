@@ -29,21 +29,21 @@ namespace PTB.Core.Parsers.Tests
 
             // Assert
             Assert.AreEqual(date, result.Date);
-            Assert.AreEqual(ColumnSize.DATE, result.Date.Length);
+            Assert.AreEqual(TransactionColumnSize.DATE, result.Date.Length);
 
             Assert.AreEqual(amount, result.Amount.TrimStart());
-            Assert.AreEqual(ColumnSize.AMOUNT, result.Amount.Length);
+            Assert.AreEqual(TransactionColumnSize.AMOUNT, result.Amount.Length);
 
             Assert.AreEqual(title, result.Title.TrimStart());
-            Assert.AreEqual(ColumnSize.TITLE, result.Title.Length);
+            Assert.AreEqual(TransactionColumnSize.TITLE, result.Title.Length);
 
             Assert.AreEqual(location, result.Location.TrimStart());
-            Assert.AreEqual(ColumnSize.LOCATION, result.Location.Length);
+            Assert.AreEqual(TransactionColumnSize.LOCATION, result.Location.Length);
 
             Assert.AreEqual(type, result.Type);
 
             Assert.AreEqual('0', result.Locked);
-            Assert.AreEqual(new String(' ', ColumnSize.SUBCATEGORY), result.Subcategory);
+            Assert.AreEqual(new String(' ', TransactionColumnSize.SUBCATEGORY), result.Subcategory);
         }
     }
 }
