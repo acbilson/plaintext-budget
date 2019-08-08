@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Parser", "PTB.Parser\PT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Console", "PTB.Console\PTB.Console.csproj", "{2E9C153B-75BC-4291-901D-ED882162F2F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Parser.Tests", "PTB.Parser.Tests\PTB.Parser.Tests.csproj", "{7A558B13-C09D-496A-9F14-8542E752A98C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2E9C153B-75BC-4291-901D-ED882162F2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E9C153B-75BC-4291-901D-ED882162F2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E9C153B-75BC-4291-901D-ED882162F2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A558B13-C09D-496A-9F14-8542E752A98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A558B13-C09D-496A-9F14-8542E752A98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A558B13-C09D-496A-9F14-8542E752A98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A558B13-C09D-496A-9F14-8542E752A98C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
