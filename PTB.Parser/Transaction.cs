@@ -16,7 +16,7 @@ namespace PTB.Core
             Title = title;
             Location = location;
             Type = type;
-            Subcategory = new String(' ', 20);
+            Subcategory = new String(' ', ColumnSize.SUBCATEGORY);
             Locked = '0';
         }
         public override string ToString()
@@ -25,17 +25,17 @@ namespace PTB.Core
             var builder = new StringBuilder();
             builder.Append(Date);
             builder.Append(delimiter);
+            builder.Append(Type);
+            builder.Append(delimiter);
             builder.Append(Amount);
             builder.Append(delimiter);
             builder.Append(Subcategory);
             builder.Append(delimiter);
-            builder.Append(Type);
-            builder.Append(delimiter);
-            builder.Append(Locked);
-            builder.Append(delimiter);
             builder.Append(Title);
             builder.Append(delimiter);
             builder.Append(Location);
+            builder.Append(delimiter);
+            builder.Append(Locked);
             return builder.ToString();
         }
     }

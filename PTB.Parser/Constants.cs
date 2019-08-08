@@ -4,6 +4,12 @@ using System.Text;
 
 namespace PTB.Core
 {
+    public struct Constant
+    {
+        public const int TRANSACTION_SIZE = 115;
+        public const string NOISE_CHARS = "'\"\\-\\*\\.\\#\\`\\\\\\/ ";
+    }
+
     public struct ColumnSize
     {
         public const int DATE = 10;

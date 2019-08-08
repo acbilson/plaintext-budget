@@ -1,6 +1,7 @@
 ﻿using PTB.Core;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PTB.Core.Parsers
 {
@@ -21,12 +22,25 @@ namespace PTB.Core.Parsers
             return new Transaction(date, amount, title, location, type);
         }
 
-        public string PrependSpaces(string value, int maxLength)
+        private string PrependSpaces(string value, int max) => new String(' ', max - value.Length) + value;
+
+        private string AddTrailingZeros(string value)
         {
-            return new String(' ', maxLength - value.Length) + value;
+            int missingCents = value.LastIndexOf('.') + 2 - value.Length;
+            if (missingCents > 0)
+            {
+                value = new String('0', missingCents) + value;
+            }
+            return value;
         }
 
-        public string ParseDate(string value)
+        private string ParseNoiseChars(string value)
+        {
+            Regex pattern = new Regex($"[{Constant.NOISE_CHARS}]");
+            return pattern.Replace(value.Trim().ToLower(), string.Empty);
+        }
+
+        private string ParseDate(string value)
         {
             DateTime result;
             if (DateTime.TryParse(value, out result) == false)
@@ -37,7 +51,7 @@ namespace PTB.Core.Parsers
             return result.ToString("yyyy-MM-dd");
         }
 
-        public string ParseAmount(string value)
+        private string ParseAmount(string value)
         {
             string amount = value;
 
@@ -47,49 +61,42 @@ namespace PTB.Core.Parsers
                 // should skip this transaction
             }
 
-            // adds a trailing zero
-            int missingCents = amount.LastIndexOf('.') + 2 - amount.Length;
-            if (missingCents > 0)
-            {
-                amount = new String('0', missingCents) + amount;
-            }
-
-            return PrependSpaces(amount, 12);
+            amount = AddTrailingZeros(amount);
+            return PrependSpaces(amount, ColumnSize.AMOUNT);
         }
 
-        public string ParseTitle(string value, string value2)
+        private string ParseTitle(string value, string value2)
         {
-            int maxLength = 50;
             string title = value + value2;
             if (string.IsNullOrWhiteSpace(title))
             {
                 // should skip this transaction
             }
 
-            title = title.Trim().ToLower().Replace(" ", string.Empty).Replace("'", string.Empty).Replace("\"", string.Empty);
+            title = ParseNoiseChars(title);
 
             // crops title if it's too long
             // TODO: improve cropping logic
-            if (title.Length > maxLength)
+            if (title.Length > ColumnSize.TITLE)
             {
-                title = title.Substring(0, maxLength);
+                title = title.Substring(0, ColumnSize.TITLE);
             }
 
-            return PrependSpaces(title, maxLength);
+            return PrependSpaces(title, ColumnSize.TITLE);
         }
 
-        public string ParseLocation(string value)
+        private string ParseLocation(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
                 // should skip this transaction
             }
 
-            string location = value.Trim().ToLower().Replace("'", string.Empty).Replace("\"", string.Empty);
-            return PrependSpaces(location, 15);
+            string location = ParseNoiseChars(value);
+            return PrependSpaces(location, ColumnSize.LOCATION);
         }
 
-        public char ParseType(string value)
+        private char ParseType(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
@@ -97,7 +104,7 @@ namespace PTB.Core.Parsers
 
             }
 
-            string type = value.Trim().Replace("'", string.Empty);
+            string type = value.Trim().Replace("'", string.Empty).Replace("\"", string.Empty);
             if (type == "DEBIT")
             {
                 return 'D';

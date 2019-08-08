@@ -12,18 +12,19 @@ namespace PlaintextBudget
         {
             var parser = new PNCParser();
 
-            using (var reader = new StreamReader(@"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv"))
+            using (var writer = new StreamWriter(@"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\ledger.csv"))
             {
-                string line = null;
+                using (var reader = new StreamReader(@"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv"))
+                {
+                    string line = null;
 
-                while ((line = reader.ReadLine()) != null) {
-
-                    Transaction transaction = parser.Parse(line);
-                    Console.WriteLine(transaction.ToString());
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        Transaction transaction = parser.Parse(line);
+                        writer.WriteLine(transaction);
+                    }
                 }
             }
-
-            Console.ReadKey();
         }
     }
 }
