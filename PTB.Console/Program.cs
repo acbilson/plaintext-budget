@@ -11,13 +11,19 @@ namespace PlaintextBudget
     {
         static void Main(string[] args)
         {
-            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var parser = new PNCParser();
-            var ledger = new Ledger(baseDir, "checking", "19-01-01", "19-12-31");
+            string loadFilePath = @"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv";
 
-            using (var writer = new StreamWriter(@"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\ledger.csv"))
+            string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
+            string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
+            var fileManager = FileManager.Instance;
+            fileManager.Instantiate(baseDir);
+
+            var parser = new PNCParser();
+            LedgerFile defaultLedgerFile = fileManager.GetDefaultLedgerFile();
+
+            using (var writer = new StreamWriter(defaultLedgerFile.FullName))
             {
-                using (var reader = new StreamReader(@"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv"))
+                using (var reader = new StreamReader(loadFilePath))
                 {
                     string line = null;
 

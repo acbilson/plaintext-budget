@@ -8,6 +8,8 @@ namespace PTB.Core
     {
         public const short TRANSACTION_SIZE = 115;
         public const string NOISE_CHARS = "'\"\\-\\*\\.\\#\\`\\\\\\/ ";
+        public const string FILE_DELIMITER = "_";
+        public const string FILE_EXTENSION = ".txt";
     }
 
     public struct ColumnSize
