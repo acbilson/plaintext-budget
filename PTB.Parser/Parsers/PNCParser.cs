@@ -48,9 +48,10 @@ namespace PTB.Parser.Parsers
             }
 
             // adds a trailing zero
-            if (amount.LastIndexOf('.') == amount.Length - 1)
+            int missingCents = amount.LastIndexOf('.') + 2 - amount.Length;
+            if (missingCents > 0)
             {
-                amount += '0';
+                amount = new String('0', missingCents) + amount;
             }
 
             return PrependSpaces(amount, 12);
@@ -96,7 +97,8 @@ namespace PTB.Parser.Parsers
 
             }
 
-            if (value == "DEBIT")
+            string type = value.Trim().Replace("'", string.Empty);
+            if (type == "DEBIT")
             {
                 return 'D';
             } else
