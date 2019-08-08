@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using PTB.Core;
 using PTB.Core.Parsers;
+using PTB.Core.FileTypes;
 
 namespace PlaintextBudget
 {
@@ -10,7 +11,9 @@ namespace PlaintextBudget
     {
         static void Main(string[] args)
         {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             var parser = new PNCParser();
+            var ledger = new Ledger(baseDir, "checking", "19-01-01", "19-12-31");
 
             using (var writer = new StreamWriter(@"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\ledger.csv"))
             {
