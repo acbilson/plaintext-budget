@@ -19,6 +19,17 @@ namespace PTB.Core
             Subcategory = new String(' ', ColumnSize.SUBCATEGORY);
             Locked = '0';
         }
+        public Transaction(string date, string amount, string title, string location, char type, char locked, string subcategory)
+        {
+            Date = date;
+            Amount = amount;
+            Title = title;
+            Location = location;
+            Type = type;
+            Subcategory = subcategory;
+            Locked = locked;
+        }
+ 
         public override string ToString()
         {
             char delimiter = ' ';

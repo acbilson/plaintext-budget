@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 
 namespace PTB.Core.Parsers
 {
-    public class PNCParser
+    public class PNCParser : BaseParser
     {
         private const char DELIMITER = ',';
 
-        public Transaction Parse(string line)
+        public override Transaction Parse(string line)
         {
             string[] lines = line.Split(DELIMITER);
 
