@@ -1,8 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Parser.Parsers;
-using PTB.Parser.Objects;
+using PTB.Core;
+using PTB.Core.Parsers;
+using System;
 
-namespace PTB.Parser.Tests
+namespace PTB.Core.Parsers.Tests
 {
     [TestClass]
     public class PNCParserTests
@@ -23,21 +24,25 @@ namespace PTB.Parser.Tests
             var parser = new PNCParser();
 
             // Act
-            PNCTransaction result = parser.Parse(data);
+            Transaction result = parser.Parse(data);
 
             // Assert
             Assert.AreEqual(date, result.Date);
+            Assert.AreEqual(ColumnSize.DATE, result.Date.Length);
 
             Assert.AreEqual(amount, result.Amount.TrimStart());
-            Assert.AreEqual(12, result.Amount.Length);
+            Assert.AreEqual(ColumnSize.AMOUNT, result.Amount.Length);
 
             Assert.AreEqual(title, result.Title.TrimStart());
-            Assert.AreEqual(50, result.Title.Length);
+            Assert.AreEqual(ColumnSize.TITLE, result.Title.Length);
 
             Assert.AreEqual(location, result.Location.TrimStart());
-            Assert.AreEqual(15, result.Location.Length);
+            Assert.AreEqual(ColumnSize.LOCATION, result.Location.Length);
 
             Assert.AreEqual(type, result.Type);
+
+            Assert.AreEqual('0', result.Locked);
+            Assert.AreEqual(new String(' ', ColumnSize.SUBCATEGORY), result.Subcategory);
         }
     }
 }

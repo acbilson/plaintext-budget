@@ -1,14 +1,14 @@
-﻿using PTB.Parser.Objects;
+﻿using PTB.Core;
 using System;
 using System.Linq;
 
-namespace PTB.Parser.Parsers
+namespace PTB.Core.Parsers
 {
     public class PNCParser
     {
         private const char DELIMITER = ',';
 
-        public PNCTransaction Parse(string line)
+        public Transaction Parse(string line)
         {
             string[] lines = line.Split(DELIMITER);
 
@@ -18,7 +18,7 @@ namespace PTB.Parser.Parsers
             string location = ParseLocation(lines[4]);
             char type = ParseType(lines[5]);
 
-            return new PNCTransaction(date, amount, title, location, type);
+            return new Transaction(date, amount, title, location, type);
         }
 
         public string PrependSpaces(string value, int maxLength)
@@ -85,7 +85,7 @@ namespace PTB.Parser.Parsers
                 // should skip this transaction
             }
 
-            string location = value.Trim().ToLower().Replace("'", string.Empty);
+            string location = value.Trim().ToLower().Replace("'", string.Empty).Replace("\"", string.Empty);
             return PrependSpaces(location, 15);
         }
 

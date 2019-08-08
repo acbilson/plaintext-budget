@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PTB.Parser\PTB.Parser.csproj" />
+    <ProjectReference Include="..\PTB.Parser\PTB.Core.csproj" />
   </ItemGroup>
 
 </Project>

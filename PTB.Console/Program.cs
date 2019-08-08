@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using PTB.Parser.Parsers;
-using PTB.Parser.Objects;
+using PTB.Core;
+using PTB.Core.Parsers;
 
 namespace PlaintextBudget
 {
@@ -17,8 +18,8 @@ namespace PlaintextBudget
 
                 while ((line = reader.ReadLine()) != null) {
 
-                    PNCTransaction transaction = parser.Parse(line);
-                    Console.WriteLine(line);
+                    Transaction transaction = parser.Parse(line);
+                    Console.WriteLine(transaction.ToString());
                 }
             }
 
