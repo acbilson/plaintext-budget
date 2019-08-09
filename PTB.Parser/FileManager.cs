@@ -12,12 +12,12 @@ namespace PTB.Core
     {
         private static readonly Lazy<FileManager> fileManager = new Lazy<FileManager>(() => new FileManager());
 
-        private readonly string[] DEFAULT_DIRECTORIES = new string[] { LedgerFile.DIRECTORY, CategoriesFile.DIRECTORY, TitleRegexFile.DIRECTORY };
+        private readonly string[] DEFAULT_DIRECTORIES = new string[] { LedgerFileOld.DIRECTORY, CategoriesFile.DIRECTORY, TitleRegexFile.DIRECTORY };
         private const string SETTINGS_FILE = "settings.json";
 
         private List<CategoriesFile> CategoriesFiles = new List<CategoriesFile>();
-        private List<LedgerFile> LedgerFiles = new List<LedgerFile>();
-        private FileSettings Settings;
+        private List<LedgerFileOld> LedgerFiles = new List<LedgerFileOld>();
+        private PTBSettings Settings;
         private TitleRegexFile TitleRegexFile;
 
         public static FileManager Instance { get { return fileManager.Value; } }
@@ -26,7 +26,7 @@ namespace PTB.Core
 
             // TODO: add default information to guide user in the use of these files
             CreateMissingFolderStructure(baseDir);
-            FileSettings settings = LoadSettingsFile(baseDir);
+            PTBSettings settings = LoadSettingsFile(baseDir);
             LoadCategoriesFiles(baseDir);
             LoadLedgerFiles(baseDir, settings);
             LoadTitleRegexFiles(baseDir, settings);
@@ -46,7 +46,7 @@ namespace PTB.Core
             }
         }
 
-        private FileSettings LoadSettingsFile(string baseDir)
+        private PTBSettings LoadSettingsFile(string baseDir)
         {
             string settingsPath = Path.Combine(baseDir, SETTINGS_FILE);
 
@@ -55,7 +55,7 @@ namespace PTB.Core
                 File.Create(settingsPath);
             }
 
-            FileSettings settings = JsonConvert.DeserializeObject<FileSettings>(File.ReadAllText(settingsPath));
+            PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(File.ReadAllText(settingsPath));
             return settings;
         }
 
@@ -78,24 +78,24 @@ namespace PTB.Core
 
         }
 
-        private void LoadLedgerFiles(string baseDir, FileSettings settings)
+        private void LoadLedgerFiles(string baseDir, PTBSettings settings)
         {
-            string ledgerDir = Path.Combine(baseDir, LedgerFile.DIRECTORY);
+            string ledgerDir = Path.Combine(baseDir, LedgerFileOld.DIRECTORY);
             string[] existingLedgerFiles = Directory.GetFiles(ledgerDir);
 
             if (existingLedgerFiles.Length == 0)
             {
-                string newLedgerFileName = LedgerFile.GetNewFileName(settings.DefaultLedgerName);
+                string newLedgerFileName = LedgerFileOld.GetNewFileName(settings.DefaultLedgerName);
                 string newLedgerFilePath = Path.Combine(ledgerDir, newLedgerFileName);
                 File.Create(newLedgerFilePath);
             } else {
                 foreach (string ledgerFile in existingLedgerFiles)
                 {
-                    LedgerFiles.Add(new LedgerFile(ledgerFile));
+                    LedgerFiles.Add(new LedgerFileOld(ledgerFile));
                 }
             }
         }
-        private void LoadTitleRegexFiles(string baseDir, FileSettings settings)
+        private void LoadTitleRegexFiles(string baseDir, PTBSettings settings)
         {
             string titleRegexDir = Path.Combine(baseDir, TitleRegexFile.DIRECTORY);
             string titleRegexPath = Path.Combine(titleRegexDir, settings.DefaultTitleRegexName + Constant.FILE_EXTENSION);
@@ -110,7 +110,7 @@ namespace PTB.Core
             TitleRegexFile = new TitleRegexFile(titleRegexPath);
         }
 
-        public LedgerFile GetDefaultLedgerFile()
+        public LedgerFileOld GetDefaultLedgerFile()
         {
             return LedgerFiles.FirstOrDefault((l) => l.LedgerName == Settings.DefaultLedgerName);
         }

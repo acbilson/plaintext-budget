@@ -4,6 +4,8 @@ using System.IO;
 using PTB.Core;
 using PTB.Core.Parsers;
 using PTB.Core.FileTypes;
+using System.Text;
+using PTB.File;
 
 namespace PTB.Console
 {
@@ -17,35 +19,23 @@ namespace PTB.Console
     {
         static void Main(string[] args)
         {
-            var action = ConsoleActions.Categorize;
+            var action = ConsoleActions.Import;
 
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
-            var fileManager = FileManager.Instance;
-            fileManager.Instantiate(baseDir);
-            LedgerFile defaultLedgerFile = fileManager.GetDefaultLedgerFile();
+            //var fileManager = FileManager.Instance;
+            //fileManager.Instantiate(baseDir);
+            //LedgerFileOld defaultLedgerFile = fileManager.GetDefaultLedgerFile();
+            var client = new FileClient();
+            client.Instantiate();
 
             switch (action)
             {
                 case ConsoleActions.Import:
 
                     string loadFilePath = @"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv";
-
-                    var pncParser = new PNCParser();
-
-                    using (var writer = new StreamWriter(defaultLedgerFile.FullName))
-                    {
-                        using (var reader = new StreamReader(loadFilePath))
-                        {
-                            string line = null;
-
-                            while ((line = reader.ReadLine()) != null)
-                            {
-                                Transaction transaction = pncParser.Parse(line);
-                                writer.WriteLine(transaction);
-                            }
-                        }
-                    }
+                    var parser = new PNCParser();
+                    client.Ledger.ImportToDefaultLedger(loadFilePath, parser);
 
                     break;
 
@@ -53,18 +43,32 @@ namespace PTB.Console
 
                     List<TitleRegex> keys = new List<TitleRegex>();
                     var titleParser = new TitleRegexParser();
-                    TitleRegexFile titleRegexFile = fileManager.GetDefaultTitleRegexFile();
+                    TitleRegexFile titleRegexFile = new TitleRegexFile("");//fileManager.GetDefaultTitleRegexFile();
 
-                    using (var reader = new StreamReader(titleRegexFile.FullName))
+                    using (var stream = System.IO.File.Open(titleRegexFile.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                     {
-                        string line = null;
-
-                        while ((line = reader.ReadLine()) != null)
+                        byte[] buffer = new byte[65];
+                        while (stream.Read(buffer, 0, Constant.CATEGORIES_SIZE + 2) > 0)
                         {
-                            TitleRegex titleSubcategoriesKey = titleParser.Parse(line);
-                            System.Console.WriteLine(titleSubcategoriesKey.ToString());
-                            keys.Add(titleSubcategoriesKey);
+                            string line = Encoding.UTF8.GetString(buffer);
+                            System.Console.Write(line);
+                            TitleRegex result = titleParser.Parse(line);
+                            string newLine = line.Replace("1", "2");
+                            System.Console.Write(newLine);
+                            byte[] newBytes = Encoding.UTF8.GetBytes(newLine);
+                            stream.Write(newBytes, 0, 65);
                         }
+                        /*
+                                                while ((line = stream.ReadLine()) != null)
+                                                {
+                                                    TitleRegex titleRegex = titleParser.Parse(line);
+                                                    keys.Add(titleRegex);
+
+                                                    // Read transactions here
+                                                    // Use regex to check each transaction against the list of regexes 
+                                                    // Update the transaction file with the new categories (needs research)
+                                                }
+                                                */
                     }
 
                     break;

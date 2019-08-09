@@ -23,7 +23,7 @@ namespace PTB.Core.Parsers.Tests
             var parser = new TransactionParser();
 
             // Act
-            Transaction result = parser.Parse(line);
+            Transaction result = parser.ParseLine(line);
 
             // Assert
             Assert.AreEqual(date, result.Date);

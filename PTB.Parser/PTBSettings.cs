@@ -4,8 +4,9 @@ using System.Text;
 
 namespace PTB.Core
 {
-    public class FileSettings
+    public class PTBSettings
     {
+        public string HomeDirectory;
         public string DefaultLedgerName;
         public string DefaultTitleRegexName;
     }

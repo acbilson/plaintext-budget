@@ -25,7 +25,8 @@ namespace PTB.Core.Parsers.Tests
             var parser = new PNCParser();
 
             // Act
-            Transaction result = parser.Parse(data);
+            //Transaction result = parser.ParseLine(data);
+            var result = new Transaction();
 
             // Assert
             Assert.AreEqual(date, result.Date);

@@ -6,7 +6,7 @@ namespace PTB.Core.Parsers
 {
     public class TransactionParser
     {
-        public Transaction Parse(string line)
+        public Transaction ParseLine(string line)
         {
             if (line.Length != Constant.TRANSACTION_SIZE)
             {
@@ -20,7 +20,6 @@ namespace PTB.Core.Parsers
             string type = line.Substring(TransactionColumnIndex.TYPE[0], TransactionColumnIndex.TYPE[1]);
             string locked = line.Substring(TransactionColumnIndex.LOCKED[0], TransactionColumnIndex.LOCKED[1]);
             string subcategory = line.Substring(TransactionColumnIndex.SUBCATEGORY[0], TransactionColumnIndex.SUBCATEGORY[1]);
-
 
             return new Transaction(date, amount, title, location, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
         }

@@ -1,0 +1,15 @@
+{
+  "Delimiter": "_",
+  "Columns": [
+    { "Name": "Date",        "Size": 10 },
+    { "Name": "Type",        "Size": 1  },
+    { "Name": "Amount",      "Size": 12 },
+    { "Name": "Subcategory", "Size": 20 },
+    { "Name": "Title",       "Size": 50 },
+    { "Name": "Location",    "Size": 15 },
+    { "Name": "Locked",      "Size": 1  }
+  ],
+  "Ledgers": [
+    { "IsDefault": true, "Name": "checking" }
+  ]
+}

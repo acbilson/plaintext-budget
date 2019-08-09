@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PTB.Core.FileTypes
 {
-    public class LedgerFile
+    public class LedgerFileOld
     {
         public static readonly string DIRECTORY = "Ledgers";
         public string FullName;
@@ -12,7 +12,7 @@ namespace PTB.Core.FileTypes
         public string LedgerName;
         public string LedgerStartDate;
 
-        public LedgerFile(string path)
+        public LedgerFileOld(string path)
         {
             FullName = path;
             FileName = System.IO.Path.GetFileName(FullName);

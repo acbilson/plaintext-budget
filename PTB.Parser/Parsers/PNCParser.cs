@@ -1,15 +1,15 @@
-﻿using PTB.Core;
-using System;
+﻿using System;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PTB.Core.Parsers
 {
-    public class PNCParser
+    public class PNCParser : IStatementParser
     {
         private const char DELIMITER = ',';
 
-        public Transaction Parse(string line)
+        public string ParseLine(string line)
         {
             string[] lines = line.Split(DELIMITER);
 
@@ -18,8 +18,25 @@ namespace PTB.Core.Parsers
             string title = ParseTitle(lines[2], lines[3]);
             string location = ParseLocation(lines[4]);
             char type = ParseType(lines[5]);
+            string subcategory = new String(' ', 20);
+            char locked = '0';
 
-            return new Transaction(date, amount, title, location, type);
+            char delimiter = ' ';
+            var builder = new StringBuilder();
+            builder.Append(date);
+            builder.Append(delimiter);
+            builder.Append(type);
+            builder.Append(delimiter);
+            builder.Append(amount);
+            builder.Append(delimiter);
+            builder.Append(subcategory);
+            builder.Append(delimiter);
+            builder.Append(title);
+            builder.Append(delimiter);
+            builder.Append(location);
+            builder.Append(delimiter);
+            builder.Append(locked);
+            return builder.ToString();
         }
 
         private string PrependSpaces(string value, int max) => new String(' ', max - value.Length) + value;
