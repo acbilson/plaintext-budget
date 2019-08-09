@@ -35,10 +35,9 @@ namespace PTB.File.Ledger
         public void WriteLine(string line)
         {
             _writer.WriteLine(line);
-
         }
 
-        public void Categorize(LedgerParser parser, int bufferSize, TitleRegex.TitleRegex[] categories)
+        public void Categorize(LedgerParser parser, int bufferSize, IEnumerable<TitleRegex.TitleRegex> categories)
         {
             using (var stream = System.IO.File.Open(_Path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
             {
@@ -66,7 +65,6 @@ namespace PTB.File.Ledger
                     }
                 }
             }
-
         }
 
         #region IDisposable Support

@@ -41,6 +41,9 @@ namespace PTB.Console
 
                 case ConsoleActions.Categorize:
 
+                    IEnumerable<PTB.File.TitleRegex.TitleRegex> titleRegexes = client.Regex.ReadAllTitleRegex();
+                    client.Ledger.CategorizeDefaultLedger(titleRegexes);
+
                     List<TitleRegex> keys = new List<TitleRegex>();
                     var titleParser = new TitleRegexParser();
                     TitleRegexFile titleRegexFile = new TitleRegexFile("");//fileManager.GetDefaultTitleRegexFile();
@@ -65,7 +68,7 @@ namespace PTB.Console
                                                     keys.Add(titleRegex);
 
                                                     // Read transactions here
-                                                    // Use regex to check each transaction against the list of regexes 
+                                                    // Use regex to check each transaction against the list of regexes
                                                     // Update the transaction file with the new categories (needs research)
                                                 }
                                                 */

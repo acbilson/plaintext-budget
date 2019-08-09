@@ -10,11 +10,11 @@ namespace PTB.File
 {
     public class BaseFileRepository
     {
-        public LedgerSchema ReadFileSchema(string home, string folder)
+        public PTBSchema ReadFileSchema(string home)
         {
-            string path = System.IO.Path.Combine(home, folder, "schema.json");
+            string path = System.IO.Path.Combine(home, "schema.json");
             string text = System.IO.File.ReadAllText(path);
-            LedgerSchema schema = JsonConvert.DeserializeObject<LedgerSchema>(text);
+            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
             return schema;
         }
 

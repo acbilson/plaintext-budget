@@ -12,20 +12,20 @@ namespace PTB.File.Ledger
     public class LedgerRepository : BaseFileRepository
     {
         private string _Folder = "Ledgers";
-        private LedgerSchema _LedgerSchema;
+        private PTBSchema _schema;
         private PTBSettings _Settings;
         private LedgerParser _parser;
 
         public LedgerRepository(PTBSettings settings)
         {
-            _LedgerSchema = base.ReadFileSchema(settings.HomeDirectory, _Folder);
             _Settings = settings;
-            _parser = new LedgerParser(_LedgerSchema);
+            _schema = base.ReadFileSchema(_Settings.HomeDirectory);
+            _parser = new LedgerParser(_schema.Ledger);
         }
 
         public void ImportToDefaultLedger(string path, IStatementParser parser)
         {
-            string ledgerPath = base.GetDefaultPath(_Settings.HomeDirectory, _Folder, _LedgerSchema.GetDefaultName());
+            string ledgerPath = base.GetDefaultPath(_Settings.HomeDirectory, _Folder, _schema.Ledger.GetDefaultName());
 
             using (LedgerFile defaultLedgerFile = new LedgerFile(ledgerPath))
             {
@@ -40,9 +40,14 @@ namespace PTB.File.Ledger
             }
         }
 
-        public void CategorizeDefaultLedger()
+        public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
+            string ledgerPath = base.GetDefaultPath(_Settings.HomeDirectory, _Folder, _schema.Ledger.GetDefaultName());
 
+            using (LedgerFile defaultLedgerFile = new LedgerFile(ledgerPath))
+            {
+                defaultLedgerFile.Categorize(_parser, _schema.Ledger.Size, titleRegices);
+            }
         }
     }
 }

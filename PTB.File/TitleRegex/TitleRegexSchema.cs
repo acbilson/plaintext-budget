@@ -10,9 +10,9 @@ namespace PTB.File.TitleRegex
     {
         // from schema.json
         public string Delimiter { get; set; }
-
+        public int Size { get; set; }
         public TitleRegexColumns Columns { get; set; }
-        public SchemaFiles[] Files { get; set; }
+        public PTBFiles[] Files { get; set; }
 
         public string GetDefaultName()
         {

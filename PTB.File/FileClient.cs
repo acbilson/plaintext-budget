@@ -8,18 +8,20 @@ using System.Text;
 using Newtonsoft.Json;
 using PTB.Core;
 using PTB.File.Ledger;
+using PTB.File.TitleRegex;
 
 namespace PTB.File
 {
     public class FileClient
     {
-        public LedgerRepository Ledger; 
+        public LedgerRepository Ledger;
+        public TitleRegexRepository Regex;
 
         public void Instantiate()
         {
             var settings = ReadSettingsFile();
             Ledger = new LedgerRepository(settings);
-
+            Regex = new TitleRegexRepository(settings);
         }
 
         private PTBSettings ReadSettingsFile()
@@ -28,6 +30,12 @@ namespace PTB.File
              PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
             return settings;
         }
+        private PTBSchema ReadSchemaFile() {
+          string schemaPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\schema.json";
+                       PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
+                      return schema;
+        }
+
 
     }
 }

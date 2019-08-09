@@ -7,9 +7,10 @@ namespace PTB.File.Ledger
     {
         // from schema.json
         public string Delimiter { get; set; }
+        public int Size { get; set; }
 
         public LedgerColumns Columns { get; set; }
-        public SchemaFiles[] Files { get; set; }
+        public PTBFiles[] Files { get; set; }
 
         public string GetDefaultName()
         {
@@ -27,7 +28,6 @@ namespace PTB.File.Ledger
         public ColumnLocation Location { get; set; }
         public ColumnLocked Locked { get; set; }
     }
-
 
     public class ColumnDate : SchemaColumn { }
 

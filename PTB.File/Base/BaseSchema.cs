@@ -12,7 +12,7 @@ namespace PTB.File.Base
         public int Offset { get; set; }
     }
 
-    public class SchemaFiles
+    public class PTBFiles
     {
         // from schema.json
         public bool IsDefault { get; set; }
