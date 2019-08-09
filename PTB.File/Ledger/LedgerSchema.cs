@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using PTB.File.Base;
+﻿using PTB.File.Base;
+using System.Linq;
 
 namespace PTB.File.Ledger
 {
@@ -7,6 +7,7 @@ namespace PTB.File.Ledger
     {
         // from schema.json
         public string Delimiter { get; set; }
+
         public int Size { get; set; }
 
         public LedgerColumns Columns { get; set; }

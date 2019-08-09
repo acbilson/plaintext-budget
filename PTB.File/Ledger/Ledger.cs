@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PTB.File.Ledger
+﻿namespace PTB.File.Ledger
 {
     public struct Ledger
     {

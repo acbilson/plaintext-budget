@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using PTB.File.Base;
+using System;
 using System.Text;
-using PTB.File.Base;
 
 namespace PTB.File.Ledger
 {
@@ -15,7 +13,6 @@ namespace PTB.File.Ledger
             _schema = schema;
         }
 
-        
         public Ledger ParseLine(string line)
         {
             int delimiterLength = _schema.Delimiter.Length;

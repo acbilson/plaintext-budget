@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.Parsers;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Newtonsoft.Json;
+using PTB.File;
+using PTB.File.Ledger;
 
 namespace PTB.Core.Parsers.Tests
 {
@@ -20,10 +19,12 @@ namespace PTB.Core.Parsers.Tests
         public void ParsesCleanLines(string line, string date, char type, string amount, string subcategory, string title, string location, char locked)
         {
             // Arrange
-            var parser = new TransactionParser();
+            string text = System.IO.File.ReadAllText(@"Data\clean-schema.json");
+            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
+            var parser = new LedgerParser(schema.Ledger);
 
             // Act
-            Transaction result = parser.ParseLine(line);
+            Ledger result = parser.ParseLine(line);
 
             // Assert
             Assert.AreEqual(date, result.Date);

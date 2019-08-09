@@ -1,31 +1,28 @@
-﻿using PTB.File.Base;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 
 namespace PTB.File.TitleRegex
 {
     public class TitleRegexRepository : BaseFileRepository
     {
-      private string _folder = "Regex";
-      private PTBSchema _schema;
-      private PTBSettings _settings;
-      private TitleRegexParser _parser;
+        private string _folder = "Regex";
+        private TitleRegexParser _parser;
 
-      public TitleRegexRepository(PTBSettings settings) {
-        _settings = settings;
-        _schema = ReadFileSchema(_settings.HomeDirectory);
-        _parser = new TitleRegexParser(_schema.Regex);
-      }
-
-      public IEnumerable<PTB.File.TitleRegex.TitleRegex> ReadAllTitleRegex() {
-        var titleRegexs = new List<TitleRegex>();
-        string path = base.GetDefaultPath(_settings.HomeDirectory, _folder, _schema.Regex.GetDefaultName());
-        TitleRegexFile titleRegexFile = new TitleRegexFile(path);
-
-        foreach (string line in titleRegexFile.ReadLine()) { 
-          titleRegexs.Add(_parser.ParseLine(line));
+        public TitleRegexRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
+        {
+            _parser = new TitleRegexParser(_schema.Regex);
         }
-        return titleRegexs;
-      }
+
+        public IEnumerable<PTB.File.TitleRegex.TitleRegex> ReadAllTitleRegex()
+        {
+            var titleRegexs = new List<TitleRegex>();
+            string path = base.GetDefaultPath(_folder, _schema.Regex.GetDefaultName());
+            TitleRegexFile titleRegexFile = new TitleRegexFile(path);
+
+            foreach (string line in titleRegexFile.ReadLine())
+            {
+                titleRegexs.Add(_parser.ParseLine(line));
+            }
+            return titleRegexs;
+        }
     }
 }

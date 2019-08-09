@@ -1,8 +1,5 @@
-﻿using System;
+﻿using PTB.File.Base;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using PTB.File.Base;
 
 namespace PTB.File.TitleRegex
 {
@@ -10,6 +7,7 @@ namespace PTB.File.TitleRegex
     {
         // from schema.json
         public string Delimiter { get; set; }
+
         public int Size { get; set; }
         public TitleRegexColumns Columns { get; set; }
         public PTBFiles[] Files { get; set; }
@@ -32,5 +30,4 @@ namespace PTB.File.TitleRegex
     public class ColumnSubcategory : SchemaColumn { }
 
     public class ColumnRegex : SchemaColumn { }
-
 }

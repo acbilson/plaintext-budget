@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PTB.File\PTB.File.csproj" />
-    <ProjectReference Include="..\PTB.Parser\PTB.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PTB.File.Base
+﻿namespace PTB.File.Base
 {
     public class BaseParser
     {

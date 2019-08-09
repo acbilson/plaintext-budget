@@ -1,15 +1,8 @@
-﻿using PTB.Core.FileTypes;
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-
-namespace PTB.Core
+﻿namespace PTB.File
 {
     public sealed class FileManager
     {
+        /*
         private static readonly Lazy<FileManager> fileManager = new Lazy<FileManager>(() => new FileManager());
 
         private readonly string[] DEFAULT_DIRECTORIES = new string[] { LedgerFileOld.DIRECTORY, CategoriesFile.DIRECTORY, TitleRegexFile.DIRECTORY };
@@ -23,7 +16,6 @@ namespace PTB.Core
         public static FileManager Instance { get { return fileManager.Value; } }
 
         public void Instantiate(string baseDir) {
-
             // TODO: add default information to guide user in the use of these files
             CreateMissingFolderStructure(baseDir);
             PTBSettings settings = LoadSettingsFile(baseDir);
@@ -75,7 +67,6 @@ namespace PTB.Core
                     CategoriesFiles.Add(new CategoriesFile(catFile));
                 }
             }
-
         }
 
         private void LoadLedgerFiles(string baseDir, PTBSettings settings)
@@ -105,7 +96,7 @@ namespace PTB.Core
                 string newTitleRegexFileName = TitleRegexFile.GetNewFileName();
                 string newTitleRegexFilePath = Path.Combine(titleRegexDir, newTitleRegexFileName);
                 File.Create(newTitleRegexFilePath);
-            } 
+            }
 
             TitleRegexFile = new TitleRegexFile(titleRegexPath);
         }
@@ -119,5 +110,6 @@ namespace PTB.Core
         {
             return this.TitleRegexFile;
         }
+    */
     }
 }

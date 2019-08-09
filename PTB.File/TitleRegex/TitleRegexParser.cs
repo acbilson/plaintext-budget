@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PTB.File.Base;
-using PTB.File.TitleRegex;
+﻿using PTB.File.Base;
+using System;
 
 namespace PTB.File.TitleRegex
 {
@@ -14,6 +11,7 @@ namespace PTB.File.TitleRegex
         {
             _schema = schema;
         }
+
         public TitleRegex ParseLine(string line)
         {
             int delimiterLength = _schema.Delimiter.Length;
@@ -23,6 +21,5 @@ namespace PTB.File.TitleRegex
 
             return new TitleRegex(Convert.ToChar(priority), subcategory, regex);
         }
-
     }
 }

@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PTB.File.Ledger;
-using PTB.Core;
-using Newtonsoft.Json;
-using System.IO;
+﻿using Newtonsoft.Json;
 
 namespace PTB.File
 {
     public class BaseFileRepository
     {
+        protected PTBSettings _settings;
+        protected PTBSchema _schema;
+
+        public BaseFileRepository(PTBSettings settings, PTBSchema schema)
+        {
+            _settings = settings;
+            _schema = schema;
+        }
+
         public PTBSchema ReadFileSchema(string home)
         {
             string path = System.IO.Path.Combine(home, "schema.json");
@@ -18,9 +21,9 @@ namespace PTB.File
             return schema;
         }
 
-        public string GetDefaultPath(string home, string folder, string name)
+        public string GetDefaultPath(string folder, string name)
         {
-            return System.IO.Path.Combine(home, folder, (name + Constant.FILE_EXTENSION));
+            return System.IO.Path.Combine(_settings.HomeDirectory, folder, (name + _settings.FileExtension));
         }
     }
 

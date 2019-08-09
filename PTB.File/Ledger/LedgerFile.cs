@@ -1,6 +1,4 @@
-﻿using PTB.File.Ledger;
-using PTB.File.TitleRegex;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -10,7 +8,6 @@ namespace PTB.File.Ledger
 {
     public class LedgerFile : IDisposable
     {
-
         private string _Path;
         private StreamWriter _writer;
 
@@ -68,6 +65,7 @@ namespace PTB.File.Ledger
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
@@ -87,6 +85,7 @@ namespace PTB.File.Ledger
         {
             Dispose(true);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

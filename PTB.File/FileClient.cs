@@ -1,12 +1,4 @@
-﻿using PTB.Core.FileTypes;
-using PTB.Core.Parsers;
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using PTB.Core;
+﻿using Newtonsoft.Json;
 using PTB.File.Ledger;
 using PTB.File.TitleRegex;
 
@@ -20,22 +12,23 @@ namespace PTB.File
         public void Instantiate()
         {
             var settings = ReadSettingsFile();
-            Ledger = new LedgerRepository(settings);
-            Regex = new TitleRegexRepository(settings);
+            var schema = ReadSchemaFile();
+            Ledger = new LedgerRepository(settings, schema);
+            Regex = new TitleRegexRepository(settings, schema);
         }
 
         private PTBSettings ReadSettingsFile()
         {
             string settingsPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\settings.json";
-             PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
+            PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
             return settings;
         }
-        private PTBSchema ReadSchemaFile() {
-          string schemaPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\schema.json";
-                       PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
-                      return schema;
+
+        private PTBSchema ReadSchemaFile()
+        {
+            string schemaPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\schema.json";
+            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
+            return schema;
         }
-
-
     }
 }

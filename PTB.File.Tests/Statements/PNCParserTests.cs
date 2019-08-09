@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core;
-using PTB.Core.Parsers;
-using System;
+using Newtonsoft.Json;
+using PTB.File;
+using PTB.File.Statements;
 
 namespace PTB.Core.Parsers.Tests
 {
@@ -22,29 +22,15 @@ namespace PTB.Core.Parsers.Tests
         public void ParseCleanData(string data, string date, string amount, string title, string location, char type)
         {
             // Arrange
+            string text = System.IO.File.ReadAllText(@"Data\clean-schema.json");
+            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
             var parser = new PNCParser();
 
             // Act
-            //Transaction result = parser.ParseLine(data);
-            var result = new Transaction();
+            string result = parser.ParseLine(data, schema.Ledger);
 
             // Assert
-            Assert.AreEqual(date, result.Date);
-            Assert.AreEqual(TransactionColumnSize.DATE, result.Date.Length);
-
-            Assert.AreEqual(amount, result.Amount.TrimStart());
-            Assert.AreEqual(TransactionColumnSize.AMOUNT, result.Amount.Length);
-
-            Assert.AreEqual(title, result.Title.TrimStart());
-            Assert.AreEqual(TransactionColumnSize.TITLE, result.Title.Length);
-
-            Assert.AreEqual(location, result.Location.TrimStart());
-            Assert.AreEqual(TransactionColumnSize.LOCATION, result.Location.Length);
-
-            Assert.AreEqual(type, result.Type);
-
-            Assert.AreEqual('0', result.Locked);
-            Assert.AreEqual(new String(' ', TransactionColumnSize.SUBCATEGORY), result.Subcategory);
+            Assert.AreEqual(schema.Ledger.Size, result.Length);
         }
     }
 }

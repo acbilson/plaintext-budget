@@ -1,16 +1,19 @@
-﻿using System;
-using System.Linq;
+﻿using PTB.File.Ledger;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace PTB.Core.Parsers
+namespace PTB.File.Statements
 {
     public class PNCParser : IStatementParser
     {
         private const char DELIMITER = ',';
+        private LedgerSchema _schema;
 
-        public string ParseLine(string line)
+        public string ParseLine(string line, LedgerSchema schema)
         {
+            _schema = schema;
+
             string[] lines = line.Split(DELIMITER);
 
             string date = ParseDate(lines[0]);
@@ -79,7 +82,7 @@ namespace PTB.Core.Parsers
             }
 
             amount = AddTrailingZeros(amount);
-            return PrependSpaces(amount, TransactionColumnSize.AMOUNT);
+            return PrependSpaces(amount, _schema.Columns.Amount.Size);
         }
 
         private string ParseTitle(string value, string value2)
@@ -94,12 +97,12 @@ namespace PTB.Core.Parsers
 
             // crops title if it's too long
             // TODO: improve cropping logic
-            if (title.Length > TransactionColumnSize.TITLE)
+            if (title.Length > _schema.Columns.Title.Size)
             {
-                title = title.Substring(0, TransactionColumnSize.TITLE);
+                title = title.Substring(0, _schema.Columns.Title.Size);
             }
 
-            return PrependSpaces(title, TransactionColumnSize.TITLE);
+            return PrependSpaces(title, _schema.Columns.Title.Size);
         }
 
         private string ParseLocation(string value)
@@ -110,7 +113,7 @@ namespace PTB.Core.Parsers
             }
 
             string location = ParseNoiseChars(value);
-            return PrependSpaces(location, TransactionColumnSize.LOCATION);
+            return PrependSpaces(location, _schema.Columns.Location.Size);
         }
 
         private char ParseType(string value)
@@ -118,18 +121,17 @@ namespace PTB.Core.Parsers
             if (string.IsNullOrWhiteSpace(value))
             {
                 // should skip this transaction
-
             }
 
             string type = value.Trim().Replace("'", string.Empty).Replace("\"", string.Empty);
             if (type == "DEBIT")
             {
                 return 'D';
-            } else
+            }
+            else
             {
                 return 'C';
             }
         }
-
     }
 }
