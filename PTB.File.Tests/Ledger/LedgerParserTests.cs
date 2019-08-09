@@ -1,12 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using PTB.File;
-using PTB.File.Ledger;
+using PTB.File.Tests;
 
-namespace PTB.Core.Parsers.Tests
+namespace PTB.File.Ledger.Tests
 {
     [TestClass]
-    public class TransactionParserTests
+    public class TransactionParserTests : GlobalSetup
     {
         [DataRow("2019-06-18 C       310.80                        directdepositpayrolloptimumjoyclinxxxxxxxxxxx390       000191699 0", "2019-06-18", 'C', "310.80", "", "directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", "000191699", '0')]
         [DataRow("2019-06-18 D        11.80                                 5458debitcardpurchaseandysfrozencustard      4517045008 0", "2019-06-18", 'D', "11.80", "", "5458debitcardpurchaseandysfrozencustard", "4517045008", '0')]
@@ -19,9 +18,7 @@ namespace PTB.Core.Parsers.Tests
         public void ParsesCleanLines(string line, string date, char type, string amount, string subcategory, string title, string location, char locked)
         {
             // Arrange
-            string text = System.IO.File.ReadAllText(@"Data\clean-schema.json");
-            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
-            var parser = new LedgerParser(schema.Ledger);
+            var parser = new LedgerParser(Schema.Ledger);
 
             // Act
             Ledger result = parser.ParseLine(line);

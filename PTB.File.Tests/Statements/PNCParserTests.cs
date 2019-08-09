@@ -1,12 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using PTB.File;
+using PTB.File.Tests;
 using PTB.File.Statements;
 
-namespace PTB.Core.Parsers.Tests
+namespace PTB.File.Statements.Tests
 {
     [TestClass]
-    public class PNCParserTests
+    public class PNCParserTests : GlobalSetup
     {
         [DataRow("2019/06/18,310.80,'Direct Deposit - Payroll','OPTIMUM JOY CLIN XXXXXXXXXXX39-0','000191699','CREDIT'", "2019-06-18", "310.80", "directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", "000191699", 'C')]
         [DataRow("2019/06/18,15.29,'5458 Debit Card Purchase Blaze Pizza Chicago Ev',,'4517145008','DEBIT'", "2019-06-18", "15.29", "5458debitcardpurchaseblazepizzachicagoev", "4517145008", 'D')]
@@ -22,15 +23,14 @@ namespace PTB.Core.Parsers.Tests
         public void ParseCleanData(string data, string date, string amount, string title, string location, char type)
         {
             // Arrange
-            string text = System.IO.File.ReadAllText(@"Data\clean-schema.json");
-            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
             var parser = new PNCParser();
 
             // Act
-            string result = parser.ParseLine(data, schema.Ledger);
+            string result = parser.ParseLine(data, Schema.Ledger);
 
             // Assert
-            Assert.AreEqual(schema.Ledger.Size, result.Length);
+            Assert.AreEqual(Schema.Ledger.Size, result.Length);
+            System.Console.WriteLine(result);
         }
     }
 }

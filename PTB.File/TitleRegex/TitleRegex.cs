@@ -6,7 +6,7 @@
         public string Regex;
         public string Subcategory;
 
-        public TitleRegex(char priority, string regex, string subcategory)
+        public TitleRegex(char priority, string subcategory, string regex)
         {
             Priority = priority;
             Regex = regex;

@@ -4,11 +4,8 @@
     {
         public string CalculateByteIndex(int delimiterLength, string line, SchemaColumn column)
         {
-            int delimiterOffset = delimiterLength;
-            int start = column.Offset + (delimiterOffset * (column.Index - 1));
-            int end = start + column.Size;
-
-            return line.Substring(start, end);
+            int start = column.Offset + (delimiterLength * (column.Index - 1));
+            return line.Substring(start, column.Size);
         }
     }
 }
