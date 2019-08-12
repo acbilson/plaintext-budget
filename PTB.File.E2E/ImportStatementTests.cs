@@ -41,7 +41,7 @@ namespace PTB.File.E2E
 
             // Act
             WhenACleanStatementIsImported();
-            Ledger.Ledger ledger = WithAParsedLedger();
+            Ledger.Ledger ledger = WithTheFirstParsedLedger();
 
             // Assert
             ShouldParseFirstEntry(ledger);

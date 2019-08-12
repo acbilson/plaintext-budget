@@ -57,19 +57,19 @@
       },
       "Subcategory": {
         "Index": 2,
-        "Size": 30,
+        "Size": 20,
         "Offset": 1
       },
       "Regex": {
         "Index": 3,
         "Size": 30,
-        "Offset": 31
+        "Offset": 21
       }
     },
     "Files": [
       {
         "IsDefault": true,
-        "Name": "ledger_checking_19-01-01_19-12-31"
+        "Name": "title-regex"
       }
     ]
   }

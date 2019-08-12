@@ -26,8 +26,7 @@ namespace PTB.File
 
         private PTBSchema ReadSchemaFile(string home)
         {
-            string settingsPath = System.IO.Path.Combine(home, "schema.json");
-            string schemaPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\schema.json";
+            string schemaPath = System.IO.Path.Combine(home, "schema.json");
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
             return schema;
         }

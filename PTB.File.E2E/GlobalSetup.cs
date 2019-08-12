@@ -4,6 +4,7 @@ using PTB.File.Base;
 using PTB.File.Ledger;
 using PTB.File.Statements;
 using PTB.File.TitleRegex;
+using System.Collections.Generic;
 
 namespace PTB.File.E2E
 {
@@ -16,6 +17,7 @@ namespace PTB.File.E2E
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
 
+        #region Initialize
         public void GetDefaultSettings(string folder)
         {
             var text = System.IO.File.ReadAllText($@".\{folder}\settings.json");
@@ -66,6 +68,7 @@ namespace PTB.File.E2E
             };
             */
         }
+        #endregion Initialize
 
         #region Arrange - With
         public void WithAFileClient()
@@ -95,17 +98,29 @@ namespace PTB.File.E2E
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Clean\datafile.csv");
             Client.Ledger.ImportToDefaultLedger(path, PNCParser);
         }
+
+        public void WhenALedgerIsCategorized()
+        {
+            IEnumerable<TitleRegex.TitleRegex> titleRegices = Client.Regex.ReadAllTitleRegex();
+            Client.Ledger.CategorizeDefaultLedger(titleRegices);
+        }
         #endregion Act - When
 
         #region Act - With
 
-        public Ledger.Ledger WithAParsedLedger()
+        public Ledger.Ledger WithTheFirstParsedLedger()
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             string firstLine = ledgerEntries.Substring(0, Schema.Ledger.Size);
             Ledger.Ledger ledger = LedgerParser.ParseLine(firstLine);
             return ledger;
+        }
+
+        public List<Ledger.Ledger> WithAllLedgerEntries()
+        {
+            var entries = Client.Ledger.ReadDefaultLedgerEntries();
+            return entries;
         }
 
         #endregion Act - With

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,11 +24,12 @@ namespace PTB.File.E2E
             WithAFileClient();
 
             // Act
-            IEnumerable<TitleRegex.TitleRegex> titleRegices = Client.Regex.ReadAllTitleRegex();
-            Client.Ledger.CategorizeDefaultLedger(titleRegices);
+            WhenALedgerIsCategorized();
+            List<Ledger.Ledger> ledgerEntries = WithAllLedgerEntries();
 
             // Assert
-
+            Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Restaurant"), "Failed to categorize any ledger entries as Restaurant");
+            Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Groceries"), "Failed to categorize any ledger entries as Groceries");
         }
     }
 }
