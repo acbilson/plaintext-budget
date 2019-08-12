@@ -8,6 +8,15 @@ namespace PTB.File.E2E
     [TestClass]
     public class ImportStatementTests : GlobalSetup
     {
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            string folder = "Import";
+            GetDefaultSchema(folder);
+            GetDefaultSettings(folder);
+        }
+
         [TestMethod]
         public void ImportsEntireStatement()
         {

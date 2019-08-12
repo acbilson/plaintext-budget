@@ -16,23 +16,16 @@ namespace PTB.File.E2E
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
 
-        [TestInitialize]
-        public void Initialize()
+        public void GetDefaultSettings(string folder)
         {
-            GetDefaultSchema();
-            GetDefaultSettings();
-        }
-
-        public void GetDefaultSettings()
-        {
-            var text = System.IO.File.ReadAllText(@".\Import\settings.json");
+            var text = System.IO.File.ReadAllText($@".\{folder}\settings.json");
             PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(text);
             Settings = settings;
         }
 
-        public void GetDefaultSchema()
+        public void GetDefaultSchema(string folder)
         {
-            var text = System.IO.File.ReadAllText(@".\Import\schema.json");
+            var text = System.IO.File.ReadAllText($@".\{folder}\schema.json");
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
             Schema = schema;
             /*
