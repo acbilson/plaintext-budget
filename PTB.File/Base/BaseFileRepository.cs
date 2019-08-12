@@ -25,6 +25,11 @@ namespace PTB.File
         {
             return System.IO.Path.Combine(_settings.HomeDirectory, folder, (name + _settings.FileExtension));
         }
+
+        public string GetCopyPath(string folder, string name)
+        {
+            return System.IO.Path.Combine(_settings.HomeDirectory, folder, (name + "-copy" + _settings.FileExtension));
+        }
     }
 
     public enum FileType
