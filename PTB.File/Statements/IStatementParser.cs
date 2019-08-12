@@ -4,6 +4,6 @@ namespace PTB.File.Statements
 {
     public interface IStatementParser
     {
-        string ParseLine(string line, LedgerSchema schema);
+        ParseResponse ParseLine(string line, LedgerSchema schema);
     }
 }

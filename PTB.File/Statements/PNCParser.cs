@@ -10,9 +10,16 @@ namespace PTB.File.Statements
         private const char DELIMITER = ',';
         private LedgerSchema _schema;
 
-        public string ParseLine(string line, LedgerSchema schema)
+        public ParseResponse ParseLine(string line, LedgerSchema schema)
         {
+            var response = ParseResponse.Default;
             _schema = schema;
+
+            if (IsSummaryLine(line)) {
+                response.Success = false;
+                response.Message = "Skip summary line";
+                return response;
+            }
 
             string[] lines = line.Split(DELIMITER);
 
@@ -39,7 +46,17 @@ namespace PTB.File.Statements
             builder.Append(location);
             builder.Append(delimiter);
             builder.Append(locked);
-            return builder.ToString();
+
+            response.Result = builder.ToString();
+            return response;
+        }
+
+        // example summary line: "00000000004604718986,2019/06/18,2019/07/16,7320.66,7763.23"
+        private bool IsSummaryLine(string line)
+        {
+            bool match = Regex.IsMatch(line, @"\d*\,\d{4}\/\d{2}\/\d{2}\,.*");
+            return match;
+
         }
 
         private string PrependSpaces(string value, int max) => new String(' ', max - value.Length) + value;

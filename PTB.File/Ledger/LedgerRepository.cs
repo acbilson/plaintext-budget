@@ -25,8 +25,12 @@ namespace PTB.File.Ledger
                 {
                     while ((line = reader.ReadLine()) != null)
                     {
-                        string transaction = parser.ParseLine(line, _schema.Ledger);
-                        defaultLedgerFile.WriteLine(transaction);
+                        ParseResponse response = parser.ParseLine(line, _schema.Ledger);
+
+                        if (response.Success)
+                        {
+                            defaultLedgerFile.WriteLine(response.Result);
+                        }
                     }
                 }
             }

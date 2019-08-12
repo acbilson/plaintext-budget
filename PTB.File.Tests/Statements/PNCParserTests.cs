@@ -26,10 +26,26 @@ namespace PTB.File.Statements.Tests
             var parser = new PNCParser();
 
             // Act
-            string result = parser.ParseLine(data, Schema.Ledger);
+            ParseResponse response = parser.ParseLine(data, Schema.Ledger);
 
             // Assert
-            Assert.AreEqual(Schema.Ledger.Size, result.Length);
+            Assert.IsTrue(response.Success);
+            Assert.AreEqual(Schema.Ledger.Size, response.Result.Length);
+        }
+
+        [DataRow("00000000004604718986,2019/06/18,2019/07/16,7320.66,7763.23")]
+        [TestMethod]
+        public void SkipsSummaryColumn(string data)
+        {
+            // Arrange
+            var parser = new PNCParser();
+
+            // Act
+            ParseResponse response = parser.ParseLine(data, Schema.Ledger);
+
+            // Assert
+            Assert.IsFalse(response.Success);
+            Assert.AreEqual("Skip summary line", response.Message);
         }
     }
 }

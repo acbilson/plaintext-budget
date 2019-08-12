@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using PTB.File.Base;
 using PTB.File.Ledger;
 using PTB.File.Statements;
@@ -9,16 +10,32 @@ namespace PTB.File.E2E
     [TestClass]
     public class GlobalSetup
     {
+        public PTBSettings Settings;
         public PTBSchema Schema;
+        public FileClient Client;
+        public PNCParser PNCParser;
+        public LedgerParser LedgerParser;
 
         [TestInitialize]
         public void Initialize()
         {
-            Schema = GetDefaultSchema();
+            GetDefaultSchema();
+            GetDefaultSettings();
         }
 
-        public PTBSchema GetDefaultSchema()
+        public void GetDefaultSettings()
         {
+            var text = System.IO.File.ReadAllText(@".\Import\settings.json");
+            PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(text);
+            Settings = settings;
+        }
+
+        public void GetDefaultSchema()
+        {
+            var text = System.IO.File.ReadAllText(@".\Import\schema.json");
+            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
+            Schema = schema;
+            /*
             var schema = new PTBSchema
             {
                 Ledger = new LedgerSchema
@@ -54,22 +71,73 @@ namespace PTB.File.E2E
                     Size = 63
                 }
             };
-
-            return schema;
+            */
         }
 
-        // Arrange - With
-        public FileClient WithAFileClient()
+        #region Arrange - With
+        public void WithAFileClient()
         {
             var client = new FileClient();
-            client.Instantiate(@".\Import");
-            return client;
+            client.Instantiate(Settings.HomeDirectory);
+            Client = client;
         }
 
-        public PNCParser WithAPNCParser()
+        public void WithAPNCParser()
         {
             var parser = new PNCParser();
-            return parser;
+            PNCParser = parser;
         }
+
+        public void WithALedgerParser()
+        {
+            var parser = new LedgerParser(Schema.Ledger);
+            LedgerParser = parser;
+        }
+        #endregion Arrange - With
+
+        
+        #region Act - When
+        public void WhenACleanStatementIsImported()
+        {
+            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Clean\datafile.csv");
+            Client.Ledger.ImportToDefaultLedger(path, PNCParser);
+        }
+        #endregion Act - When
+
+        #region Act - With
+
+        public Ledger.Ledger WithAParsedLedger()
+        {
+            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
+            string ledgerEntries = System.IO.File.ReadAllText(path);
+            string firstLine = ledgerEntries.Substring(0, Schema.Ledger.Size);
+            Ledger.Ledger ledger = LedgerParser.ParseLine(firstLine);
+            return ledger;
+        }
+
+        #endregion Act - With
+
+        #region Assert - Should
+        public void ShouldImportAllLedgerEntries()
+        {
+            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
+            string ledgerEntries = System.IO.File.ReadAllText(path);
+            Assert.AreEqual(13572, ledgerEntries.Length);
+        }
+
+        // first line: 2019/06/18,310.80,"Direct Deposit - Payroll","OPTIMUM JOY CLIN XXXXXXXXXXX39-0","000191699","CREDIT"
+        public void ShouldParseFirstEntry(Ledger.Ledger ledger)
+        {
+            Assert.AreEqual("2019-06-18", ledger.Date);
+            Assert.AreEqual("310.80", ledger.Amount.TrimStart());
+            Assert.AreEqual("directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", ledger.Title.TrimStart());
+            Assert.AreEqual("000191699", ledger.Location.TrimStart());
+            Assert.AreEqual('C', ledger.Type);
+            Assert.AreEqual('0', ledger.Locked);
+            Assert.AreEqual("", ledger.Subcategory.Trim());
+        }
+
+        #endregion Assert - Should
+
     }
 }

@@ -26,6 +26,9 @@
     <None Update="Import\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Import\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
