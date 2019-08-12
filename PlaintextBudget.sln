@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.File", "PTB.File\PTB.Fi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.File.Tests", "PTB.File.Tests\PTB.File.Tests.csproj", "{2B8299A3-1476-480F-8C75-119A24A34B86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.File.E2E", "PTB.File.E2E\PTB.File.E2E.csproj", "{AEC769E5-6CA6-432B-9CEF-98A3038FB6D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2B8299A3-1476-480F-8C75-119A24A34B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B8299A3-1476-480F-8C75-119A24A34B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B8299A3-1476-480F-8C75-119A24A34B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEC769E5-6CA6-432B-9CEF-98A3038FB6D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC769E5-6CA6-432B-9CEF-98A3038FB6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC769E5-6CA6-432B-9CEF-98A3038FB6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC769E5-6CA6-432B-9CEF-98A3038FB6D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

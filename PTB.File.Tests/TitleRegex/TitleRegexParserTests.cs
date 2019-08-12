@@ -19,7 +19,7 @@ namespace PTB.File.TitleRegex.Tests
         public void ParsesCleanData(string line, char priority, string subcategory, string regex)
         {
             // Arrange
-            var parser = new TitleRegexParser(Schema.Regex);
+            var parser = new TitleRegexParser(Schema.TitleRegex);
 
             // Act
             var result = parser.ParseLine(line);

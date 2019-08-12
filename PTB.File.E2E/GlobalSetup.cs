@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.File.Base;
 using PTB.File.Ledger;
+using PTB.File.Statements;
 using PTB.File.TitleRegex;
 
-namespace PTB.File.Tests
+namespace PTB.File.E2E
 {
     [TestClass]
     public class GlobalSetup
@@ -55,6 +56,20 @@ namespace PTB.File.Tests
             };
 
             return schema;
+        }
+
+        // Arrange - With
+        public FileClient WithAFileClient()
+        {
+            var client = new FileClient();
+            client.Instantiate(@".\Import");
+            return client;
+        }
+
+        public PNCParser WithAPNCParser()
+        {
+            var parser = new PNCParser();
+            return parser;
         }
     }
 }

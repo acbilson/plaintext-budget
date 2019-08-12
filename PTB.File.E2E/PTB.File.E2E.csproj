@@ -10,7 +10,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,22 +17,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\clean-schema.json">
+    <None Update="Import\Clean\datafile.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\clean-settings.json">
+    <None Update="Import\schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\Clean\schema.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\Clean\settings.json">
+    <None Update="Import\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Base\" />
+    <Folder Include="Import\Clean\" />
   </ItemGroup>
 
 </Project>

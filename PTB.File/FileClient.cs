@@ -9,23 +9,24 @@ namespace PTB.File
         public LedgerRepository Ledger;
         public TitleRegexRepository Regex;
 
-        public void Instantiate()
+        public void Instantiate(string home = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\")
         {
-            var settings = ReadSettingsFile();
-            var schema = ReadSchemaFile();
+            var settings = ReadSettingsFile(home);
+            var schema = ReadSchemaFile(home);
             Ledger = new LedgerRepository(settings, schema);
             Regex = new TitleRegexRepository(settings, schema);
         }
 
-        private PTBSettings ReadSettingsFile()
+        private PTBSettings ReadSettingsFile(string home)
         {
-            string settingsPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\settings.json";
+            string settingsPath = System.IO.Path.Combine(home, "settings.json");
             PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
             return settings;
         }
 
-        private PTBSchema ReadSchemaFile()
+        private PTBSchema ReadSchemaFile(string home)
         {
+            string settingsPath = System.IO.Path.Combine(home, "schema.json");
             string schemaPath = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\schema.json";
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
             return schema;

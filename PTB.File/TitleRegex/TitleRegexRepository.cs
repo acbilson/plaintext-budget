@@ -9,13 +9,13 @@ namespace PTB.File.TitleRegex
 
         public TitleRegexRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
         {
-            _parser = new TitleRegexParser(_schema.Regex);
+            _parser = new TitleRegexParser(_schema.TitleRegex);
         }
 
         public IEnumerable<PTB.File.TitleRegex.TitleRegex> ReadAllTitleRegex()
         {
             var titleRegexs = new List<TitleRegex>();
-            string path = base.GetDefaultPath(_folder, _schema.Regex.GetDefaultName());
+            string path = base.GetDefaultPath(_folder, _schema.TitleRegex.GetDefaultName());
             TitleRegexFile titleRegexFile = new TitleRegexFile(path);
 
             foreach (string line in titleRegexFile.ReadLine())

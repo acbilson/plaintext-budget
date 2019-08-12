@@ -6,6 +6,6 @@ namespace PTB.File
     public class PTBSchema
     {
         public LedgerSchema Ledger;
-        public TitleRegexSchema Regex;
+        public TitleRegexSchema TitleRegex;
     }
 }

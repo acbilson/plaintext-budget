@@ -30,7 +30,6 @@ namespace PTB.File.Statements.Tests
 
             // Assert
             Assert.AreEqual(Schema.Ledger.Size, result.Length);
-            System.Console.WriteLine(result);
         }
     }
 }
