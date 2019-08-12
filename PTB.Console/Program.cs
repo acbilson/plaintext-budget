@@ -20,9 +20,6 @@ namespace PTB.Console
 
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
-            //var fileManager = FileManager.Instance;
-            //fileManager.Instantiate(baseDir);
-            //LedgerFileOld defaultLedgerFile = fileManager.GetDefaultLedgerFile();
             var client = new FileClient();
             client.Instantiate();
 
@@ -30,9 +27,14 @@ namespace PTB.Console
             {
                 case ConsoleActions.Import:
 
-                    string loadFilePath = @"C:\Users\abilson\OneDrive - SPR Consulting\Working\Bench\Source\Resource\datafile.csv";
-                    var parser = new PNCParser();
-                    client.Ledger.ImportToDefaultLedger(loadFilePath, parser);
+                    string importFolderPath = System.IO.Path.Combine(baseDir, "Import");
+                    string[] importFilePaths = System.IO.Directory.GetFiles(importFolderPath);
+
+                    foreach (var importFilePath in importFilePaths)
+                    {
+                        var parser = new PNCParser();
+                        client.Ledger.ImportToDefaultLedger(importFilePath, parser, append: true);
+                    }
 
                     break;
 

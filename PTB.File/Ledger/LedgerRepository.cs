@@ -17,11 +17,11 @@ namespace PTB.File.Ledger
             _parser = new LedgerParser(_schema.Ledger);
         }
 
-        public void ImportToDefaultLedger(string path, IStatementParser parser)
+        public void ImportToDefaultLedger(string path, IStatementParser parser, bool append = false)
         {
             string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
 
-            using (LedgerFile defaultLedgerFile = new LedgerFile(ledgerPath))
+            using (var writer = new StreamWriter(ledgerPath, append))
             {
                 string line;
                 using (StreamReader reader = new StreamReader(path))
@@ -32,7 +32,7 @@ namespace PTB.File.Ledger
 
                         if (response.Success)
                         {
-                            defaultLedgerFile.WriteLine(response.Result);
+                            writer.WriteLine(response.Result);
                         }
                     }
                 }
