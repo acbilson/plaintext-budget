@@ -16,7 +16,7 @@ namespace PTB.Console
     {
         private static void Main(string[] args)
         {
-            var action = ConsoleActions.Categorize;
+            var action = ConsoleActions.Import;
 
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
