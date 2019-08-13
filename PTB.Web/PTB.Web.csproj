@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\custom-pipes\prepend-zeros.pipe.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -40,6 +44,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PTB.File\PTB.File.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\custom-pipes\prepend-zeros.pipe.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

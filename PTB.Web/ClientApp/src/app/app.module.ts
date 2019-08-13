@@ -11,6 +11,8 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LedgerComponent } from './ledger/ledger.component';
 
+import { PrependZerosPipe } from './custom-pipes/prepend-zeros.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,8 @@ import { LedgerComponent } from './ledger/ledger.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    LedgerComponent
+    LedgerComponent,
+    PrependZerosPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

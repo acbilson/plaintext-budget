@@ -39,18 +39,45 @@ namespace PTB.File.Ledger
             }
         }
 
-        public List<Ledger> ReadDefaultLedgerEntries()
+        public bool IndexStartsAtCorrectByte(int startIndex)
         {
+            if (startIndex == 0) { return true; }
+
+            if (startIndex > 0) { 
+                // subtracts the first byte of the line to the start Index (e.g. a 117 byte line will start the next line on 118)
+                return (startIndex - 1) % _schema.Ledger.Size == 0;
+            }
+            return false;
+        }
+
+        public byte[] GetLedgerBuffer() => new byte[_schema.Ledger.Size + Environment.NewLine.Length];
+
+        public void SetBufferStartIndex(FileStream stream, int startIndex) => stream.Seek(startIndex, SeekOrigin.Begin);
+
+        public List<Ledger> ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
+        {
+            if (!IndexStartsAtCorrectByte(startIndex))
+            {
+                throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.Size}"); 
+            }
+
             var ledgerEntries = new List<Ledger>();
             string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
 
-            using (var reader = new StreamReader(ledgerPath))
+            using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.Read))
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                int byteIndex = startIndex;
+                int bytesRead = 0;
+                byte[] buffer = GetLedgerBuffer();
+                SetBufferStartIndex(stream, startIndex);
+
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0 && ledgerCount > 0)
                 {
-                    Ledger current = _parser.ParseLine(line);
+                    string line = Encoding.ASCII.GetString(buffer);
+                    Ledger current = _parser.ParseLine(line, byteIndex);
                     ledgerEntries.Add(current);
+                    ledgerCount--;
+                    byteIndex += bytesRead;
                 }
             }
 

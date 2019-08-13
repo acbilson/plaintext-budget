@@ -12,8 +12,7 @@ namespace PTB.File.Ledger
         {
             _schema = schema;
         }
-
-        public Ledger ParseLine(string line)
+        public Ledger ParseLine(string line, int index = 0)
         {
             int delimiterLength = _schema.Delimiter.Length;
             string date = CalculateByteIndex(delimiterLength, line, _schema.Columns.Date);
@@ -24,7 +23,7 @@ namespace PTB.File.Ledger
             string location = CalculateByteIndex(delimiterLength, line, _schema.Columns.Location);
             string locked = CalculateByteIndex(delimiterLength, line, _schema.Columns.Locked);
 
-            return new Ledger(date, amount, title, location, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
+            return new Ledger(index, date, amount, title, location, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
         }
 
         public string ParseLedger(Ledger ledger)

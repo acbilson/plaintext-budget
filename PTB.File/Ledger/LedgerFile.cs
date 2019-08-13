@@ -34,36 +34,6 @@ namespace PTB.File.Ledger
             _writer.WriteLine(line);
         }
 
-        public void Categorize(LedgerParser parser, int bufferSize, IEnumerable<TitleRegex.TitleRegex> categories)
-        {
-            using (var stream = System.IO.File.Open(_Path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-            {
-                var reader = new StreamReader(stream, Encoding.UTF8);
-                var writer = new StreamWriter(stream, Encoding.UTF8);
-
-                char[] buffer = new char[bufferSize];
-                while (reader.Read(buffer, 0, buffer.Length) != 0)
-                {
-                    Ledger current = parser.ParseLine(buffer.ToString());
-
-                    foreach (var category in categories)
-                    {
-                        if (Regex.IsMatch(current.Title, category.Regex))
-                        {
-                            current.Subcategory = category.Subcategory;
-
-                            // returns stream to overwrite
-                            stream.Position -= buffer.Length;
-                            writer.Write(parser.ParseLedger(current));
-
-                            // moves to next line
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
-
         #region IDisposable Support
 
         private bool disposedValue = false;

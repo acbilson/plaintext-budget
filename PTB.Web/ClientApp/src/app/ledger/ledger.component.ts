@@ -11,9 +11,14 @@ export class LedgerComponent implements OnInit {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
 
-    http.get<ILedger[]>(baseUrl + 'api/Ledger/ReadAllLedgers').subscribe(result => { this.ledgers = result; }, error => console.error(error));
+    const startIndex = 0;
+    const ledgerCount = 25;
+    const uri = baseUrl + 'api/Ledger/ReadLedgers' + '?startIndex=' + startIndex + '&count=' + ledgerCount;
+    http.get<ILedger[]>(uri).subscribe(result => { this.ledgers = result; }, error => console.error(error));
 
+    // this is dummy data while the subscription loads
     const ledger: ILedger = {
+      "index": "0",
       "date": "19-01-01",
       "type": "D",
       "amount": "10.80",
@@ -29,10 +34,10 @@ export class LedgerComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
 
 interface ILedger {
+  "index": string;
   "date": string;
   "type": string;
   "amount": string;

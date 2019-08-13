@@ -13,15 +13,14 @@ namespace PTB.Web.Controllers
     [ApiController]
     public class LedgerController : ControllerBase
     {
-        // GET: api/Ledger
+        // GET: api/Ledger?startIndex=0&count=10
         [HttpGet("[action]")]
-        public IEnumerable<Ledger> ReadAllLedgers()
+        public IEnumerable<Ledger> ReadLedgers(int startIndex, int count)
         {
             var home = Environment.CurrentDirectory;
             var client = new FileClient();
             client.Instantiate(home);
-            var ledgerEntries = client.Ledger.ReadDefaultLedgerEntries();
-            //var ledger = new Ledger("19-12-31", "99.95", "serversidetesttitle", "00012942", 'C', '0', "");
+            var ledgerEntries = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
             return ledgerEntries;
         }
 
