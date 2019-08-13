@@ -1,0 +1,76 @@
+{
+  "Ledger": {
+    "Delimiter": " ",
+    "Size": 115,
+    "Columns": {
+      "Date": {
+        "Index": 1,
+        "Size": 10,
+        "Offset": 0
+      },
+      "Type": {
+        "Index": 2,
+        "Size": 1,
+        "Offset": 10
+      },
+      "Amount": {
+        "Index": 3,
+        "Size": 12,
+        "Offset": 11
+      },
+      "Subcategory": {
+        "Index": 4,
+        "Size": 20,
+        "Offset": 23
+      },
+      "Title": {
+        "Index": 5,
+        "Size": 50,
+        "Offset": 43
+      },
+      "Location": {
+        "Index": 6,
+        "Size": 15,
+        "Offset": 93
+      },
+      "Locked": {
+        "Index": 7,
+        "Size": 1,
+        "Offset": 108
+      }
+    },
+    "Files": [
+      {
+        "IsDefault": true,
+        "Name": "ledger_checking_19-01-01_19-12-31"
+      }
+    ]
+  },
+  "TitleRegex": {
+    "Delimiter": " ",
+    "Size": 63,
+    "Columns": {
+      "Priority": {
+        "Index": 1,
+        "Size": 1,
+        "Offset": 0
+      },
+      "Subcategory": {
+        "Index": 2,
+        "Size": 20,
+        "Offset": 1
+      },
+      "Regex": {
+        "Index": 3,
+        "Size": 30,
+        "Offset": 21
+      }
+    },
+    "Files": [
+      {
+        "IsDefault": true,
+        "Name": "title-regex"
+      }
+    ]
+  }
+}

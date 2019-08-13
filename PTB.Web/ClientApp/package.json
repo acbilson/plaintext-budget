@@ -1,17 +1,4 @@
 {
-  "name": "PTB.Web",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve --extract-css",
-    "build": "ng build --extract-css",
-    "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.0",
     "@angular/common": "^5.2.0",
@@ -28,7 +15,7 @@
     "bootstrap": "^3.4.1",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.6",
-    "zone.js": "^0.8.19"
+    "zone.js": "^-1.8.19"
   },
   "devDependencies": {
     "@angular/cli": "~1.7.0",
@@ -50,7 +37,20 @@
     "tslint": "~5.9.1",
     "typescript": "~2.5.3"
   },
+  "license": "MIT",
+  "name": "PTB.Web",
   "optionalDependencies": {
     "node-sass": "^4.9.0"
-  }
+  },
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --extract-css",
+    "build": "ng build --extract-css",
+    "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "version": "0.0.0"
 }
