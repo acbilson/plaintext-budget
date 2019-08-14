@@ -14,9 +14,6 @@ namespace PTB.File.Ledger
         }
 
 
-        public bool LineEndsWithWindowsNewLine(string line) => line.IndexOf(Environment.NewLine) == (line.Length - Environment.NewLine.Length);
-
-        public bool LineSizeMatchesSchema(string line) => line.Length == (_schema.Size + Environment.NewLine.Length);
 
         public StringToLedgerResponse ParseLine(string line, int index = 0)
         {
@@ -29,7 +26,7 @@ namespace PTB.File.Ledger
                 return response;
             }
 
-            if (!LineSizeMatchesSchema(line))
+            if (!LineSizeMatchesSchema(line, _schema.Size))
             {
                 response.Success = false;
                 response.Message = "Line length does not match schema, which may indicate data corruption.";

@@ -101,8 +101,15 @@ namespace PTB.File.E2E
 
         public void WhenALedgerIsCategorized()
         {
-            IEnumerable<TitleRegex.TitleRegex> titleRegices = Client.Regex.ReadAllTitleRegex();
-            Client.Ledger.CategorizeDefaultLedger(titleRegices);
+            TitleRegexReadResponse response = Client.Regex.ReadAllTitleRegex();
+            Client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
+        }
+
+        public LedgerUpdateResponse WhenALedgerIsUpdated(Ledger.Ledger ledgerToUpdate)
+        {
+            var response = Client.Ledger.UpdateDefaultLedgerEntry(ledgerToUpdate);
+            return response;
+
         }
         #endregion Act - When
 
@@ -116,6 +123,12 @@ namespace PTB.File.E2E
             StringToLedgerResponse response = LedgerParser.ParseLine(firstLine, 0);
             return response.Result; 
         }
+        public Ledger.Ledger WithTheFourthLedger()
+        {
+            var ledger = GetLedgerOnLine(4);
+            return ledger;
+        }
+
 
         public List<Ledger.Ledger> WithAllLedgerEntries()
         {
@@ -145,7 +158,28 @@ namespace PTB.File.E2E
             Assert.AreEqual("", ledger.Subcategory.Trim());
         }
 
+        public void ShouldUpdateFourthEntryWithNewSubcategory(string subcategory)
+        {
+            var ledger = GetLedgerOnLine(4);
+            Assert.AreEqual(subcategory, ledger.Subcategory);
+        }
+
         #endregion Assert - Should
+
+        // should be the full length of the line plus ending (117) multiplied by the line number minus 1 b/c it starts a 1
+        private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.Size + System.Environment.NewLine.Length) * (lineNumber - 1);
+
+        private Ledger.Ledger GetLedgerOnLine(int lineNumber)
+        {
+            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
+            string ledgerEntries = System.IO.File.ReadAllText(path);
+            int ledgerIndex = CalculateLedgerIndex(lineNumber);
+            string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.Size + System.Environment.NewLine.Length);
+            StringToLedgerResponse response = LedgerParser.ParseLine(line, ledgerIndex);
+
+            Assert.IsTrue(response.Success, $"Failed to parse ledger with message {response.Message}");
+            return response.Result;
+        }
 
     }
 }

@@ -48,7 +48,7 @@ namespace PTB.File.Ledger
 
             if (startIndex > 0) { 
                 // subtracts the first byte of the line to the start Index (e.g. a 117 byte line will start the next line on 118)
-                return (startIndex - 1) % _schema.Ledger.Size == 0;
+                return (startIndex % (_schema.Ledger.Size + Environment.NewLine.Length)) == 0;
             }
             return false;
         }
@@ -57,7 +57,6 @@ namespace PTB.File.Ledger
 
         public void SetBufferStartIndex(FileStream stream, int startIndex) => stream.Seek(startIndex, SeekOrigin.Begin);
 
-        public long GetLineIndex(long streamPosition) => streamPosition / _schema.Ledger.Size;
 
         public List<Ledger> ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
         {
@@ -67,9 +66,9 @@ namespace PTB.File.Ledger
             }
 
             var ledgerEntries = new List<Ledger>();
-            string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
+            string path = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
 
-            using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 int byteIndex = startIndex;
                 int bytesRead = 0;
@@ -83,7 +82,7 @@ namespace PTB.File.Ledger
 
                     if (!current.Success)
                     {
-                        long lineNumber = GetLineIndex(stream.Position);
+                        long lineNumber = GetLineNumber(stream.Position, _schema.Ledger.Size);
                         throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
                     }
 
@@ -96,12 +95,33 @@ namespace PTB.File.Ledger
             return ledgerEntries;
         }
 
+        public LedgerUpdateResponse UpdateDefaultLedgerEntry(Ledger ledgerToUpdate)
+        {
+            var response = LedgerUpdateResponse.Default;
+
+            if (!IndexStartsAtCorrectByte(ledgerToUpdate.Index))
+            {
+                response.Success = false;
+                response.Message = $"Could not update ledger with these values. The start index {ledgerToUpdate} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.Size}";
+                return response;
+            }
+
+            string path = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
+            string line = _parser.ParseLedger(ledgerToUpdate);
+
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Write))
+            {
+                byte[] buffer = _encoding.GetBytes(line);
+                SetBufferStartIndex(stream, ledgerToUpdate.Index);
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Flush();
+            }
+
+            return response;
+        }
+
         public string GetRegexMatch(string regex) => String.Concat(".*", regex.TrimStart(), "*");
 
-        public bool HasByteOrderMark(byte[] buffer) => buffer[0] == 239;
-
-        // Windows new line has both byte 13 (\n) and byte 10 (\r). Unix only has byte 13 (\n), so it will not contain byte 10 (\r)
-        public bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
 
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
@@ -114,6 +134,8 @@ namespace PTB.File.Ledger
                 int bytesRead = 0;
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
+                    string line = _encoding.GetString(buffer);
+
                     // the byte order mark (byteID 239) is added by some utf-8 compatible text editors. Can remove using Vim by :set nobomb; wq
                     if (HasByteOrderMark(buffer))
                     {
@@ -126,13 +148,11 @@ namespace PTB.File.Ledger
                         throw new ParseException("The default ledger has Unix new lines instead of Windows new lines. Please convert to windows new lines to continue");
                     }
 
-
-                    string line = _encoding.GetString(buffer);
                     StringToLedgerResponse current = _parser.ParseLine(line, bytesRead);
 
                     if (!current.Success)
                     {
-                        long lineNumber = GetLineIndex(stream.Position);
+                        long lineNumber = GetLineNumber(stream.Position, _schema.Ledger.Size);
                         throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
                     }
 
