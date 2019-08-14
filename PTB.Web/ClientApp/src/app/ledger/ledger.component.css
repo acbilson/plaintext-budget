@@ -2,6 +2,8 @@
 .ledger-date { }
 .ledger-type { text-align: center; }
 .ledger-amount { text-align: right; }
+.ledger-amount-credit { }
+.ledger-amount-debit { color: red; }
 .ledger-title { }
 .ledger-subcategory { }
 .ledger-location { }

@@ -11,6 +11,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'prependZeros'})
 export class PrependZerosPipe implements PipeTransform {
   transform(value: string, width?: number): string {
-    return '0'.repeat(isNaN(width) ? 7 : width - value.length) + value;
+    var prependCount = isNaN(width) ? 7 : width;
+    prependCount -= value.toString().length;
+    var prepend = '0'.repeat(prependCount);
+    return (prepend + value);
   }
 }

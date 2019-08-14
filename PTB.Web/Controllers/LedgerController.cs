@@ -15,7 +15,7 @@ namespace PTB.Web.Controllers
     {
         // GET: api/Ledger?startIndex=0&count=10
         [HttpGet("[action]")]
-        public IEnumerable<Ledger> ReadLedgers(int startIndex, int count)
+        public List<Ledger> ReadLedgers(int startIndex, int count)
         {
             var home = Environment.CurrentDirectory;
             var client = new FileClient();
