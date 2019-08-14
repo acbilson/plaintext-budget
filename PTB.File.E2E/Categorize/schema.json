@@ -48,7 +48,7 @@
   },
   "TitleRegex": {
     "Delimiter": " ",
-    "Size": 63,
+    "Size": 53,
     "Columns": {
       "Priority": {
         "Index": 1,
