@@ -10,9 +10,9 @@ namespace PTB.File.Statements
         private const char DELIMITER = ',';
         private LedgerSchema _schema;
 
-        public ParseResponse ParseLine(string line, LedgerSchema schema)
+        public StatementParseResponse ParseLine(string line, LedgerSchema schema)
         {
-            var response = ParseResponse.Default;
+            var response = StatementParseResponse.Default;
             _schema = schema;
 
             if (IsSummaryLine(line)) {

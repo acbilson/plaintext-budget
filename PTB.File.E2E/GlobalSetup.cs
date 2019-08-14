@@ -112,9 +112,9 @@ namespace PTB.File.E2E
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
-            string firstLine = ledgerEntries.Substring(0, Schema.Ledger.Size);
-            Ledger.Ledger ledger = LedgerParser.ParseLine(firstLine, 0);
-            return ledger;
+            string firstLine = ledgerEntries.Substring(0, Schema.Ledger.Size + System.Environment.NewLine.Length);
+            StringToLedgerResponse response = LedgerParser.ParseLine(firstLine, 0);
+            return response.Result; 
         }
 
         public List<Ledger.Ledger> WithAllLedgerEntries()

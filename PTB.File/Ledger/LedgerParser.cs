@@ -12,8 +12,30 @@ namespace PTB.File.Ledger
         {
             _schema = schema;
         }
-        public Ledger ParseLine(string line, int index = 0)
+
+
+        public bool LineEndsWithWindowsNewLine(string line) => line.IndexOf(Environment.NewLine) == (line.Length - Environment.NewLine.Length);
+
+        public bool LineSizeMatchesSchema(string line) => line.Length == (_schema.Size + Environment.NewLine.Length);
+
+        public StringToLedgerResponse ParseLine(string line, int index = 0)
         {
+            var response = StringToLedgerResponse.Default;
+
+            if (!LineEndsWithWindowsNewLine(line))
+            {
+                response.Success = false;
+                response.Message = "Line does not end with carriage return, which may indicate data corruption";
+                return response;
+            }
+
+            if (!LineSizeMatchesSchema(line))
+            {
+                response.Success = false;
+                response.Message = "Line length does not match schema, which may indicate data corruption.";
+                return response;
+            }
+
             int delimiterLength = _schema.Delimiter.Length;
             string date = CalculateByteIndex(delimiterLength, line, _schema.Columns.Date);
             string type = CalculateByteIndex(delimiterLength, line, _schema.Columns.Type);
@@ -23,7 +45,8 @@ namespace PTB.File.Ledger
             string location = CalculateByteIndex(delimiterLength, line, _schema.Columns.Location);
             string locked = CalculateByteIndex(delimiterLength, line, _schema.Columns.Locked);
 
-            return new Ledger(index, date, amount, title, location, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
+            response.Result = new Ledger(index, date, amount, title, location, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
+            return response;
         }
 
         public string ParseLedger(Ledger ledger)

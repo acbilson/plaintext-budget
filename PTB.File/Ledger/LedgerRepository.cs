@@ -1,9 +1,11 @@
-﻿using PTB.File.Statements;
+﻿using PTB.File.Exceptions;
+using PTB.File.Statements;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace PTB.File.Ledger
 {
@@ -11,6 +13,7 @@ namespace PTB.File.Ledger
     {
         private string _Folder = "Ledgers";
         private LedgerParser _parser;
+        private Encoding _encoding = Encoding.ASCII;
 
         public LedgerRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
         {
@@ -28,7 +31,7 @@ namespace PTB.File.Ledger
                 {
                     while ((line = reader.ReadLine()) != null)
                     {
-                        ParseResponse response = parser.ParseLine(line, _schema.Ledger);
+                        StatementParseResponse response = parser.ParseLine(line, _schema.Ledger);
 
                         if (response.Success)
                         {
@@ -54,6 +57,8 @@ namespace PTB.File.Ledger
 
         public void SetBufferStartIndex(FileStream stream, int startIndex) => stream.Seek(startIndex, SeekOrigin.Begin);
 
+        public long GetLineIndex(long streamPosition) => streamPosition / _schema.Ledger.Size;
+
         public List<Ledger> ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
         {
             if (!IndexStartsAtCorrectByte(startIndex))
@@ -73,9 +78,16 @@ namespace PTB.File.Ledger
 
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0 && ledgerCount > 0)
                 {
-                    string line = Encoding.ASCII.GetString(buffer);
-                    Ledger current = _parser.ParseLine(line, byteIndex);
-                    ledgerEntries.Add(current);
+                    string line = _encoding.GetString(buffer);
+                    StringToLedgerResponse current = _parser.ParseLine(line, byteIndex);
+
+                    if (!current.Success)
+                    {
+                        long lineNumber = GetLineIndex(stream.Position);
+                        throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
+                    }
+
+                    ledgerEntries.Add(current.Result);
                     ledgerCount--;
                     byteIndex += bytesRead;
                 }
@@ -86,8 +98,10 @@ namespace PTB.File.Ledger
 
         public string GetRegexMatch(string regex) => String.Concat(".*", regex.TrimStart(), "*");
 
-        // Tried a ton of ways to read and write in the same stream. It was super-fast, but I always
-        // had data corruption. Creating a new file is simpler, with no issues.
+        public bool HasByteOrderMark(byte[] buffer) => buffer[0] == 239;
+
+        // Windows new line has both byte 13 (\n) and byte 10 (\r). Unix only has byte 13 (\n), so it will not contain byte 10 (\r)
+        public bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
 
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
@@ -96,13 +110,33 @@ namespace PTB.File.Ledger
             {
                 int bufferLength = _schema.Ledger.Size + Environment.NewLine.Length;
                 int lineIndex = _schema.Ledger.Size - 1;
-                var encoding = Encoding.ASCII;
                 var buffer = new byte[bufferLength];
                 int bytesRead = 0;
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    string line = encoding.GetString(buffer);
-                    Ledger ledger = _parser.ParseLine(line, bytesRead);
+                    // the byte order mark (byteID 239) is added by some utf-8 compatible text editors. Can remove using Vim by :set nobomb; wq
+                    if (HasByteOrderMark(buffer))
+                    {
+                        throw new ParseException("The default ledger has a byte order mark added by a utf-8 compatible editor. Please remove from the text file to continue.");
+                    }
+
+                    // editing text files on a Unix-based can convert the line endings. Fix by running the unixtodos command
+                    if (HasUnixNewLine(buffer))
+                    {
+                        throw new ParseException("The default ledger has Unix new lines instead of Windows new lines. Please convert to windows new lines to continue");
+                    }
+
+
+                    string line = _encoding.GetString(buffer);
+                    StringToLedgerResponse current = _parser.ParseLine(line, bytesRead);
+
+                    if (!current.Success)
+                    {
+                        long lineNumber = GetLineIndex(stream.Position);
+                        throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
+                    }
+
+                    Ledger ledger = current.Result;
 
                     foreach (var titleRegex in titleRegices)
                     {
@@ -114,7 +148,7 @@ namespace PTB.File.Ledger
                             ledger.Subcategory = titleRegex.Subcategory;
                             string newLine = _parser.ParseLedger(ledger);
                             newLine += Environment.NewLine;
-                            byte[] newBuffer = encoding.GetBytes(newLine);
+                            byte[] newBuffer = _encoding.GetBytes(newLine);
 
                             // returns the stream to the beginning of the buffer (moves forward at Read())
                             stream.Seek(-bytesRead, SeekOrigin.Current);
@@ -127,9 +161,7 @@ namespace PTB.File.Ledger
                             continue;
                         }
                     }
-
                 }
-
             }
         }
     }

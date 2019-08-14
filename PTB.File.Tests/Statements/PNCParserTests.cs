@@ -26,7 +26,7 @@ namespace PTB.File.Statements.Tests
             var parser = new PNCParser();
 
             // Act
-            ParseResponse response = parser.ParseLine(data, Schema.Ledger);
+            StatementParseResponse response = parser.ParseLine(data, Schema.Ledger);
 
             // Assert
             Assert.IsTrue(response.Success);
@@ -41,7 +41,7 @@ namespace PTB.File.Statements.Tests
             var parser = new PNCParser();
 
             // Act
-            ParseResponse response = parser.ParseLine(data, Schema.Ledger);
+            StatementParseResponse response = parser.ParseLine(data, Schema.Ledger);
 
             // Assert
             Assert.IsFalse(response.Success);
