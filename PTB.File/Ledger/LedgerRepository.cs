@@ -88,40 +88,49 @@ namespace PTB.File.Ledger
 
         // Tried a ton of ways to read and write in the same stream. It was super-fast, but I always
         // had data corruption. Creating a new file is simpler, with no issues.
+
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
             string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
-            string newLedgerPath = base.GetCopyPath(_Folder, _schema.Ledger.GetDefaultName());
-            string line;
-
-            using (var reader = new StreamReader(ledgerPath))
+            using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.ReadWrite))
             {
-                using (var writer = new StreamWriter(newLedgerPath))
+                int bufferLength = _schema.Ledger.Size + Environment.NewLine.Length;
+                int lineIndex = _schema.Ledger.Size - 1;
+                var encoding = Encoding.ASCII;
+                var buffer = new byte[bufferLength];
+                int bytesRead = 0;
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    while ((line = reader.ReadLine()) != null)
+                    string line = encoding.GetString(buffer);
+                    Ledger ledger = _parser.ParseLine(line, bytesRead);
+
+                    foreach (var titleRegex in titleRegices)
                     {
-                        Ledger ledger = _parser.ParseLine(line);
+                        string match = GetRegexMatch(titleRegex.Regex);
+                        bool isMatch = Regex.IsMatch(ledger.Title, match, RegexOptions.IgnoreCase);
 
-                        foreach (var titleRegex in titleRegices)
+                        if (isMatch)
                         {
-                            string match = GetRegexMatch(titleRegex.Regex);
-                            bool isMatch = Regex.IsMatch(ledger.Title, match, RegexOptions.IgnoreCase);
+                            ledger.Subcategory = titleRegex.Subcategory;
+                            string newLine = _parser.ParseLedger(ledger);
+                            newLine += Environment.NewLine;
+                            byte[] newBuffer = encoding.GetBytes(newLine);
 
-                            if (isMatch)
-                            {
-                                ledger.Subcategory = titleRegex.Subcategory;
-                                continue;
-                            }
+                            // returns the stream to the beginning of the buffer (moves forward at Read())
+                            stream.Seek(-bytesRead, SeekOrigin.Current);
+                            stream.Write(newBuffer, 0, newBuffer.Length);
+
+                            // required for file to be updated.
+                            stream.Flush();
+
+                            // will only match first occurence, not overwrite with second, third, etc.
+                            continue;
                         }
-
-                        string newLine = _parser.ParseLedger(ledger);
-                        writer.WriteLine(newLine);
                     }
-                }
-            }
 
-            System.IO.File.Copy(newLedgerPath, ledgerPath, overwrite: true);
-            System.IO.File.Delete(newLedgerPath);
+                }
+
+            }
         }
     }
 }
