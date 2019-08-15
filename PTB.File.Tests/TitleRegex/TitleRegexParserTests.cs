@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using PTB.File;
 using PTB.File.Tests;
-using PTB.File.TitleRegex;
 
 namespace PTB.File.TitleRegex.Tests
 {

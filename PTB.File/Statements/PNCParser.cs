@@ -15,7 +15,8 @@ namespace PTB.File.Statements
             var response = StatementParseResponse.Default;
             _schema = schema;
 
-            if (IsSummaryLine(line)) {
+            if (IsSummaryLine(line))
+            {
                 response.Success = false;
                 response.Message = "Skip summary line";
                 return response;
@@ -56,7 +57,6 @@ namespace PTB.File.Statements
         {
             bool match = Regex.IsMatch(line, @"\d*\,\d{4}\/\d{2}\/\d{2}\,.*");
             return match;
-
         }
 
         private string PrependSpaces(string value, int max) => new String(' ', max - value.Length) + value;

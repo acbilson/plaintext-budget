@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PTB.File.TitleRegex
+﻿namespace PTB.File.TitleRegex
 {
     public class TitleRegexToStringResponse
     {
@@ -12,6 +8,7 @@ namespace PTB.File.TitleRegex
 
         public static TitleRegexToStringResponse Default => new TitleRegexToStringResponse { Result = string.Empty, Success = true, Message = string.Empty };
     }
+
     public class StringToTitleRegexResponse
     {
         public TitleRegex Result { get; set; }

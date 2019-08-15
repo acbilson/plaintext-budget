@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using PTB.File.Base;
 using PTB.File.Ledger;
 using PTB.File.Statements;
 using PTB.File.TitleRegex;
@@ -18,6 +17,7 @@ namespace PTB.File.E2E
         public LedgerParser LedgerParser;
 
         #region Initialize
+
         public void GetDefaultSettings(string folder)
         {
             var text = System.IO.File.ReadAllText($@".\{folder}\settings.json");
@@ -68,9 +68,11 @@ namespace PTB.File.E2E
             };
             */
         }
+
         #endregion Initialize
 
         #region Arrange - With
+
         public void WithAFileClient()
         {
             var client = new FileClient();
@@ -89,10 +91,11 @@ namespace PTB.File.E2E
             var parser = new LedgerParser(Schema.Ledger);
             LedgerParser = parser;
         }
+
         #endregion Arrange - With
 
-        
         #region Act - When
+
         public void WhenACleanStatementIsImported()
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Clean\datafile.csv");
@@ -109,8 +112,8 @@ namespace PTB.File.E2E
         {
             var response = Client.Ledger.UpdateDefaultLedgerEntry(ledgerToUpdate);
             return response;
-
         }
+
         #endregion Act - When
 
         #region Act - With
@@ -121,14 +124,14 @@ namespace PTB.File.E2E
             string ledgerEntries = System.IO.File.ReadAllText(path);
             string firstLine = ledgerEntries.Substring(0, Schema.Ledger.Size + System.Environment.NewLine.Length);
             StringToLedgerResponse response = LedgerParser.ParseLine(firstLine, 0);
-            return response.Result; 
+            return response.Result;
         }
+
         public Ledger.Ledger WithTheFourthLedger()
         {
             var ledger = GetLedgerOnLine(4);
             return ledger;
         }
-
 
         public List<Ledger.Ledger> WithAllLedgerEntries()
         {
@@ -139,6 +142,7 @@ namespace PTB.File.E2E
         #endregion Act - With
 
         #region Assert - Should
+
         public void ShouldImportAllLedgerEntries()
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
@@ -180,6 +184,5 @@ namespace PTB.File.E2E
             Assert.IsTrue(response.Success, $"Failed to parse ledger with message {response.Message}");
             return response.Result;
         }
-
     }
 }

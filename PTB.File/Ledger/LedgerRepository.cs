@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace PTB.File.Ledger
 {
@@ -46,7 +45,8 @@ namespace PTB.File.Ledger
         {
             if (startIndex == 0) { return true; }
 
-            if (startIndex > 0) { 
+            if (startIndex > 0)
+            {
                 // subtracts the first byte of the line to the start Index (e.g. a 117 byte line will start the next line on 118)
                 return (startIndex % (_schema.Ledger.Size + Environment.NewLine.Length)) == 0;
             }
@@ -57,12 +57,11 @@ namespace PTB.File.Ledger
 
         public void SetBufferStartIndex(FileStream stream, int startIndex) => stream.Seek(startIndex, SeekOrigin.Begin);
 
-
         public List<Ledger> ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
         {
             if (!IndexStartsAtCorrectByte(startIndex))
             {
-                throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.Size}"); 
+                throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.Size}");
             }
 
             var ledgerEntries = new List<Ledger>();
@@ -121,7 +120,6 @@ namespace PTB.File.Ledger
         }
 
         public string GetRegexMatch(string regex) => String.Concat(".*", regex.TrimStart(), "*");
-
 
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {

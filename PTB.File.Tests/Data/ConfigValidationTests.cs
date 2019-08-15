@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PTB.File.Tests.Data
 {
@@ -73,6 +70,5 @@ namespace PTB.File.Tests.Data
 
             Assert.IsNotNull(schema.TitleRegex);
         }
-
     }
 }

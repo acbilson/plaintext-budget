@@ -1,6 +1,6 @@
-﻿using PTB.File.Ledger;
+﻿using PTB.File.Categories;
+using PTB.File.Ledger;
 using PTB.File.TitleRegex;
-using PTB.File.Categories;
 
 namespace PTB.File
 {

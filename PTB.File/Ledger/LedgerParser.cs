@@ -13,8 +13,6 @@ namespace PTB.File.Ledger
             _schema = schema;
         }
 
-
-
         public StringToLedgerResponse ParseLine(string line, int index = 0)
         {
             var response = StringToLedgerResponse.Default;

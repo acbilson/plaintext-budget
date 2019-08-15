@@ -1,14 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PTB.File.E2E
 {
     [TestClass]
     public class ImportStatementTests : GlobalSetup
     {
-
         [TestInitialize]
         public void Initialize()
         {
@@ -46,6 +42,5 @@ namespace PTB.File.E2E
             // Assert
             ShouldParseFirstEntry(ledger);
         }
-
     }
 }

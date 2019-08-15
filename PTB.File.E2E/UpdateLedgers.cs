@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PTB.File.E2E
 {

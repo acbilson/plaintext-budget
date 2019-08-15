@@ -1,27 +1,27 @@
 <p *ngIf="!ledgers"><em>Loading...</em></p>
 <table class="table">
-  <thead>
-    <tr>
-      <!--<th scope="col">ID</th>-->
-      <th scope="col">Date</th>
-      <th scope="col">Amount</th>
-      <th scope="col">Subcategory</th>
-      <th scope="col">Title</th>
-      <th scope="col">Locked</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let ledger of ledgers">
-      <!--<td class="ledger-index"><label>{{ledger.index | prependZeros }}</label></td>-->
-      <td class="ledger-date"><label>{{ledger.date | trim }}</label></td>
-      <td class="ledger-amount">
-        <div *ngIf="ledger.type == 'D'; then thenBlock else elseBlock"></div>
-        <ng-template #thenBlock><label class="ledger-amount-debit">{{ledger.amount | trim | debit }}</label></ng-template>
-        <ng-template #elseBlock><label class="ledger-amount-credit">{{ ledger.amount | trim }}</label></ng-template>
-      </td>
-      <td class="ledger-subcategory"><input [ngModel]="ledger.subcategory | trim" (ngModelChange)="ledger.subcategory=$event" name="subcategory" type="text" /></td>
-      <td class="ledger-title"><input [ngModel]="ledger.title | trim" (ngModelChange)="ledger.title=$event" name="title" type="text" /></td>
-      <td class="ledger-locked"><input [ngModel]="ledger.locked | trim" (ngModelChange)="ledger.locked=$event" name="locked" type="text" /></td>
-    </tr>
-  </tbody>
+    <thead>
+        <tr>
+            <!--<th scope="col">ID</th>-->
+            <th scope="col">Date</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Subcategory</th>
+            <th scope="col">Title</th>
+            <th scope="col">Locked</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let ledger of ledgers">
+            <!--<td class="ledger-index"><label>{{ledger.index | prependZeros }}</label></td>-->
+            <td class="ledger-date"><label>{{ledger.date | trim }}</label></td>
+            <td class="ledger-amount">
+                <div *ngIf="ledger.type == 'D'; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock><label class="ledger-amount-debit">{{ ledger.amount | trim | debit }}</label></ng-template>
+                <ng-template #elseBlock><label class="ledger-amount-credit">{{ ledger.amount | trim }}</label></ng-template>
+            </td>
+            <td class="ledger-subcategory"><input [ngModel]="ledger.subcategory | trim" (ngModelChange)="ledger.subcategory=$event" name="subcategory" type="text" /></td>
+            <td class="ledger-title"><input [ngModel]="ledger.title | trim" (ngModelChange)="ledger.title=$event" name="title" type="text" /></td>
+            <td class="ledger-locked"><input [ngModel]="ledger.locked | trim" (ngModelChange)="ledger.locked=$event" name="locked" type="text" /></td>
+        </tr>
+    </tbody>
 </table>

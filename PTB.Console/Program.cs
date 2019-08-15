@@ -2,7 +2,6 @@
 using PTB.File.Statements;
 using PTB.File.TitleRegex;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace PTB.Console
@@ -44,7 +43,8 @@ namespace PTB.Console
                     TitleRegexReadResponse response = client.Regex.ReadAllTitleRegex();
                     client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
 
-                    foreach (var skippedMessage in response.SkippedMessages) {
+                    foreach (var skippedMessage in response.SkippedMessages)
+                    {
                         System.Console.WriteLine(skippedMessage);
                     }
 

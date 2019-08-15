@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PTB.File.Categories
+﻿namespace PTB.File.Categories
 {
     public struct Categories
     {

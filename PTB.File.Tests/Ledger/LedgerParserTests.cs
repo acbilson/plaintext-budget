@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using PTB.File.Tests;
 
 namespace PTB.File.Ledger.Tests

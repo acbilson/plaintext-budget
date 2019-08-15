@@ -1,7 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using PTB.File.Tests;
-using System;
 
 namespace PTB.File.Tests
 {

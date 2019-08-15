@@ -10,7 +10,6 @@ export class LedgerComponent implements OnInit {
   public ledgers: ILedger[];
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-
     const startIndex = 0;
     const ledgerCount = 25;
     const uri = baseUrl + 'api/Ledger/ReadLedgers' + '?startIndex=' + startIndex + '&count=' + ledgerCount;
@@ -29,7 +28,6 @@ export class LedgerComponent implements OnInit {
       };
 
     this.ledgers = [ledger];
-
   };
 
   ngOnInit() {

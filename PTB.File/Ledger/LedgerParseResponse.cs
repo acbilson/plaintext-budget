@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PTB.File.Ledger
+﻿namespace PTB.File.Ledger
 {
     public class LedgerToStringResponse
     {
@@ -12,6 +8,7 @@ namespace PTB.File.Ledger
 
         public static LedgerToStringResponse Default => new LedgerToStringResponse { Result = string.Empty, Success = true, Message = string.Empty };
     }
+
     public class StringToLedgerResponse
     {
         public Ledger Result { get; set; }

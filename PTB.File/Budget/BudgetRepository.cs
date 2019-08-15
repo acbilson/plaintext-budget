@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.IO;
+﻿using PTB.File.Categories;
 using System.Collections.Generic;
-using System.Text;
-using PTB.File.Categories;
+using System.IO;
 
 namespace PTB.File.Budget
 {
