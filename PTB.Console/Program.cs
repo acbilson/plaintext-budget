@@ -40,7 +40,7 @@ namespace PTB.Console
 
                 case ConsoleActions.Categorize:
 
-                    TitleRegexReadResponse response = client.Regex.ReadAllTitleRegex();
+                    CategoriesReadResponse response = client.Regex.ReadAllTitleRegex();
                     client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
 
                     foreach (var skippedMessage in response.SkippedMessages)

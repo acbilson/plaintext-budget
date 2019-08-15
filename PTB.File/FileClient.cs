@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PTB.File.Categories;
 using PTB.File.Budget;
 using PTB.File.Ledger;
 using PTB.File.TitleRegex;
@@ -10,6 +11,7 @@ namespace PTB.File
         public LedgerRepository Ledger;
         public TitleRegexRepository Regex;
         public BudgetRepository Budget;
+        public CategoriesRepository Categories;
 
         public void Instantiate(string home = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\")
         {
@@ -18,6 +20,7 @@ namespace PTB.File
             Ledger = new LedgerRepository(settings, schema);
             Regex = new TitleRegexRepository(settings, schema);
             Budget = new BudgetRepository(settings, schema);
+            Categories = new CategoriesRepository(settings, schema);
         }
 
         private PTBSettings ReadSettingsFile(string home)

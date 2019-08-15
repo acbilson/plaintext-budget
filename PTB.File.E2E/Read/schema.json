@@ -72,5 +72,27 @@
         "Name": "title-regex"
       }
     ]
+  },
+  "Categories": {
+    "Delimiter": " ",
+    "Size": 41,
+    "Columns": {
+      "Category": {
+        "Index": 1,
+        "Size": 20,
+        "Offset": 0
+      },
+      "Subcategory": {
+        "Index": 2,
+        "Size": 20,
+        "Offset": 21
+      }
+    },
+    "Files": [
+      {
+        "IsDefault": true,
+        "Name": "categories_19-01-01"
+      }
+    ]
   }
 }

@@ -104,7 +104,7 @@ namespace PTB.File.E2E
 
         public void WhenALedgerIsCategorized()
         {
-            TitleRegexReadResponse response = Client.Regex.ReadAllTitleRegex();
+            CategoriesReadResponse response = Client.Regex.ReadAllTitleRegex();
             Client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
         }
 

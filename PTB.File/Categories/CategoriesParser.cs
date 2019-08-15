@@ -11,14 +11,17 @@ namespace PTB.File.Categories
             _schema = schema;
         }
 
-        public Categories ParseLine(string line)
+        public StringToCategoriesResponse ParseLine(string line)
         {
+            var response = StringToCategoriesResponse.Default;
+
             int delimiterLength = _schema.Delimiter.Length;
 
             string category = CalculateByteIndex(delimiterLength, line, _schema.Columns.Category);
             string subcategory = CalculateByteIndex(delimiterLength, line, _schema.Columns.Subcategory);
 
-            return new Categories(category, subcategory);
+            response.Result = new Categories(category, subcategory);
+            return response;
         }
     }
 }

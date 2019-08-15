@@ -16,9 +16,9 @@ namespace PTB.File.TitleRegex
             _parser = new TitleRegexParser(_schema.TitleRegex);
         }
 
-        public TitleRegexReadResponse ReadAllTitleRegex()
+        public CategoriesReadResponse ReadAllTitleRegex()
         {
-            var response = TitleRegexReadResponse.Default;
+            var response = CategoriesReadResponse.Default;
             string path = base.GetDefaultPath(_folder, _schema.TitleRegex.GetDefaultName());
 
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))

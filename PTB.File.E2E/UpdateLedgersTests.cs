@@ -4,7 +4,7 @@ using System;
 namespace PTB.File.E2E
 {
     [TestClass]
-    public class UpdateLedgers : GlobalSetup
+    public class UpdateLedgersTests : GlobalSetup
     {
         [TestInitialize]
         public void Initialize()

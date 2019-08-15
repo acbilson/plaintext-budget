@@ -3,7 +3,7 @@
 namespace PTB.File.E2E
 {
     [TestClass]
-    public class ReadLedgers : GlobalSetup
+    public class ReadLedgersTests : GlobalSetup
     {
         [TestInitialize]
         public void Initialize()

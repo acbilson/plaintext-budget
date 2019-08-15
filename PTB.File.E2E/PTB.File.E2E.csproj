@@ -41,6 +41,9 @@
     <None Update="Import\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Read\Categories\categories_19-01-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Read\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
