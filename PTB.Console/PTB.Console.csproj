@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PTB.File\PTB.File.csproj" />
+    <ProjectReference Include="..\PTB.Core\PTB.Core.csproj" />
   </ItemGroup>
 
 </Project>

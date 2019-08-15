@@ -1,6 +1,6 @@
-﻿using PTB.File;
-using PTB.File.Statements;
-using PTB.File.TitleRegex;
+﻿using PTB.Core;
+using PTB.Core.Statements;
+using PTB.Core.TitleRegex;
 using System;
 using System.IO;
 
