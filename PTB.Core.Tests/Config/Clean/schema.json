@@ -1,7 +1,5 @@
 {
   "Ledger": {
-    "Delimiter": " ",
-    "Size": 115,
     "Columns": {
       "Date": {
         "Index": 1,
@@ -39,21 +37,39 @@
         "Offset": 108
       }
     },
-    "Files": [
-      {
-        "IsDefault": true,
-        "Name": "ledger_checking_19-01-01_19-12-31"
-      }
-    ]
+    "Delimiter": " ",
+    "Folder": "Ledgers",
+    "DefaultFileName": "ledger_checking_19-01-01_19-12-31",
+    "LineSize": 115
   },
-
-  "Budget": {
-    "CategorySeparator": "-",
-    "Size":  33
+  "TitleRegex": {
+    "DefaultFileName": "title-regex",
+    "Folder": "Regex",
+    "Delimiter": " ",
+    "LineSize": 63,
+    "Columns": {
+      "Priority": {
+        "Index": 1,
+        "Size": 1,
+        "Offset": 0
+      },
+      "Subcategory": {
+        "Index": 2,
+        "Size": 30,
+        "Offset": 1
+      },
+      "Regex": {
+        "Index": 3,
+        "Size": 30,
+        "Offset": 31
+      }
+    }
   },
   "Categories": {
+    "DefaultFileName": "categories_19-01-01",
+    "Folder": "Categories",
     "Delimiter": " ",
-    "Size": 41,
+    "LineSize": 41,
     "Columns": {
       "Category": {
         "Index": 1,
@@ -65,12 +81,9 @@
         "Size": 20,
         "Offset": 20
       }
-    },
-    "Files": [
-      {
-        "IsDefault": true,
-        "Name": "categories_19-01-01"
-      }
-    ]
+    }
+  },
+  "Budget": {
+    "CategorySeparator": "-"
   }
 }

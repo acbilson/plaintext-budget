@@ -27,7 +27,7 @@ namespace PTB.Core.Statements.Tests
 
             // Assert
             Assert.IsTrue(response.Success);
-            Assert.AreEqual(Schema.Ledger.Size, response.Result.Length);
+            Assert.AreEqual(Schema.Ledger.LineSize, response.Result.Length);
         }
 
         [DataRow("00000000004604718986,2019/06/18,2019/07/16,7320.66,7763.23")]

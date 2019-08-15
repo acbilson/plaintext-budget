@@ -3,19 +3,9 @@ using System.Linq;
 
 namespace PTB.Core.TitleRegex
 {
-    public class TitleRegexSchema
+    public class TitleRegexSchema : FolderSchema
     {
-        // from schema.json
-        public string Delimiter { get; set; }
-
-        public int Size { get; set; }
         public TitleRegexColumns Columns { get; set; }
-        public PTBFiles[] Files { get; set; }
-
-        public string GetDefaultName()
-        {
-            return Files.First((l) => l.IsDefault == true).Name;
-        }
     }
 
     public class TitleRegexColumns

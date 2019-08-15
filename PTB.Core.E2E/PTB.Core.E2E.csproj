@@ -22,9 +22,6 @@
     <None Update="Budget\Categories\categories_19-01-01.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Budget\schema.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Budget\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -32,9 +29,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Categorize\Regex\title-regex.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Categorize\schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Categorize\settings.json">
@@ -49,9 +43,6 @@
     <None Update="FileAccess\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="FileAccess\schema.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="FileAccess\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -59,9 +50,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Import\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Import\schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Import\settings.json">
@@ -73,10 +61,10 @@
     <None Update="Read\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Read\schema.json">
+    <None Update="Read\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Read\settings.json">
+    <None Update="schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Update\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
@@ -97,4 +85,13 @@
   <ItemGroup>
     <ProjectReference Include="..\PTB.Core\PTB.Core.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy $(OutDir)schema.json $(OutDir)Budget\schema.json" />
+    <Exec Command="copy $(OutDir)schema.json $(OutDir)Categorize\schema.json" />
+    <Exec Command="copy $(OutDir)schema.json $(OutDir)FileAccess\schema.json" />
+    <Exec Command="copy $(OutDir)schema.json $(OutDir)Import\schema.json" />
+    <Exec Command="copy $(OutDir)schema.json $(OutDir)Read\schema.json" />
+    <Exec Command="copy $(OutDir)schema.json $(OutDir)Update\schema.json" />
+  </Target>
 </Project>

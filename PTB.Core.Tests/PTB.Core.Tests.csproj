@@ -24,10 +24,10 @@
     <None Update="Data\clean-settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\Clean\schema.json">
+    <None Update="Config\Clean\schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\Clean\settings.json">
+    <None Update="Config\Clean\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -7,6 +7,6 @@ namespace PTB.Core.Budget
     public class BudgetSchema
     {
         public char CategorySeparator { get; set; }
-        public int Size { get; set; }
+        public int LineSize { get; set; }
     }
 }

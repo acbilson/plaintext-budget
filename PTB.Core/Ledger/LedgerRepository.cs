@@ -21,7 +21,7 @@ namespace PTB.Core.Ledger
 
         public void ImportToDefaultLedger(string path, IStatementParser parser, bool append = false)
         {
-            string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
+            string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.DefaultFileName);
 
             using (var writer = new StreamWriter(ledgerPath, append))
             {
@@ -48,12 +48,12 @@ namespace PTB.Core.Ledger
             if (startIndex > 0)
             {
                 // subtracts the first byte of the line to the start Index (e.g. a 117 byte line will start the next line on 118)
-                return (startIndex % (_schema.Ledger.Size + Environment.NewLine.Length)) == 0;
+                return (startIndex % (_schema.Ledger.LineSize + Environment.NewLine.Length)) == 0;
             }
             return false;
         }
 
-        public byte[] GetLedgerBuffer() => new byte[_schema.Ledger.Size + Environment.NewLine.Length];
+        public byte[] GetLedgerBuffer() => new byte[_schema.Ledger.LineSize + Environment.NewLine.Length];
 
         public void SetBufferStartIndex(FileStream stream, int startIndex) => stream.Seek(startIndex, SeekOrigin.Begin);
 
@@ -61,11 +61,11 @@ namespace PTB.Core.Ledger
         {
             if (!IndexStartsAtCorrectByte(startIndex))
             {
-                throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.Size}");
+                throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.LineSize}");
             }
 
             var ledgerEntries = new List<Ledger>();
-            string path = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
+            string path = base.GetDefaultPath(_Folder, _schema.Ledger.DefaultFileName);
 
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
@@ -81,7 +81,7 @@ namespace PTB.Core.Ledger
 
                     if (!current.Success)
                     {
-                        long lineNumber = GetLineNumber(stream.Position, _schema.Ledger.Size);
+                        long lineNumber = GetLineNumber(stream.Position, _schema.Ledger.LineSize);
                         throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
                     }
 
@@ -101,11 +101,11 @@ namespace PTB.Core.Ledger
             if (!IndexStartsAtCorrectByte(ledgerToUpdate.Index))
             {
                 response.Success = false;
-                response.Message = $"Could not update ledger with these values. The start index {ledgerToUpdate} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.Size}";
+                response.Message = $"Could not update ledger with these values. The start index {ledgerToUpdate} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.LineSize}";
                 return response;
             }
 
-            string path = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
+            string path = base.GetDefaultPath(_Folder, _schema.Ledger.DefaultFileName);
             string line = _parser.ParseLedger(ledgerToUpdate);
 
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Write))
@@ -123,11 +123,11 @@ namespace PTB.Core.Ledger
 
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
-            string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.GetDefaultName());
+            string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.DefaultFileName);
             using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.ReadWrite))
             {
-                int bufferLength = _schema.Ledger.Size + Environment.NewLine.Length;
-                int lineIndex = _schema.Ledger.Size - 1;
+                int bufferLength = _schema.Ledger.LineSize + Environment.NewLine.Length;
+                int lineIndex = _schema.Ledger.LineSize - 1;
                 var buffer = new byte[bufferLength];
                 int bytesRead = 0;
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
@@ -150,7 +150,7 @@ namespace PTB.Core.Ledger
 
                     if (!current.Success)
                     {
-                        long lineNumber = GetLineNumber(stream.Position, _schema.Ledger.Size);
+                        long lineNumber = GetLineNumber(stream.Position, _schema.Ledger.LineSize);
                         throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
                     }
 

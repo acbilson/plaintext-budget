@@ -20,13 +20,12 @@ namespace PTB.Core.Categories
         public CategoriesReadResponse ReadAllCategories()
         {
             var response = CategoriesReadResponse.Default;
-            string path = base.GetDefaultPath(_folder, _schema.Categories.GetDefaultName());
+            string path = base.GetDefaultPath(_folder, _schema.Categories.DefaultFileName);
 
-            //var groupedCategories = categories.GroupBy((c) => c.Category, (c) => c.Subcategory);
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
-                int bufferLength = _schema.Categories.Size + System.Environment.NewLine.Length;
-                int lineIndex = _schema.Categories.Size - 1;
+                int bufferLength = _schema.Categories.LineSize + System.Environment.NewLine.Length;
+                int lineIndex = _schema.Categories.LineSize - 1;
                 var buffer = new byte[bufferLength];
                 int bytesRead = 0;
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
@@ -53,7 +52,7 @@ namespace PTB.Core.Categories
                     }
                     else
                     {
-                        long lineNumber = GetLineNumber(stream.Position, _schema.Categories.Size);
+                        long lineNumber = GetLineNumber(stream.Position, _schema.Categories.LineSize);
                         string message = $"Skipped categories at line {lineNumber}. Message was {current.Message}";
                         response.SkippedMessages.Add(message);
                     }

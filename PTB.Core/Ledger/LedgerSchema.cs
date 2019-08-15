@@ -3,20 +3,9 @@ using System.Linq;
 
 namespace PTB.Core.Ledger
 {
-    public class LedgerSchema
+    public class LedgerSchema : FolderSchema
     {
-        public string Folder { get; set; }
-        public string Delimiter { get; set; }
-        public string DefaultFileName { get; set; }
-
-        public int Size { get; set; }
         public LedgerColumns Columns { get; set; }
-        public PTBFiles[] Files { get; set; }
-
-        public string GetDefaultName()
-        {
-            return Files.First((l) => l.IsDefault == true).Name;
-        }
     }
 
     public class LedgerColumns

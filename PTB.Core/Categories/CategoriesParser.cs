@@ -22,7 +22,7 @@ namespace PTB.Core.Categories
                 return response;
             }
 
-            if (!LineSizeMatchesSchema(line, _schema.Size))
+            if (!LineSizeMatchesSchema(line, _schema.LineSize))
             {
                 response.Success = false;
                 response.Message = "Line length does not match schema, which may indicate data corruption.";

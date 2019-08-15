@@ -1,2 +1,2 @@
-3           Restaurant                     BLAZEPIZZA
-2            Groceries                      TRADERJOE
+3                     Restaurant                     BLAZEPIZZA
+2                      Groceries                      TRADERJOE

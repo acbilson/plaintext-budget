@@ -10,28 +10,28 @@ namespace PTB.Core.Tests.Data
         public void LoadsCleanSettings()
         {
             // Arrange / Act
-            string settingsPath = @"./Data/Clean/settings.json";
+            string settingsPath = @"./Config/Clean/settings.json";
             PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
 
             // Assert
             Assert.IsNotNull(settings.HomeDirectory);
             Assert.IsNotNull(settings.FileExtension);
             Assert.IsNotNull(settings.FileDelimiter);
-            Assert.IsNotNull(settings.DefaultLedgerName);
-            Assert.IsNotNull(settings.DefaultTitleRegexName);
         }
 
         [TestMethod]
         public void LoadsCleanSchema()
         {
             // Arrange / Act
-            string settingsPath = @"./Data/Clean/schema.json";
+            string settingsPath = @"./Config/Clean/schema.json";
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(settingsPath));
 
             // Assert
             Assert.IsNotNull(schema.Ledger);
             Assert.IsNotNull(schema.Ledger.Delimiter);
-            Assert.IsNotNull(schema.Ledger.Size);
+            Assert.IsNotNull(schema.Ledger.LineSize);
+            Assert.IsNotNull(schema.Ledger.DefaultFileName);
+            Assert.IsNotNull(schema.Ledger.Folder);
 
             Assert.IsNotNull(schema.Ledger.Columns);
             Assert.IsNotNull(schema.Ledger.Columns.Amount);
@@ -63,12 +63,46 @@ namespace PTB.Core.Tests.Data
             Assert.IsNotNull(schema.Ledger.Columns.Type.Offset);
             Assert.IsNotNull(schema.Ledger.Columns.Type.Size);
 
-            Assert.IsNotNull(schema.Ledger.Files);
-            Assert.IsTrue(schema.Ledger.Files.Length > 0, "Should have at least one file");
-            Assert.IsNotNull(schema.Ledger.Files[0].IsDefault);
-            Assert.IsNotNull(schema.Ledger.Files[0].Name);
-
             Assert.IsNotNull(schema.TitleRegex);
+            Assert.IsNotNull(schema.TitleRegex.Delimiter);
+            Assert.IsNotNull(schema.TitleRegex.LineSize);
+            Assert.IsNotNull(schema.TitleRegex.DefaultFileName);
+            Assert.IsNotNull(schema.TitleRegex.Folder);
+
+            Assert.IsNotNull(schema.TitleRegex.Columns);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Priority);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Priority.Index);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Priority.Offset);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Priority.Size);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subcategory);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subcategory.Index);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subcategory.Offset);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subcategory.Size);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Regex);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Regex.Index);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Regex.Offset);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Regex.Size);
+
+            Assert.IsNotNull(schema.Categories);
+            Assert.IsNotNull(schema.Categories.Delimiter);
+            Assert.IsNotNull(schema.Categories.LineSize);
+            Assert.IsNotNull(schema.Categories.DefaultFileName);
+            Assert.IsNotNull(schema.Categories.Folder);
+
+            Assert.IsNotNull(schema.Categories.Columns);
+            Assert.IsNotNull(schema.Categories.Columns.Category);
+            Assert.IsNotNull(schema.Categories.Columns.Category.Index);
+            Assert.IsNotNull(schema.Categories.Columns.Category.Offset);
+            Assert.IsNotNull(schema.Categories.Columns.Category.Size);
+            Assert.IsNotNull(schema.Categories.Columns);
+            Assert.IsNotNull(schema.Categories.Columns.Subcategory);
+            Assert.IsNotNull(schema.Categories.Columns.Subcategory.Index);
+            Assert.IsNotNull(schema.Categories.Columns.Subcategory.Offset);
+            Assert.IsNotNull(schema.Categories.Columns.Subcategory.Size);
+
+            Assert.IsNotNull(schema.Budget);
+            Assert.IsNotNull(schema.Budget.CategorySeparator);
+            Assert.IsNotNull(schema.Budget.LineSize);
         }
     }
 }

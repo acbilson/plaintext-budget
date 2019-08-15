@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using PTB.Core.Ledger;
@@ -26,48 +27,12 @@ namespace PTB.Core.E2E
             Settings = settings;
         }
 
+        // The schema is copied in a post build event from the root level to each folder
         public void GetDefaultSchema(string folder)
         {
             var text = System.IO.File.ReadAllText($@".\{folder}\schema.json");
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
             Schema = schema;
-            /*
-            var schema = new PTBSchema
-            {
-                Ledger = new LedgerSchema
-                {
-                    Columns = new LedgerColumns
-                    {
-                        Date =        new ColumnDate {               Index = 1, Size = 10, Offset =   0  },
-                        Type =        new ColumnType {               Index = 2, Size =  1, Offset =  10 },
-                        Amount =      new ColumnAmount {             Index = 3, Size = 12, Offset =  11 },
-                        Subcategory = new Ledger.ColumnSubcategory { Index = 4, Size = 20, Offset =  23 },
-                        Title =       new ColumnTitle {              Index = 5, Size = 50, Offset =  43 },
-                        Location =    new ColumnLocation {           Index = 6, Size = 15, Offset =  93 },
-                        Locked =      new ColumnLocked {             Index = 7, Size =  1, Offset = 108 }
-                    },
-                    Delimiter = " ",
-                    Files = new PTBFiles[] {
-                        new PTBFiles { IsDefault = true, Name = "ledger_checking_19-01-01_19-12-31" }
-                    },
-                    Size = 115
-                },
-                TitleRegex = new TitleRegexSchema
-                {
-                    Columns = new TitleRegexColumns
-                    {
-                        Priority =    new ColumnPriority {               Index = 1, Size =  1, Offset =  0 },
-                        Subcategory = new TitleRegex.ColumnSubcategory { Index = 2, Size = 30, Offset =  1 },
-                        Regex =       new ColumnRegex {                  Index = 3, Size = 30, Offset = 31 }
-                    },
-                    Delimiter = " ",
-                    Files = new PTBFiles[] {
-                        new PTBFiles { IsDefault = true, Name = "regex-title" }
-                    },
-                    Size = 63
-                }
-            };
-            */
         }
 
         #endregion Initialize
@@ -129,7 +94,7 @@ namespace PTB.Core.E2E
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
-            string firstLine = ledgerEntries.Substring(0, Schema.Ledger.Size + System.Environment.NewLine.Length);
+            string firstLine = ledgerEntries.Substring(0, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
             StringToLedgerResponse response = LedgerParser.ParseLine(firstLine, 0);
             return response.Result;
         }
@@ -159,8 +124,9 @@ namespace PTB.Core.E2E
         public void ShouldImportAllLedgerEntries()
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
-            string ledgerEntries = System.IO.File.ReadAllText(path);
-            Assert.AreEqual(13572, ledgerEntries.Length);
+            IEnumerable<string> ledgerEntries = System.IO.File.ReadLines(path);
+            // takes all lines minus the header
+            Assert.AreEqual(117 - 1, ledgerEntries.Count());
         }
 
         // first line: 2019/06/18,310.80,"Direct Deposit - Payroll","OPTIMUM JOY CLIN XXXXXXXXXXX39-0","000191699","CREDIT"
@@ -208,14 +174,14 @@ namespace PTB.Core.E2E
         #endregion Assert - With
 
         // should be the full length of the line plus ending (117) multiplied by the line number minus 1 b/c it starts a 1
-        private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.Size + System.Environment.NewLine.Length) * (lineNumber - 1);
+        private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.LineSize + System.Environment.NewLine.Length) * (lineNumber - 1);
 
         private Ledger.Ledger GetLedgerOnLine(int lineNumber)
         {
             string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             int ledgerIndex = CalculateLedgerIndex(lineNumber);
-            string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.Size + System.Environment.NewLine.Length);
+            string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
             StringToLedgerResponse response = LedgerParser.ParseLine(line, ledgerIndex);
 
             Assert.IsTrue(response.Success, $"Failed to parse ledger with message {response.Message}");

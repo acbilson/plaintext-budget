@@ -19,12 +19,12 @@ namespace PTB.Core.TitleRegex
         public CategoriesReadResponse ReadAllTitleRegex()
         {
             var response = CategoriesReadResponse.Default;
-            string path = base.GetDefaultPath(_folder, _schema.TitleRegex.GetDefaultName());
+            string path = base.GetDefaultPath(_folder, _schema.TitleRegex.DefaultFileName);
 
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
-                int bufferLength = _schema.TitleRegex.Size + Environment.NewLine.Length;
-                int lineIndex = _schema.TitleRegex.Size - 1;
+                int bufferLength = _schema.TitleRegex.LineSize + Environment.NewLine.Length;
+                int lineIndex = _schema.TitleRegex.LineSize - 1;
                 var buffer = new byte[bufferLength];
                 int bytesRead = 0;
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
@@ -51,7 +51,7 @@ namespace PTB.Core.TitleRegex
                     }
                     else
                     {
-                        long lineNumber = GetLineNumber(stream.Position, _schema.TitleRegex.Size);
+                        long lineNumber = GetLineNumber(stream.Position, _schema.TitleRegex.LineSize);
                         string message = $"Skipped title regex at line {lineNumber}. Message was {current.Message}";
                         response.SkippedMessages.Add(message);
                     }

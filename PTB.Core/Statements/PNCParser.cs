@@ -29,7 +29,7 @@ namespace PTB.Core.Statements
             string title = ParseTitle(lines[2], lines[3]);
             string location = ParseLocation(lines[4]);
             char type = ParseType(lines[5]);
-            string subcategory = new String(' ', 20);
+            string subcategory = new String(' ', _schema.Columns.Subcategory.Size);
             char locked = '0';
 
             char delimiter = ' ';

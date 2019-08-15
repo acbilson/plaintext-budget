@@ -12,11 +12,13 @@ namespace PTB.Core.Tests
             var client = new PTBClient();
 
             // Act
-            client.Instantiate(@".\Data\Clean");
+            client.Instantiate(@".\Config\Clean");
 
             //Assert
             Assert.IsNotNull(client.Ledger);
             Assert.IsNotNull(client.Regex);
+            Assert.IsNotNull(client.Budget);
+            Assert.IsNotNull(client.Categories);
         }
     }
 }

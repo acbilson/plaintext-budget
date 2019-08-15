@@ -8,7 +8,7 @@ namespace PTB.Core
 {
     public interface IFileManager
     {
-
+        List<PTBFile> GetLedgerFiles();
 
     }
 
@@ -23,15 +23,37 @@ namespace PTB.Core
             _schema = schema;
         }
 
-        public List<PTBFile> GetLedgerFiles()
+        private List<PTBFile> GetFiles(string folder)
         {
-            var files = Directory.GetFiles(Path.Combine(_settings.HomeDirectory, _schema.Ledger.Folder))
+            var files = Directory.GetFiles(Path.Combine(_settings.HomeDirectory, folder))
                 .Select(path => new PTBFile {
-                    IsDefault = Path.GetFileNameWithoutExtension(path) == _schema.Ledger.GetDefaultName(),
+                    IsDefault = Path.GetFileNameWithoutExtension(path) == _schema.Ledger.DefaultFileName,
                     Info = new FileInfo(path)
                 }).ToList();
             return files;
         }
+
+        private FileInfo GetFile(string folder, string fileName)
+        {
+            string path = Path.Combine(_settings.HomeDirectory, folder, fileName + _settings.FileExtension);
+            return new FileInfo(path);
+        }
+
+        public List<PTBFile> GetLedgerFiles()
+        {
+            return GetFiles(_schema.Ledger.Folder);
+        }
+        public List<PTBFile> GetCategoriesFiles()
+        {
+            return GetFiles(_schema.Categories.Folder);
+        }
+
+        public FileInfo GetTitleRegexFile()
+        {
+            return GetFile(_schema.TitleRegex.Folder, _schema.TitleRegex.DefaultFileName);
+        }
+
+
 
         /*
         private static readonly Lazy<FileManager> fileManager = new Lazy<FileManager>(() => new FileManager());
