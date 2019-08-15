@@ -1,6 +1,4 @@
 {
-  "DefaultLedgerName": "checking",
-  "DefaultTitleRegexName": "title-regex",
   "FileDelimiter": "_",
   "FileExtension": ".txt",
   "HomeDirectory": "C:\\Users\\abilson\\OneDrive - SPR Consulting\\Archive\\2019\\BudgetProject\\PTB_Home"
