@@ -9,7 +9,7 @@ namespace PTB.Core.Tests
         public void InstantiatesWithCleanConfigs()
         {
             // Arrange
-            var client = new FileClient();
+            var client = new PTBClient();
 
             // Act
             client.Instantiate(@".\Data\Clean");

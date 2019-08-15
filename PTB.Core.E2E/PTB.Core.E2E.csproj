@@ -13,6 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Budget\Categories\categories_19-01-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Budget\schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Budget\settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Categorize\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -61,6 +70,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Budget\Budget\" />
     <Folder Include="Import\Clean\" />
   </ItemGroup>
 

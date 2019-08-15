@@ -46,32 +46,10 @@
       }
     ]
   },
-  "TitleRegex": {
-    "Delimiter": " ",
-    "Size": 63,
-    "Columns": {
-      "Priority": {
-        "Index": 1,
-        "Size": 1,
-        "Offset": 0
-      },
-      "Subcategory": {
-        "Index": 2,
-        "Size": 20,
-        "Offset": 1
-      },
-      "Regex": {
-        "Index": 3,
-        "Size": 21,
-        "Offset": 31
-      }
-    },
-    "Files": [
-      {
-        "IsDefault": true,
-        "Name": "title-regex"
-      }
-    ]
+
+  "Budget": {
+    "CategorySeparator": "-",
+    "Size":  33
   },
   "Categories": {
     "Delimiter": " ",

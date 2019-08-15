@@ -12,7 +12,7 @@ namespace PTB.Core.E2E
     {
         public PTBSettings Settings;
         public PTBSchema Schema;
-        public FileClient Client;
+        public PTBClient Client;
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
 
@@ -75,7 +75,7 @@ namespace PTB.Core.E2E
 
         public void WithAFileClient()
         {
-            var client = new FileClient();
+            var client = new PTBClient();
             client.Instantiate(Settings.HomeDirectory);
             Client = client;
         }
@@ -139,6 +139,12 @@ namespace PTB.Core.E2E
             return entries;
         }
 
+        public List<Categories.Categories> WithAllCategories()
+        {
+            var categories = Client.Categories.ReadAllCategories();
+            return categories.Categories;
+        }
+
         #endregion Act - With
 
         #region Assert - Should
@@ -168,7 +174,32 @@ namespace PTB.Core.E2E
             Assert.AreEqual(subcategory, ledger.Subcategory);
         }
 
+        public void ShouldGenerateABudgetOfTheRightSize(string[] lines)
+        {
+            Assert.AreEqual(64, lines.Length);
+        }
+        public void ShouldGenerateASortedBudget(string[] lines)
+        {
+            string firstCategory = "Charity";
+            string firstSubcategory = "Neighborhood Campus";
+            Assert.IsTrue(lines[0].Contains(firstCategory), $"First category should contain the word {firstCategory} if the budget is sorted.");
+            Assert.IsTrue(lines[1].Contains(firstSubcategory), $"First subcategory under {firstCategory} should contain the word {firstSubcategory} if the budget is sorted.");
+        }
+
+
         #endregion Assert - Should
+
+        #region Assert - With
+
+        public string[] WithBudgetLines()
+        {
+            string fileName = Client.Budget.GetBudgetName();
+            string path = System.IO.Path.Combine(Settings.HomeDirectory, $@"Budget\{fileName}{Settings.FileExtension}");
+            string[] budgetLines = System.IO.File.ReadAllLines(path);
+            return budgetLines;
+        }
+
+        #endregion Assert - With
 
         // should be the full length of the line plus ending (117) multiplied by the line number minus 1 b/c it starts a 1
         private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.Size + System.Environment.NewLine.Length) * (lineNumber - 1);

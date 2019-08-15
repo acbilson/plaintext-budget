@@ -15,6 +15,20 @@ namespace PTB.Core.Categories
         {
             var response = StringToCategoriesResponse.Default;
 
+            if (!LineEndsWithWindowsNewLine(line))
+            {
+                response.Success = false;
+                response.Message = "Line does not end with carriage return, which may indicate data corruption";
+                return response;
+            }
+
+            if (!LineSizeMatchesSchema(line, _schema.Size))
+            {
+                response.Success = false;
+                response.Message = "Line length does not match schema, which may indicate data corruption.";
+                return response;
+            }
+
             int delimiterLength = _schema.Delimiter.Length;
 
             string category = CalculateByteIndex(delimiterLength, line, _schema.Columns.Category);

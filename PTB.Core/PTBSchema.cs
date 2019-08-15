@@ -1,13 +1,10 @@
-﻿using PTB.Core.Categories;
-using PTB.Core.Ledger;
-using PTB.Core.TitleRegex;
-
-namespace PTB.Core
+﻿namespace PTB.Core
 {
     public class PTBSchema
     {
-        public LedgerSchema Ledger;
-        public TitleRegexSchema TitleRegex;
-        public CategoriesSchema Categories;
+        public PTB.Core.Ledger.LedgerSchema Ledger;
+        public PTB.Core.TitleRegex.TitleRegexSchema TitleRegex;
+        public PTB.Core.Categories.CategoriesSchema Categories;
+        public PTB.Core.Budget.BudgetSchema Budget;
     }
 }

@@ -6,7 +6,7 @@ using PTB.Core.TitleRegex;
 
 namespace PTB.Core
 {
-    public class FileClient
+    public class PTBClient
     {
         public LedgerRepository Ledger;
         public TitleRegexRepository Regex;
