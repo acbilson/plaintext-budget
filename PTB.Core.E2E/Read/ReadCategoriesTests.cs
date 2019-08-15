@@ -24,7 +24,7 @@ namespace PTB.Core.E2E
 
             // Assert
             Assert.IsTrue(response.SkippedMessages.Count <= 0);
-            Assert.AreEqual(40, response.Categories.Count);
+            Assert.AreEqual(39, response.Categories.Count);
         }
     }
 }

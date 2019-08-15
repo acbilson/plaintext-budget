@@ -1,40 +1,39 @@
-                Food            Groceries
-              Income                Other
-              Income            Heartland
-              Income           Relativity
-             Charity       Rock the World
-             Charity  Neighborhood Campus
-             Housing                 IKEA
-             Housing               Target
-             Housing     Cleaning Service
-            Clothing                Adult
-            Clothing               Adults
-            Clothing             Children
-            Personal               Coffee
-            Personal               Online
-            Personal              Netflix
-            Personal        Miscellaneous
-            Personal     Music/Technology
-            Personal    Amazon Membership
-            Personal    Education/Tuition
-            Personal    Organization Dues
-            Personal  Cosmetics/Hair Care
-            Personal Gifts (Inc. Christma
-           Insurance                 Auto
-           Insurance             Renter's
-           Transfers       Emergency Fund
-           Utilities                  Gas
-           Utilities                Phone
-           Utilities             Internet
-           Utilities          Electricity
-          Recreation                Other
-          Recreation           Restaurant
-          Recreation      Vacation/Travel
-      Medical/Health              Dentist
-      Medical/Health           Counseling
-      Medical/Health         Doctor Bills
-      Medical/Health         Orthodontics
-      Transportation            Gas & Oil
-      Transportation       Public Transit
-      Transportation      Repairs & Tires
-      Transportation License, Taxes & Par
+                          Food                      Groceries
+                        Income                          Other
+                        Income                      Heartland
+                        Income                     Relativity
+                       Charity                 Rock the World
+                       Charity            Neighborhood Campus
+                       Housing                           IKEA
+                       Housing                         Target
+                       Housing               Cleaning Service
+                      Clothing                          Adult
+                      Clothing                       Children
+                      Personal                         Coffee
+                      Personal                         Online
+                      Personal                        Netflix
+                      Personal                  Miscellaneous
+                      Personal               Music/Technology
+                      Personal              Amazon Membership
+                      Personal              Education/Tuition
+                      Personal              Organization Dues
+                      Personal            Cosmetics/Hair Care
+                      Personal                          Gifts
+                     Insurance                           Auto
+                     Insurance                       Renter's
+                     Transfers                 Emergency Fund
+                     Utilities                            Gas
+                     Utilities                          Phone
+                     Utilities                       Internet
+                     Utilities                    Electricity
+                    Recreation                          Other
+                    Recreation                     Restaurant
+                    Recreation                Vacation/Travel
+                Medical/Health                        Dentist
+                Medical/Health                     Counseling
+                Medical/Health                   Doctor Bills
+                Medical/Health                   Orthodontics
+                Transportation                      Gas & Oil
+                Transportation                 Public Transit
+                Transportation                Repairs & Tires
+                Transportation       License, Taxes & Parking

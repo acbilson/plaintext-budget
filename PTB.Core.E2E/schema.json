@@ -69,17 +69,17 @@
     "DefaultFileName": "categories_19-01-01",
     "Folder": "Categories",
     "Delimiter": " ",
-    "LineSize": 41,
+    "LineSize": 61,
     "Columns": {
       "Category": {
         "Index": 1,
-        "Size": 20,
+        "Size": 30,
         "Offset": 0
       },
       "Subcategory": {
         "Index": 2,
-        "Size": 20,
-        "Offset": 20
+        "Size": 30,
+        "Offset": 30
       }
     }
   },
