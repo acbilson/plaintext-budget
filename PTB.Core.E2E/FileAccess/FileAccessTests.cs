@@ -42,5 +42,47 @@ namespace PTB.Core.E2E.PTBFileAccess
             Assert.AreEqual(Schema.Ledger.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Info.Name));
         }
 
+        [TestMethod]
+        public void GetsTwoCategoriesFiles()
+        {
+            // Arrange
+            WithAFileManager();
+
+            // Act
+            var files = FileManager.GetCategoriesFiles();
+
+            // Assert
+            Assert.AreEqual(2, files.Count());
+        }
+
+        [TestMethod]
+        public void GetsDefaultCategoriesFile()
+        {
+            // Arrange
+            WithAFileManager();
+
+            // Act
+            var files = FileManager.GetCategoriesFiles();
+
+            // Assert
+            var file = files.First(f => f.IsDefault);
+            Assert.IsNotNull(file, "Should have identified the default categories file");
+            Assert.AreEqual(Schema.Categories.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Info.Name));
+        }
+
+        [TestMethod]
+        public void GetsTitleRegexFile()
+        {
+            // Arrange
+            WithAFileManager();
+
+            // Act
+            var file = FileManager.GetTitleRegexFile();
+
+            // Assert
+            Assert.AreEqual(Schema.TitleRegex.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Name));
+        }
+
+
     }
 }

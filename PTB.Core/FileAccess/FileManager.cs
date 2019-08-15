@@ -23,11 +23,11 @@ namespace PTB.Core
             _schema = schema;
         }
 
-        private List<PTBFile> GetFiles(string folder)
+        private List<PTBFile> GetFiles(string folder, string fileName)
         {
             var files = Directory.GetFiles(Path.Combine(_settings.HomeDirectory, folder))
                 .Select(path => new PTBFile {
-                    IsDefault = Path.GetFileNameWithoutExtension(path) == _schema.Ledger.DefaultFileName,
+                    IsDefault = Path.GetFileNameWithoutExtension(path) == fileName,
                     Info = new FileInfo(path)
                 }).ToList();
             return files;
@@ -41,11 +41,11 @@ namespace PTB.Core
 
         public List<PTBFile> GetLedgerFiles()
         {
-            return GetFiles(_schema.Ledger.Folder);
+            return GetFiles(_schema.Ledger.Folder, _schema.Ledger.DefaultFileName);
         }
         public List<PTBFile> GetCategoriesFiles()
         {
-            return GetFiles(_schema.Categories.Folder);
+            return GetFiles(_schema.Categories.Folder, _schema.Categories.DefaultFileName);
         }
 
         public FileInfo GetTitleRegexFile()
