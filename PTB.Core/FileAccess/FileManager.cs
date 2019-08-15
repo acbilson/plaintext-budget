@@ -1,7 +1,38 @@
-﻿namespace PTB.Core
+﻿using System.Linq;
+using System.Collections;
+using System.IO;
+using System.Collections.Generic;
+using PTB.Core.PTBFileAccess;
+
+namespace PTB.Core
 {
-    public sealed class FileManager
+    public interface IFileManager
     {
+
+
+    }
+
+    public class FileManager : IFileManager
+    {
+        private PTBSettings _settings;
+        private PTBSchema _schema;
+
+        public FileManager(PTBSettings settings, PTBSchema schema)
+        {
+            _settings = settings;
+            _schema = schema;
+        }
+
+        public List<PTBFile> GetLedgerFiles()
+        {
+            var files = Directory.GetFiles(Path.Combine(_settings.HomeDirectory, _schema.Ledger.Folder))
+                .Select(path => new PTBFile {
+                    IsDefault = Path.GetFileNameWithoutExtension(path) == _schema.Ledger.GetDefaultName(),
+                    Info = new FileInfo(path)
+                }).ToList();
+            return files;
+        }
+
         /*
         private static readonly Lazy<FileManager> fileManager = new Lazy<FileManager>(() => new FileManager());
 

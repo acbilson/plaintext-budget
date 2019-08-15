@@ -5,11 +5,11 @@ namespace PTB.Core.Ledger
 {
     public class LedgerSchema
     {
-        // from schema.json
+        public string Folder { get; set; }
         public string Delimiter { get; set; }
+        public string DefaultFileName { get; set; }
 
         public int Size { get; set; }
-
         public LedgerColumns Columns { get; set; }
         public PTBFiles[] Files { get; set; }
 

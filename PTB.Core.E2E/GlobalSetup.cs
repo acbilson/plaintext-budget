@@ -15,6 +15,7 @@ namespace PTB.Core.E2E
         public PTBClient Client;
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
+        public FileManager FileManager;
 
         #region Initialize
 
@@ -90,6 +91,12 @@ namespace PTB.Core.E2E
         {
             var parser = new LedgerParser(Schema.Ledger);
             LedgerParser = parser;
+        }
+
+        public void WithAFileManager()
+        {
+            var fileManager = new FileManager(Settings, Schema);
+            FileManager = fileManager;
         }
 
         #endregion Arrange - With
@@ -185,7 +192,6 @@ namespace PTB.Core.E2E
             Assert.IsTrue(lines[0].Contains(firstCategory), $"First category should contain the word {firstCategory} if the budget is sorted.");
             Assert.IsTrue(lines[1].Contains(firstSubcategory), $"First subcategory under {firstCategory} should contain the word {firstSubcategory} if the budget is sorted.");
         }
-
 
         #endregion Assert - Should
 
