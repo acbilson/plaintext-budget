@@ -1,46 +1,72 @@
 ﻿using PTB.Core;
-using PTB.Core.Categories;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
 using PTB.Core.TitleRegex;
 using System;
 using System.IO;
+using System.Text;
 
 namespace PTB.Console
 {
-    internal enum ConsoleActions
-    {
-        Import,
-        Categorize
-    }
-
     public class Program
     {
-        private static void Main(string[] args)
+        private static PTBClient InitiateClient()
         {
-            var action = ConsoleActions.Import;
-
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
             var client = new PTBClient();
-            client.Instantiate(new FileManager(""), new PTBFileLogger(LoggingLevel.Debug, ""));
+            var fileManager = new FileManager(baseDir);
+            client.Instantiate(fileManager, new PTBFileLogger(LoggingLevel.Debug, baseDir));
+            return client;
+        }
 
-            switch (action)
+        private static void Main(string[] args)
+        {
+            bool exit = false;
+
+            do
             {
-                case ConsoleActions.Import:
+                System.Console.WriteLine("Please enter a value, or '?' for help:");
+                string input = System.Console.ReadLine();
 
-                    string importFolderPath = System.IO.Path.Combine(baseDir, "Import");
-                    string[] importFilePaths = System.IO.Directory.GetFiles(importFolderPath);
+                if (input == "?")
+                {
+                    var builder = new StringBuilder();
+                    builder.Append("These are your options:");
+                    builder.Append(System.Environment.NewLine);
+                    builder.Append($" - Import Statement ('import')");
+                    builder.Append(System.Environment.NewLine);
+                    builder.Append($" - Categorize Default Ledger ('categorize')");
+                    builder.Append(System.Environment.NewLine);
+                    builder.Append($" - Generate Budget ('budget')");
+                    builder.Append(System.Environment.NewLine);
+                    builder.Append($" - Exit ('exit')");
+                    builder.Append(System.Environment.NewLine);
+                    System.Console.Write(builder.ToString());
+                }
 
-                    foreach (var importFilePath in importFilePaths)
+                if (input == "exit")
+                {
+                    exit = true;
+                    continue;
+                }
+
+                if (input == "import")
+                {
+                    var client = InitiateClient();
+
+                    var importFiles = client.FileManager.GetStatementFiles();
+
+                    foreach (var importFile in importFiles)
                     {
                         var parser = new PNCParser();
-                        client.Ledger.ImportToDefaultLedger(importFilePath, parser, append: true);
+                        client.Ledger.ImportToDefaultLedger(importFile.FullName, parser, append: true);
                     }
+                }
 
-                    break;
-
-                case ConsoleActions.Categorize:
+                if (input == "categorize")
+                {
+                    var client = InitiateClient();
 
                     TitleRegexReadResponse response = client.Regex.ReadAllTitleRegex();
                     client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
@@ -49,13 +75,16 @@ namespace PTB.Console
                     {
                         System.Console.WriteLine(skippedMessage);
                     }
+                }
 
-                    break;
+                if (input == "budget")
+                {
+                    var client = InitiateClient();
 
-                default:
-
-                    break;
-            }
+                    var response = client.Categories.ReadAllDefaultCategories();
+                    client.Budget.CreateBudget(response.Categories);
+                }
+            } while (exit == false);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace PTB.Core
         FileInfo GetTitleRegexFile();
         FileInfo GetDefaultLedgerFile();
         FileInfo GetDefaultCategoriesFile();
+        List<FileInfo> GetStatementFiles();
     }
 
     public class FileManager : IFileManager
@@ -64,6 +65,13 @@ namespace PTB.Core
         {
             string path = Path.Combine(Settings.HomeDirectory, folder, fileName + Settings.FileExtension);
             return new FileInfo(path);
+        }
+
+        public List<FileInfo> GetStatementFiles()
+        {
+             List<FileInfo> filePaths = Directory.GetFiles(Path.Combine(Settings.HomeDirectory, "Import"), "*.csv")
+                .Select(path => new FileInfo(path)).ToList();
+            return filePaths;
         }
 
         public List<PTBFile> GetLedgerFiles()
