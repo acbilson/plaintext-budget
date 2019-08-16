@@ -18,8 +18,8 @@ namespace PTB.Web.Controllers
             var fileManager = new FileManager(home);
             var client = new PTBClient();
             client.Instantiate(fileManager);
-            var ledgerEntries = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
-            return ledgerEntries;
+            var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
+            return response.Result;
         }
 
         // GET: api/Ledger/5

@@ -16,9 +16,9 @@ namespace PTB.Core.TitleRegex
             _parser = new TitleRegexParser(_schema.TitleRegex);
         }
 
-        public CategoriesReadResponse ReadAllTitleRegex()
+        public TitleRegexReadResponse ReadAllTitleRegex()
         {
-            var response = CategoriesReadResponse.Default;
+            var response = TitleRegexReadResponse.Default;
             FileInfo titleRegexFile = _fileManager.GetTitleRegexFile();
 
             using (var stream = new FileStream(titleRegexFile.FullName, FileMode.Open, FileAccess.Read))

@@ -20,12 +20,12 @@ namespace PTB.Core.TitleRegex
         public static StringToTitleRegexResponse Default => new StringToTitleRegexResponse { Success = true, Message = string.Empty };
     }
 
-    public class CategoriesReadResponse
+    public class TitleRegexReadResponse
     {
         public List<TitleRegex> TitleRegices;
 
         public List<string> SkippedMessages;
 
-        public static CategoriesReadResponse Default => new CategoriesReadResponse { TitleRegices = new List<TitleRegex>(), SkippedMessages = new List<string>() };
+        public static TitleRegexReadResponse Default => new TitleRegexReadResponse { TitleRegices = new List<TitleRegex>(), SkippedMessages = new List<string>() };
     }
 }

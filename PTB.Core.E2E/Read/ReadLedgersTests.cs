@@ -12,10 +12,10 @@ namespace PTB.Core.E2E
             WithAFileClient();
 
             // Act
-            var result = Client.Ledger.ReadDefaultLedgerEntries(0, 10000);
+            var response = Client.Ledger.ReadDefaultLedgerEntries(0, 10000);
 
             // Assert
-            Assert.AreEqual(30, result.Count);
+            Assert.AreEqual(30, response.Result.Count);
         }
 
         [TestMethod]
@@ -27,10 +27,10 @@ namespace PTB.Core.E2E
             WithAFileClient();
 
             // Act
-            var result = Client.Ledger.ReadDefaultLedgerEntries(startIndex, ledgersToRead);
+            var response = Client.Ledger.ReadDefaultLedgerEntries(startIndex, ledgersToRead);
 
             // Assert
-            Assert.AreEqual(ledgersToRead, result.Count);
+            Assert.AreEqual(ledgersToRead, response.Result.Count);
         }
     }
 }

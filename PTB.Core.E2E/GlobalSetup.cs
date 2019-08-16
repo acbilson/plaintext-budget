@@ -7,6 +7,7 @@ using PTB.Core.Statements;
 using PTB.Core.TitleRegex;
 using System.Collections.Generic;
 using System.IO;
+using PTB.Core.Categories;
 
 namespace PTB.Core.E2E
 {
@@ -113,7 +114,7 @@ namespace PTB.Core.E2E
 
         public void WhenALedgerIsCategorized()
         {
-            CategoriesReadResponse response = Client.Regex.ReadAllTitleRegex();
+            TitleRegexReadResponse response = Client.Regex.ReadAllTitleRegex();
             Client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
         }
 
@@ -144,8 +145,8 @@ namespace PTB.Core.E2E
 
         public List<Ledger.Ledger> WithAllLedgerEntries()
         {
-            var entries = Client.Ledger.ReadDefaultLedgerEntries(0, 10000);
-            return entries;
+            var response = Client.Ledger.ReadDefaultLedgerEntries(0, 10000);
+            return response.Result;
         }
 
         public List<Categories.Categories> WithAllCategories()
@@ -196,14 +197,12 @@ namespace PTB.Core.E2E
             Assert.IsTrue(lines[1].Contains(firstSubcategory), $"First subcategory under {firstCategory} should contain the word {firstSubcategory} if the budget is sorted.");
         }
 
-        public void ShouldCategorizeBasicCategories(List<Ledger.Ledger> ledgerEntries)
+        public void ShouldHaveCategorizedAtLeastOneLedger(List<Ledger.Ledger> ledgerEntries)
         {
-            string[] basicCategories = new string[] { "Coffee", "Groceries", "Phone" };
-
-            foreach (var basicCategory in basicCategories)
-            {
-                Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == basicCategory), $"Failed to categorize any ledger entries as {basicCategory}.");
-            }
+            var noSubcategoryLedgers = ledgerEntries.Where(l => l.Subcategory.Trim() == "");
+            var noSubjectLedgers = ledgerEntries.Where(l => l.Subject.Trim() == "");
+            Assert.AreNotEqual(noSubcategoryLedgers.Count(), ledgerEntries.Count(), "There should not be the same number of ledgers without subcategories as total.");
+            Assert.AreNotEqual(noSubjectLedgers.Count(), ledgerEntries.Count(), "There should not be the same number of ledgers without subjects as total.");
         }
 
         public void ShouldNotCategorizeLockedLedger(List<Ledger.Ledger> ledgerEntries)
@@ -216,14 +215,15 @@ namespace PTB.Core.E2E
             }
         }
 
-        public void ShouldCategorizeBasicSubjects(List<Ledger.Ledger> ledgerEntries)
+        public void ShouldNotHaveAnySkippedCategories(CategoriesReadResponse response)
         {
-            string[] basicSubjects = new string[] { "Starbucks", "Jewel", "Trader Joe's" };
-
-            foreach (var basicSubject in basicSubjects)
+            if (response.SkippedMessages.Count > 0)
             {
-                Assert.IsTrue(ledgerEntries.Any((l) => l.Subject.TrimStart() == basicSubject), $"Failed to set the subject of any ledger entries as {basicSubject}.");
+                string messages = string.Join(System.Environment.NewLine, response.SkippedMessages);
+                Assert.Fail($"There were skipped categories. Messages: {messages}");
             }
+            Assert.AreEqual(39, response.Categories.Count());
+
         }
 
         #endregion Assert - Should

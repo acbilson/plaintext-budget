@@ -25,4 +25,13 @@
 
         public static LedgerUpdateResponse Default => new LedgerUpdateResponse { Success = true, Message = string.Empty };
     }
+    public class LedgerReadResponse
+    {
+        public System.Collections.Generic.List<Ledger> Result;
+        public bool Success { get; set; }
+        public string Message { get; set; }
+
+        public static LedgerReadResponse Default => new LedgerReadResponse { Success = true, Message = string.Empty, Result = new System.Collections.Generic.List<Ledger>() };
+    }
+
 }

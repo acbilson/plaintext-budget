@@ -18,9 +18,8 @@ namespace PTB.Core.E2E
             List<Ledger.Ledger> ledgerEntries = WithAllLedgerEntries();
 
             // Assert
-            ShouldCategorizeBasicCategories(ledgerEntries);
+            ShouldHaveCategorizedAtLeastOneLedger(ledgerEntries);
             ShouldNotCategorizeLockedLedger(ledgerEntries);
-            ShouldCategorizeBasicSubjects(ledgerEntries);
         }
     }
 }

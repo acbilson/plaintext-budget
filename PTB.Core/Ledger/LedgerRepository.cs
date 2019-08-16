@@ -57,14 +57,15 @@ namespace PTB.Core.Ledger
 
         public void SetBufferStartIndex(FileStream stream, int startIndex) => stream.Seek(startIndex, SeekOrigin.Begin);
 
-        public List<Ledger> ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
+        public LedgerReadResponse ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
         {
+            var response = LedgerReadResponse.Default;
+
             if (!IndexStartsAtCorrectByte(startIndex))
             {
                 throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.LineSize}");
             }
 
-            var ledgerEntries = new List<Ledger>();
             FileInfo ledgerFile = _fileManager.GetDefaultLedgerFile();
 
             using (var stream = new FileStream(ledgerFile.FullName, FileMode.Open, FileAccess.Read))
@@ -85,13 +86,13 @@ namespace PTB.Core.Ledger
                         throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {current.Message}");
                     }
 
-                    ledgerEntries.Add(current.Result);
+                    response.Result.Add(current.Result);
                     ledgerCount--;
                     byteIndex += bytesRead;
                 }
             }
 
-            return ledgerEntries;
+            return response;
         }
 
         public LedgerUpdateResponse UpdateDefaultLedgerEntry(Ledger ledgerToUpdate)

@@ -1,4 +1,5 @@
 ﻿using PTB.Core;
+using PTB.Core.Categories;
 using PTB.Core.Statements;
 using PTB.Core.TitleRegex;
 using System;
@@ -40,7 +41,7 @@ namespace PTB.Console
 
                 case ConsoleActions.Categorize:
 
-                    CategoriesReadResponse response = client.Regex.ReadAllTitleRegex();
+                    TitleRegexReadResponse response = client.Regex.ReadAllTitleRegex();
                     client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
 
                     foreach (var skippedMessage in response.SkippedMessages)
