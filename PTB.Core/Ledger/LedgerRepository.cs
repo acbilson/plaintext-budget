@@ -121,6 +121,8 @@ namespace PTB.Core.Ledger
 
         public string GetRegexMatch(string regex) => String.Concat(".*", regex.TrimStart(), "*");
 
+        public bool IsLedgerLocked(char locked) => locked == '1';
+
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
             string ledgerPath = base.GetDefaultPath(_Folder, _schema.Ledger.DefaultFileName);
@@ -155,6 +157,12 @@ namespace PTB.Core.Ledger
                     }
 
                     Ledger ledger = current.Result;
+
+                    // skips ledgers that have been locked by user modification
+                    if (IsLedgerLocked(ledger.Locked))
+                    {
+                        continue;
+                    }
 
                     foreach (var titleRegex in titleRegices)
                     {

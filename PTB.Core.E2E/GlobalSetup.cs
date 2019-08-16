@@ -195,6 +195,26 @@ namespace PTB.Core.E2E
             Assert.IsTrue(lines[1].Contains(firstSubcategory), $"First subcategory under {firstCategory} should contain the word {firstSubcategory} if the budget is sorted.");
         }
 
+        public void ShouldCategorizeBasicCategories(List<Ledger.Ledger> ledgerEntries)
+        {
+            string[] basicCategories = new string[] { "Coffee", "Groceries", "Phone" };
+
+            foreach (var basicCategory in basicCategories)
+            {
+                Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == basicCategory), $"Failed to categorize any ledger entries as {basicCategory}.");
+            }
+        }
+
+        public void ShouldNotCategorizeLockedLedger(List<Ledger.Ledger> ledgerEntries)
+        {
+            var lockedLedgerEntries = ledgerEntries.Where(l => l.Locked == '1');
+
+            foreach (var ledgerEntry in lockedLedgerEntries)
+            {
+                Assert.AreEqual("Custom", ledgerEntry.Subcategory.TrimStart());
+            }
+        }
+
         #endregion Assert - Should
 
         #region Assert - With

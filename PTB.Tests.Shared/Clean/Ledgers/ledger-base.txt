@@ -15,7 +15,7 @@
 2014-12-02 C       430.00                                                       depositreferenceno037535522       037535522 0
 2014-12-02 D        10.80                                                pospurchaseusps162622020evanstonil      pos3330909 0
 2014-12-02 D        43.00                                                   pospurchasetraderjoesevanstonil      pos6947020 0
-2014-12-02 D        68.68                                                   pospurchase03428jewelevanstonil      pos6745640 0
+2014-12-02 D        68.68                         Custom                    pospurchase03428jewelevanstonil      pos6745640 1
 2014-12-03 D        40.00                                                           check1028refno095720143       095720143 0
 2014-12-04 D        21.25                                   webpmtsingleonlinepmtallstateinsckf244838860pos       000143389 0
 2014-12-04 D        23.00                                          5059debitcardpurchaseexxonmobilevanstoni      9710845006 0
