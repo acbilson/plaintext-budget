@@ -20,6 +20,7 @@ namespace PTB.Core.E2E
             // Assert
             ShouldCategorizeBasicCategories(ledgerEntries);
             ShouldNotCategorizeLockedLedger(ledgerEntries);
+            ShouldCategorizeBasicSubjects(ledgerEntries);
         }
     }
 }

@@ -215,6 +215,16 @@ namespace PTB.Core.E2E
             }
         }
 
+        public void ShouldCategorizeBasicSubjects(List<Ledger.Ledger> ledgerEntries)
+        {
+            string[] basicSubjects = new string[] { "Starbucks", "Jewel", "Trader Joe's" };
+
+            foreach (var basicSubject in basicSubjects)
+            {
+                Assert.IsTrue(ledgerEntries.Any((l) => l.Subject.TrimStart() == basicSubject), $"Failed to set the subject of any ledger entries as {basicSubject}.");
+            }
+        }
+
         #endregion Assert - Should
 
         #region Assert - With

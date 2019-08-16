@@ -172,6 +172,7 @@ namespace PTB.Core.Ledger
                         if (isMatch)
                         {
                             ledger.Subcategory = titleRegex.Subcategory;
+                            ledger.Subject = titleRegex.Subject;
                             string newLine = _parser.ParseLedger(ledger);
                             newLine += Environment.NewLine;
                             byte[] newBuffer = _encoding.GetBytes(newLine);
