@@ -150,7 +150,7 @@ namespace PTB.Core.E2E
 
         public List<Categories.Categories> WithAllCategories()
         {
-            var categories = Client.Categories.ReadAllCategories();
+            var categories = Client.Categories.ReadAllDefaultCategories();
             return categories.Categories;
         }
 

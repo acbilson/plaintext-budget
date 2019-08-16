@@ -17,12 +17,13 @@ namespace PTB.Core.Categories
             _parser = new CategoriesParser(_schema.Categories);
         }
 
-        public CategoriesReadResponse ReadAllCategories()
+        public CategoriesReadResponse ReadAllDefaultCategories()
         {
             var response = CategoriesReadResponse.Default;
-            string path = base.GetDefaultPath(_folder, _schema.Categories.DefaultFileName);
 
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            FileInfo categoriesFile = _fileManager.GetDefaultCategoriesFile();
+
+            using (var stream = new FileStream(categoriesFile.FullName, FileMode.Open, FileAccess.Read))
             {
                 int bufferLength = _schema.Categories.LineSize + System.Environment.NewLine.Length;
                 int lineIndex = _schema.Categories.LineSize - 1;

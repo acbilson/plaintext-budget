@@ -12,7 +12,10 @@ namespace PTB.Core
     {
         List<PTBFile> GetLedgerFiles();
         List<PTBFile> GetCategoriesFiles();
+
         FileInfo GetTitleRegexFile();
+        FileInfo GetDefaultLedgerFile();
+        FileInfo GetDefaultCategoriesFile();
     }
 
     public class FileManager : IFileManager
@@ -68,10 +71,22 @@ namespace PTB.Core
             return GetFiles(Schema.Ledger.Folder, Schema.Ledger.DefaultFileName, Schema.Ledger.FileMask);
         }
 
+        public FileInfo GetDefaultLedgerFile()
+        {
+            var files = GetLedgerFiles();
+            return files.First(f => f.IsDefault == true).Info;
+        }
+
         public List<PTBFile> GetCategoriesFiles()
         {
             return GetFiles(Schema.Categories.Folder, Schema.Categories.DefaultFileName, Schema.Categories.FileMask);
         }
+        public FileInfo GetDefaultCategoriesFile()
+        {
+            var files = GetCategoriesFiles();
+            return files.First(f => f.IsDefault == true).Info;
+        }
+
 
         public FileInfo GetTitleRegexFile()
         {

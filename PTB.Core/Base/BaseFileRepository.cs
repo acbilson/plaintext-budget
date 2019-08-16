@@ -28,29 +28,5 @@ namespace PTB.Core
         public bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
 
         public long GetLineNumber(long streamPosition, int lineSize) => streamPosition / (lineSize + System.Environment.NewLine.Length);
-
-        public PTBSchema ReadFileSchema(string home)
-        {
-            string path = System.IO.Path.Combine(home, "schema.json");
-            string text = System.IO.File.ReadAllText(path);
-            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
-            return schema;
-        }
-
-        public string GetDefaultPath(string folder, string name)
-        {
-            return System.IO.Path.Combine(_settings.HomeDirectory, folder, (name + _settings.FileExtension));
-        }
-
-        public string GetCopyPath(string folder, string name)
-        {
-            return System.IO.Path.Combine(_settings.HomeDirectory, folder, (name + "-copy" + _settings.FileExtension));
-        }
-    }
-
-    public enum FileType
-    {
-        Ledger,
-        Categories
     }
 }
