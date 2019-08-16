@@ -39,6 +39,10 @@
     }
   },
   "Budget": {
-    "CategorySeparator": "-"
+    "CategorySeparator": "-",
+    "DefaultFileName": "budget-19-01-01",
+    "Delimiter": " ",
+    "Folder": "Budget",
+    "LineSize": 43
   }
 }

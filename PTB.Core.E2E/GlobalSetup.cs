@@ -46,7 +46,7 @@ namespace PTB.Core.E2E
                 FileDelimiter = "_",
                 FileExtension = ".txt",
                 HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean",
-                LoggingLevel = LoggingLevel.Debug
+                LoggingLevel = LoggingLevel.Info
             };
             CleanSettings = settings;
         }
@@ -57,7 +57,7 @@ namespace PTB.Core.E2E
                 FileDelimiter = "_",
                 FileExtension = ".txt",
                 HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty",
-                LoggingLevel = LoggingLevel.Debug
+                LoggingLevel = LoggingLevel.Info
             };
             DirtySettings = settings;
         }
@@ -89,12 +89,13 @@ namespace PTB.Core.E2E
         public void WithALogger()
         {
             var logger = new PTBFileLogger(CleanSettings.LoggingLevel, CleanSettings.HomeDirectory);
+            Logger = logger;
         }
 
         public void WithAFileClient()
         {
-            WithAFileManager();
             WithALogger();
+            WithAFileManager();
             var client = new PTBClient();
             client.Instantiate(FileManager, Logger);
             Client = client;

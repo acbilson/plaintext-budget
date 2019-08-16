@@ -21,7 +21,7 @@ namespace PTB.Core
             Ledger = new LedgerRepository(fileManager);
             Regex = new TitleRegexRepository(fileManager);
             Budget = new BudgetRepository(fileManager);
-            Categories = new CategoriesRepository(fileManager);
+            Categories = new CategoriesRepository(fileManager, logger);
         }
 
         private PTBSchema ReadSchemaFile(string home)

@@ -40,11 +40,10 @@ namespace PTB.Core.Budget
     
         public void CreateBudget(List<Categories.Categories> categories)
         {
-
-            FileInfo categoriesFile = _fileManager.GetDefaultCategoriesFile();
+            string path = Path.Combine(_settings.HomeDirectory, _schema.Budget.Folder, _schema.Budget.DefaultFileName + _settings.FileExtension);
 
             // creates the Budget directory if this is the first time creating a budget
-            Directory.CreateDirectory(categoriesFile.Directory.FullName);
+            Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
 
             var groupedCategories = categories.GroupBy(
                 group => group.Category.TrimStart(),
@@ -55,7 +54,7 @@ namespace PTB.Core.Budget
                 })
                 .OrderBy(group => group.Category);
 
-            using (var writer = new StreamWriter(categoriesFile.FullName, append: false))
+            using (var writer = new StreamWriter(path, append: false))
             {
                 foreach (var group in groupedCategories)
                 {
