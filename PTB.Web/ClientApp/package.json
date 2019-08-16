@@ -15,7 +15,7 @@
     "bootstrap": "^3.4.1",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.6",
-    "zone.js": "^-1.8.19"
+    "zone.js": "^1.8.19"
   },
   "devDependencies": {
     "@angular/cli": "~1.7.0",
@@ -45,7 +45,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --extract-css",
+    "start": "ng serve --port 5000 --extract-css",
     "build": "ng build --extract-css",
     "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
     "test": "ng test",

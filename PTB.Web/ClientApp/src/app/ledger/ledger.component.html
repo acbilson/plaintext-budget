@@ -20,7 +20,11 @@
                 <ng-template #elseBlock><label class="ledger-amount-credit">{{ ledger.amount | trim }}</label></ng-template>
             </td>
             <td class="ledger-subcategory"><input [ngModel]="ledger.subcategory | trim" (ngModelChange)="ledger.subcategory=$event" name="subcategory" type="text" /></td>
-            <td class="ledger-title"><input [ngModel]="ledger.title | trim" (ngModelChange)="ledger.title=$event" name="title" type="text" /></td>
+            <td class="ledger-title">
+                <div *ngIf="ledger.subject == ''; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock><input [ngModel]="ledger.title | trim" (ngModelChange)="ledger.title=$event" name="title" type="text" />
+                <ng-template #elseBlock><input [ngModel]="ledger.subject | trim" (ngModelChange)="ledger.subject=$event" name="title" type="text" />
+            </td>
             <td class="ledger-locked"><input [ngModel]="ledger.locked | trim" (ngModelChange)="ledger.locked=$event" name="locked" type="text" /></td>
         </tr>
     </tbody>

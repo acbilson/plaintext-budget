@@ -23,6 +23,7 @@ export class LedgerComponent implements OnInit {
       "amount": "10.80",
       "subcategory": "",
       "title": "mytesttitle",
+      "subject": "",
       "location": "001284",
       "locked": "0"
       };
@@ -41,6 +42,7 @@ interface ILedger {
   "amount": string;
   "subcategory": string;
   "title": string;
+  "subject": string;
   "location": string;
   "locked": string;
 }
