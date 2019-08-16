@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -5,44 +6,94 @@ using PTB.Core.Ledger;
 using PTB.Core.Statements;
 using PTB.Core.TitleRegex;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PTB.Core.E2E
 {
     [TestClass]
     public class GlobalSetup
     {
-        public PTBSettings Settings;
+        public PTBSettings CleanSettings;
+        public PTBSettings DirtySettings;
         public PTBSchema Schema;
         public PTBClient Client;
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
         public FileManager FileManager;
 
-        #region Initialize
+        public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
 
-        public void GetDefaultSettings(string folder)
+        [TestInitialize] 
+        public void GlobalInitialize()
         {
-            var text = System.IO.File.ReadAllText($@".\{folder}\settings.json");
-            PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(text);
-            Settings = settings;
+            GetDefaultSchema();
+            GetDefaultSettings();
+            GetDirtySettings();
         }
 
-        // The schema is copied in a post build event from the root level to each folder
-        public void GetDefaultSchema(string folder)
+        #region Initialize
+
+        public void GetDefaultSettings()
         {
-            var text = System.IO.File.ReadAllText($@".\{folder}\schema.json");
+            var settings = new PTBSettings
+            {
+                FileDelimiter = "_",
+                FileExtension = ".txt",
+                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean"
+            };
+            CleanSettings = settings;
+        }
+        public void GetDirtySettings()
+        {
+            var settings = new PTBSettings
+            {
+                FileDelimiter = "_",
+                FileExtension = ".txt",
+                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty"
+            };
+            DirtySettings = settings;
+        }
+
+        public void GetDefaultSchema()
+        {
+            var text = File.ReadAllText($@".\schema.json");
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
             Schema = schema;
         }
 
+        public void CopyFiles(List<string> paths)
+        {
+            foreach (var path in paths)
+            {
+                string extension = Path.GetExtension(path);
+                string newFileName = string.Concat(Path.GetFileNameWithoutExtension(path), "-copy", extension);
+                string destPath = Path.Combine(Path.GetDirectoryName(path), newFileName);
+                File.Copy(path, destPath, overwrite: true);
+                CopiedFiles.Add(new Tuple<string, string>(path, destPath));
+            }
+        }
+
         #endregion Initialize
+
+        #region Cleanup
+        public void RestoreFiles()
+        {
+            foreach (var filePair in CopiedFiles)
+            {
+                File.Copy(filePair.Item2, filePair.Item1, overwrite: true);
+                File.Delete(filePair.Item2);
+            }
+        }
+
+
+        #endregion Cleanup
 
         #region Arrange - With
 
         public void WithAFileClient()
         {
             var client = new PTBClient();
-            client.Instantiate(Settings.HomeDirectory);
+            client.Instantiate(CleanSettings);
             Client = client;
         }
 
@@ -60,7 +111,7 @@ namespace PTB.Core.E2E
 
         public void WithAFileManager()
         {
-            var fileManager = new FileManager(Settings, Schema);
+            var fileManager = new FileManager(CleanSettings, Schema);
             FileManager = fileManager;
         }
 
@@ -70,7 +121,7 @@ namespace PTB.Core.E2E
 
         public void WhenACleanStatementIsImported()
         {
-            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Clean\datafile.csv");
+            string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Statements\datafile.csv");
             Client.Ledger.ImportToDefaultLedger(path, PNCParser);
         }
 
@@ -92,7 +143,7 @@ namespace PTB.Core.E2E
 
         public Ledger.Ledger WithTheFirstParsedLedger()
         {
-            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
+            string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             string firstLine = ledgerEntries.Substring(0, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
             StringToLedgerResponse response = LedgerParser.ParseLine(firstLine, 0);
@@ -123,7 +174,7 @@ namespace PTB.Core.E2E
 
         public void ShouldImportAllLedgerEntries()
         {
-            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
+            string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             IEnumerable<string> ledgerEntries = System.IO.File.ReadLines(path);
             // takes all lines minus the header
             Assert.AreEqual(117 - 1, ledgerEntries.Count());
@@ -166,7 +217,7 @@ namespace PTB.Core.E2E
         public string[] WithBudgetLines()
         {
             string fileName = Client.Budget.GetBudgetName();
-            string path = System.IO.Path.Combine(Settings.HomeDirectory, $@"Budget\{fileName}{Settings.FileExtension}");
+            string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, $@"Budget\{fileName}{CleanSettings.FileExtension}");
             string[] budgetLines = System.IO.File.ReadAllLines(path);
             return budgetLines;
         }
@@ -178,7 +229,7 @@ namespace PTB.Core.E2E
 
         private Ledger.Ledger GetLedgerOnLine(int lineNumber)
         {
-            string path = System.IO.Path.Combine(Settings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
+            string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             int ledgerIndex = CalculateLedgerIndex(lineNumber);
             string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.LineSize + System.Environment.NewLine.Length);

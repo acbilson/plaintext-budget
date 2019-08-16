@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PTB.Core.E2E.PTBFileAccess
+namespace PTB.Core.E2E
 {
     [TestClass]
     public class FileAccessTests : GlobalSetup
@@ -10,8 +10,8 @@ namespace PTB.Core.E2E.PTBFileAccess
         public void Initialize()
         {
             string folder = "FileAccess";
-            GetDefaultSchema(folder);
-            GetDefaultSettings(folder);
+            GetDefaultSchema();
+            GetDefaultSettings();
         }
 
         [TestMethod]

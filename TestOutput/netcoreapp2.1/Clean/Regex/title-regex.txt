@@ -1,0 +1,36 @@
+1                         Coffee            BROTHERSK                     Brothers K
+1                         Coffee            STARBUCKS                      Starbucks
+1                         Coffee         OTHERBROTHER                  Other Brother
+1                      Groceries                JEWEL                          Jewel
+1                      Groceries            TRADERJOE                   Trader Joe's
+2                          Other           GOOGLEPLAY                    Google Play
+2                         Coffee         THECOMMONCUP                 The Common Cup
+2                         Coffee       INTELLIGENTSIA                 Intelligentsia
+2                         Online               AMAZON                         Amazon
+2                         Target               TARGET                         Target
+2                     Counseling SPRINGTREECOUNSELING          Springtree Counseling
+2                     Restaurant              POCKETS                        Pockets
+3                            Gas           PEOPLESGAS                    Peoples Gas
+3                           Auto              USAAP&C                       USAA P&C
+3                           Auto        USAAPCPREMIUM                   USAA Premium
+3                          Phone               VZWRLS                        Verizon
+3                          Phone              VERIZON                        Verizon
+3                          Phone         AT&TMOBILITY                           AT&T
+3                        Netflix              NETFLIX                        Netflix
+3                       Internet              COMCAST                        Comcast
+3                       Renter's          ALLSTATEINS                       Allstate
+3                      Groceries             MARIANOS                       Marianos
+3                      Groceries             WHOLEFDS                    Whole Foods
+3                      Groceries      J.D.MILLSHEALTH                      J.D.Mills
+3                     Relativity             KCURALLC                     Relativity
+3                     Relativity            KCURACORP                     Relativity
+3                     Restaurant                 ROTI                           Roti
+3                     Restaurant             POTBELLY                       Potbelly
+3                     Restaurant           BLAZEPIZZA                    Blaze Pizza
+3                     Restaurant   ANDYSFROZENCUSTARD           Andys Frozen Custard
+3                     Restaurant  ANDY'SFROZENCUSTARD           Andys Frozen Custard
+3                   Doctor Bills   NORTHSHOREHOSPITAL           North Shore Hospital
+3                  Miscellaneous     ATMWITHDRAWALFEE                 ATM Withdrawal
+3                 Emergency Fund       AUTOTRANSFERTO            Transfer to Savings
+3                 Public Transit          METRAOGIVIE                          Metra
+3                 Rock the World       PAYPAL.*ROCKWO                 Rock the World

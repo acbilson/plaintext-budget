@@ -10,9 +10,14 @@ namespace PTB.Core.E2E
         [TestInitialize]
         public void Initialize()
         {
-            string folder = "Categorize";
-            GetDefaultSchema(folder);
-            GetDefaultSettings(folder);
+            List<string> filesToCopy = new List<string> { @"./Clean/Ledgers/ledger_checking_19-01-01_19-12-31.txt" };
+            CopyFiles(filesToCopy);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            RestoreFiles();
         }
 
         [TestMethod]
@@ -26,7 +31,7 @@ namespace PTB.Core.E2E
             List<Ledger.Ledger> ledgerEntries = WithAllLedgerEntries();
 
             // Assert
-            Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Internet"), $"Failed to categorize any ledger entries as Internet.");
+            Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Coffee"), $"Failed to categorize any ledger entries as Coffee.");
             Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Groceries"), "Failed to categorize any ledger entries as Groceries");
         }
     }

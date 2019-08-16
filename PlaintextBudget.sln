@@ -8,10 +8,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Core", "PTB.Core\PTB.Core.csproj", "{3EEB51F4-E718-43EF-92CD-1ECF0F5F2F3E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Core.Tests", "PTB.Core.Tests\PTB.Core.Tests.csproj", "{2B8299A3-1476-480F-8C75-119A24A34B86}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02} = {3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Core.E2E", "PTB.Core.E2E\PTB.Core.E2E.csproj", "{AEC769E5-6CA6-432B-9CEF-98A3038FB6D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02} = {3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Web", "PTB.Web\PTB.Web.csproj", "{84C3692C-1235-40DC-A623-DF6A4415BAB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Tests.Shared", "PTB.Tests.Shared\PTB.Tests.Shared.csproj", "{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +47,10 @@ Global
 		{84C3692C-1235-40DC-A623-DF6A4415BAB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84C3692C-1235-40DC-A623-DF6A4415BAB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84C3692C-1235-40DC-A623-DF6A4415BAB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

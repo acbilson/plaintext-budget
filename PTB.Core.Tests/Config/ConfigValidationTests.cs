@@ -10,7 +10,7 @@ namespace PTB.Core.Config.Tests
         public void LoadsCleanSettings()
         {
             // Arrange / Act
-            string settingsPath = @"./Config/Clean/settings.json";
+            string settingsPath = @"./Clean/settings.json";
             PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
 
             // Assert
@@ -23,7 +23,7 @@ namespace PTB.Core.Config.Tests
         public void LoadsCleanSchema()
         {
             // Arrange / Act
-            string settingsPath = @"./Config/Clean/schema.json";
+            string settingsPath = @"./schema.json";
             PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(settingsPath));
 
             // Assert

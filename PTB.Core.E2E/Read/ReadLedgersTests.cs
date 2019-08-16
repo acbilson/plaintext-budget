@@ -5,14 +5,6 @@ namespace PTB.Core.E2E
     [TestClass]
     public class ReadLedgersTests : GlobalSetup
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            string folder = "Read";
-            GetDefaultSchema(folder);
-            GetDefaultSettings(folder);
-        }
-
         [TestMethod]
         public void ReadAllLedgerEntries()
         {

@@ -13,21 +13,13 @@ namespace PTB.Core
         public BudgetRepository Budget;
         public CategoriesRepository Categories;
 
-        public void Instantiate(string home = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home\")
+        public void Instantiate(PTBSettings settings)
         {
-            var settings = ReadSettingsFile(home);
-            var schema = ReadSchemaFile(home);
+            var schema = ReadSchemaFile(settings.HomeDirectory);
             Ledger = new LedgerRepository(settings, schema);
             Regex = new TitleRegexRepository(settings, schema);
             Budget = new BudgetRepository(settings, schema);
             Categories = new CategoriesRepository(settings, schema);
-        }
-
-        private PTBSettings ReadSettingsFile(string home)
-        {
-            string settingsPath = System.IO.Path.Combine(home, "settings.json");
-            PTBSettings settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
-            return settings;
         }
 
         private PTBSchema ReadSchemaFile(string home)

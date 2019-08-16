@@ -7,14 +7,6 @@ namespace PTB.Core.E2E
     [TestClass]
     public class BudgetTests : GlobalSetup
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            string folder = "Budget";
-            GetDefaultSchema(folder);
-            GetDefaultSettings(folder);
-        }
-
         [TestMethod]
         public void GeneratesBudget()
         {

@@ -16,7 +16,7 @@ namespace PTB.Web.Controllers
         {
             var home = Environment.CurrentDirectory;
             var client = new PTBClient();
-            client.Instantiate(home);
+            client.Instantiate(new PTBSettings());
             var ledgerEntries = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
             return ledgerEntries;
         }

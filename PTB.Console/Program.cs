@@ -21,7 +21,7 @@ namespace PTB.Console
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
             var client = new PTBClient();
-            client.Instantiate();
+            client.Instantiate(new PTBSettings());
 
             switch (action)
             {

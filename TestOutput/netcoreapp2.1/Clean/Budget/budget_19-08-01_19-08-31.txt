@@ -1,0 +1,63 @@
+------------ Charity
+       0.00  Neighborhood Campus
+       0.00  Rock the World
+
+------------ Clothing
+       0.00  Adult
+       0.00  Children
+
+------------ Food
+       0.00  Groceries
+
+------------ Housing
+       0.00  Cleaning Service
+       0.00  IKEA
+       0.00  Target
+
+------------ Income
+       0.00  Heartland
+       0.00  Other
+       0.00  Relativity
+
+------------ Insurance
+       0.00  Auto
+       0.00  Renter's
+
+------------ Medical/Health
+       0.00  Counseling
+       0.00  Dentist
+       0.00  Doctor Bills
+       0.00  Orthodontics
+
+------------ Personal
+       0.00  Amazon Membership
+       0.00  Coffee
+       0.00  Cosmetics/Hair Care
+       0.00  Education/Tuition
+       0.00  Gifts
+       0.00  Miscellaneous
+       0.00  Music/Technology
+       0.00  Netflix
+       0.00  Online
+       0.00  Organization Dues
+
+------------ Recreation
+       0.00  Other
+       0.00  Restaurant
+       0.00  Vacation/Travel
+
+------------ Transfers
+       0.00  Emergency Fund
+
+------------ Transportation
+       0.00  Gas & Oil
+       0.00  License, Taxes & Parking
+       0.00  Public Transit
+       0.00  Repairs & Tires
+
+------------ Utilities
+       0.00  Electricity
+       0.00  Gas
+       0.00  Internet
+       0.00  Phone
+

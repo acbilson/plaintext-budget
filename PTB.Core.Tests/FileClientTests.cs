@@ -3,7 +3,7 @@
 namespace PTB.Core.Tests
 {
     [TestClass]
-    public class FileClientTests
+    public class FileClientTests : GlobalSetup
     {
         [TestMethod]
         public void InstantiatesWithCleanConfigs()
@@ -12,7 +12,7 @@ namespace PTB.Core.Tests
             var client = new PTBClient();
 
             // Act
-            client.Instantiate(@".\Config\Clean");
+            client.Instantiate(Settings);
 
             //Assert
             Assert.IsNotNull(client.Ledger);
