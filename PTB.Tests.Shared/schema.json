@@ -21,26 +21,26 @@
         "Size": 30,
         "Offset": 23
       },
-      "Title": {
+      "Subject": {
         "Index": 5,
-        "Size": 50,
+        "Size": 30,
         "Offset": 53
       },
-      "Location": {
+      "Title": {
         "Index": 6,
-        "Size": 15,
-        "Offset": 103
+        "Size": 50,
+        "Offset": 83
       },
       "Locked": {
         "Index": 7,
         "Size": 1,
-        "Offset": 118
+        "Offset": 133
       }
     },
     "Delimiter": " ",
     "Folder": "Ledgers",
     "DefaultFileName": "ledger_checking_19-01-01_19-12-31",
-    "LineSize": 125
+    "LineSize": 140
   },
   "TitleRegex": {
     "DefaultFileName": "title-regex",

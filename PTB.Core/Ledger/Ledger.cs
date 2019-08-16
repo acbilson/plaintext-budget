@@ -3,16 +3,16 @@
     public struct Ledger
     {
         public int Index;
-        public string Date, Amount, Title, Location, Subcategory;
+        public string Date, Amount, Subject, Title, Subcategory;
         public char Type, Locked;
 
-        public Ledger(int index, string date, string amount, string title, string location, char type, char locked, string subcategory)
+        public Ledger(int index, string date, string amount, string subject, string title, char type, char locked, string subcategory)
         {
             Index = index;
             Date = date;
             Amount = amount;
+            Subject = subject;
             Title = title;
-            Location = location;
             Type = type;
             Subcategory = subcategory;
             Locked = locked;

@@ -170,8 +170,8 @@ namespace PTB.Core.E2E
         {
             Assert.AreEqual("2019-06-18", ledger.Date);
             Assert.AreEqual("310.80", ledger.Amount.TrimStart());
+            Assert.AreEqual("", ledger.Subject.Trim());
             Assert.AreEqual("directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", ledger.Title.TrimStart());
-            Assert.AreEqual("000191699", ledger.Location.TrimStart());
             Assert.AreEqual('C', ledger.Type);
             Assert.AreEqual('0', ledger.Locked);
             Assert.AreEqual("", ledger.Subcategory.Trim());

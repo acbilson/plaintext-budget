@@ -14,8 +14,8 @@ namespace PTB.Core.Ledger
         public ColumnType Type { get; set; }
         public ColumnAmount Amount { get; set; }
         public ColumnSubcategory Subcategory { get; set; }
+        public ColumnSubject Subject { get; set; }
         public ColumnTitle Title { get; set; }
-        public ColumnLocation Location { get; set; }
         public ColumnLocked Locked { get; set; }
     }
 
@@ -27,9 +27,9 @@ namespace PTB.Core.Ledger
 
     public class ColumnSubcategory : SchemaColumn { }
 
-    public class ColumnTitle : SchemaColumn { }
+    public class ColumnSubject : SchemaColumn { }
 
-    public class ColumnLocation : SchemaColumn { }
+    public class ColumnTitle : SchemaColumn { }
 
     public class ColumnLocked : SchemaColumn { }
 }

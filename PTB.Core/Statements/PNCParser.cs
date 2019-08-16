@@ -27,9 +27,9 @@ namespace PTB.Core.Statements
             string date = ParseDate(lines[0]);
             string amount = ParseAmount(lines[1]);
             string title = ParseTitle(lines[2], lines[3]);
-            string location = ParseLocation(lines[4]);
             char type = ParseType(lines[5]);
             string subcategory = new String(' ', _schema.Columns.Subcategory.Size);
+            string subject = new String(' ', _schema.Columns.Subject.Size);
             char locked = '0';
 
             char delimiter = ' ';
@@ -42,9 +42,9 @@ namespace PTB.Core.Statements
             builder.Append(delimiter);
             builder.Append(subcategory);
             builder.Append(delimiter);
-            builder.Append(title);
+            builder.Append(subject);
             builder.Append(delimiter);
-            builder.Append(location);
+            builder.Append(title);
             builder.Append(delimiter);
             builder.Append(locked);
 
@@ -120,17 +120,6 @@ namespace PTB.Core.Statements
             }
 
             return PrependSpaces(title, _schema.Columns.Title.Size);
-        }
-
-        private string ParseLocation(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                // should skip this transaction
-            }
-
-            string location = ParseNoiseChars(value);
-            return PrependSpaces(location, _schema.Columns.Location.Size);
         }
 
         private char ParseType(string value)

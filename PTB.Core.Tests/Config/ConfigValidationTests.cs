@@ -42,10 +42,10 @@ namespace PTB.Core.Config.Tests
             Assert.IsNotNull(schema.Ledger.Columns.Date.Index);
             Assert.IsNotNull(schema.Ledger.Columns.Date.Offset);
             Assert.IsNotNull(schema.Ledger.Columns.Date.Size);
-            Assert.IsNotNull(schema.Ledger.Columns.Location);
-            Assert.IsNotNull(schema.Ledger.Columns.Location.Index);
-            Assert.IsNotNull(schema.Ledger.Columns.Location.Offset);
-            Assert.IsNotNull(schema.Ledger.Columns.Location.Size);
+            Assert.IsNotNull(schema.Ledger.Columns.Subject);
+            Assert.IsNotNull(schema.Ledger.Columns.Subject.Index);
+            Assert.IsNotNull(schema.Ledger.Columns.Subject.Offset);
+            Assert.IsNotNull(schema.Ledger.Columns.Subject.Size);
             Assert.IsNotNull(schema.Ledger.Columns.Locked);
             Assert.IsNotNull(schema.Ledger.Columns.Locked.Index);
             Assert.IsNotNull(schema.Ledger.Columns.Locked.Offset);

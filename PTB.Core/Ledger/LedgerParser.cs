@@ -36,11 +36,11 @@ namespace PTB.Core.Ledger
             string type = CalculateByteIndex(delimiterLength, line, _schema.Columns.Type);
             string amount = CalculateByteIndex(delimiterLength, line, _schema.Columns.Amount);
             string subcategory = CalculateByteIndex(delimiterLength, line, _schema.Columns.Subcategory);
+            string subject = CalculateByteIndex(delimiterLength, line, _schema.Columns.Subject);
             string title = CalculateByteIndex(delimiterLength, line, _schema.Columns.Title);
-            string location = CalculateByteIndex(delimiterLength, line, _schema.Columns.Location);
             string locked = CalculateByteIndex(delimiterLength, line, _schema.Columns.Locked);
 
-            response.Result = new Ledger(index, date, amount, title, location, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
+            response.Result = new Ledger(index, date, amount, subject, title, Convert.ToChar(type), Convert.ToChar(locked), subcategory);
             return response;
         }
 
@@ -55,9 +55,9 @@ namespace PTB.Core.Ledger
             builder.Append(_schema.Delimiter);
             builder.Append(ledger.Subcategory);
             builder.Append(_schema.Delimiter);
-            builder.Append(ledger.Title);
+            builder.Append(ledger.Subject);
             builder.Append(_schema.Delimiter);
-            builder.Append(ledger.Location);
+            builder.Append(ledger.Title);
             builder.Append(_schema.Delimiter);
             builder.Append(ledger.Locked);
             return builder.ToString();
