@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using PTB.Core.PTBFileAccess;
+using System.Text.RegularExpressions;
 
 namespace PTB.Core
 {
@@ -23,9 +24,16 @@ namespace PTB.Core
             _schema = schema;
         }
 
-        private List<PTBFile> GetFiles(string folder, string fileName)
+        private bool IsMaskMatch(string path, string fileMask) {
+            string fileName = Path.GetFileNameWithoutExtension(path);
+            return Regex.IsMatch(fileName, fileMask);
+
+        }
+
+        private List<PTBFile> GetFiles(string folder, string fileName, string fileMask)
         {
             var files = Directory.GetFiles(Path.Combine(_settings.HomeDirectory, folder))
+                .Where(path => IsMaskMatch(path, fileMask))
                 .Select(path => new PTBFile {
                     IsDefault = Path.GetFileNameWithoutExtension(path) == fileName,
                     Info = new FileInfo(path)
@@ -41,18 +49,17 @@ namespace PTB.Core
 
         public List<PTBFile> GetLedgerFiles()
         {
-            return GetFiles(_schema.Ledger.Folder, _schema.Ledger.DefaultFileName);
+            return GetFiles(_schema.Ledger.Folder, _schema.Ledger.DefaultFileName, _schema.Ledger.FileMask);
         }
         public List<PTBFile> GetCategoriesFiles()
         {
-            return GetFiles(_schema.Categories.Folder, _schema.Categories.DefaultFileName);
+            return GetFiles(_schema.Categories.Folder, _schema.Categories.DefaultFileName, _schema.Categories.FileMask);
         }
 
         public FileInfo GetTitleRegexFile()
         {
             return GetFile(_schema.TitleRegex.Folder, _schema.TitleRegex.DefaultFileName);
         }
-
 
 
         /*

@@ -32,6 +32,7 @@ namespace PTB.Core.Config.Tests
             Assert.IsNotNull(schema.Ledger.LineSize);
             Assert.IsNotNull(schema.Ledger.DefaultFileName);
             Assert.IsNotNull(schema.Ledger.Folder);
+            Assert.IsNotNull(schema.Ledger.FileMask);
 
             Assert.IsNotNull(schema.Ledger.Columns);
             Assert.IsNotNull(schema.Ledger.Columns.Amount);
@@ -92,6 +93,7 @@ namespace PTB.Core.Config.Tests
             Assert.IsNotNull(schema.Categories.LineSize);
             Assert.IsNotNull(schema.Categories.DefaultFileName);
             Assert.IsNotNull(schema.Categories.Folder);
+            Assert.IsNotNull(schema.Categories.FileMask);
 
             Assert.IsNotNull(schema.Categories.Columns);
             Assert.IsNotNull(schema.Categories.Columns.Category);

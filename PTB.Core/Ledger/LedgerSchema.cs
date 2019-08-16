@@ -5,6 +5,7 @@ namespace PTB.Core.Ledger
 {
     public class LedgerSchema : FolderSchema
     {
+        public string FileMask { get; set; }
         public LedgerColumns Columns { get; set; }
     }
 

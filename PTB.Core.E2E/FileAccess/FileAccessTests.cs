@@ -14,8 +14,8 @@ namespace PTB.Core.E2E
             GetDefaultSettings();
         }
 
-        [TestMethod]
-        public void GetsThreeLedgerFiles()
+        [TestMethod, Description("There are four files present in the Ledgers folder, but one does not match the ledger file mask")]
+        public void GetsOnlyThreeLedgerFiles()
         {
             // Arrange
             WithAFileManager();
@@ -24,7 +24,7 @@ namespace PTB.Core.E2E
             var files = FileManager.GetLedgerFiles();
 
             // Assert
-            Assert.AreEqual(4, files.Count());
+            Assert.AreEqual(3, files.Count());
         }
 
         [TestMethod]
@@ -82,7 +82,5 @@ namespace PTB.Core.E2E
             // Assert
             Assert.AreEqual(Schema.TitleRegex.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Name));
         }
-
-
     }
 }
