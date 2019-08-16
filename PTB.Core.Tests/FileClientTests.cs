@@ -9,10 +9,11 @@ namespace PTB.Core.Tests
         public void InstantiatesWithCleanConfigs()
         {
             // Arrange
+            var fileManager = new FileManager(Settings, Schema);
             var client = new PTBClient();
 
             // Act
-            client.Instantiate(Settings);
+            client.Instantiate(fileManager);
 
             //Assert
             Assert.IsNotNull(client.Ledger);

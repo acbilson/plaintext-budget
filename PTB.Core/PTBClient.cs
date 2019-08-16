@@ -8,18 +8,19 @@ namespace PTB.Core
 {
     public class PTBClient
     {
+        public FileManager FileManager;
+
         public LedgerRepository Ledger;
         public TitleRegexRepository Regex;
         public BudgetRepository Budget;
         public CategoriesRepository Categories;
 
-        public void Instantiate(PTBSettings settings)
+        public void Instantiate(FileManager fileManager)
         {
-            var schema = ReadSchemaFile(settings.HomeDirectory);
-            Ledger = new LedgerRepository(settings, schema);
-            Regex = new TitleRegexRepository(settings, schema);
-            Budget = new BudgetRepository(settings, schema);
-            Categories = new CategoriesRepository(settings, schema);
+            Ledger = new LedgerRepository(fileManager);
+            Regex = new TitleRegexRepository(fileManager);
+            Budget = new BudgetRepository(fileManager);
+            Categories = new CategoriesRepository(fileManager);
         }
 
         private PTBSchema ReadSchemaFile(string home)

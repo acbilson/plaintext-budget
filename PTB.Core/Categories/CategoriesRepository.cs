@@ -12,7 +12,7 @@ namespace PTB.Core.Categories
         private CategoriesParser _parser;
         private Encoding _encoding = Encoding.ASCII;
 
-        public CategoriesRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
+        public CategoriesRepository(FileManager fileManager) : base(fileManager)
         {
             _parser = new CategoriesParser(_schema.Categories);
         }

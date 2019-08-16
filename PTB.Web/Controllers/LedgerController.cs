@@ -15,8 +15,9 @@ namespace PTB.Web.Controllers
         public List<Ledger> ReadLedgers(int startIndex, int count)
         {
             var home = Environment.CurrentDirectory;
+            var fileManager = new FileManager(home);
             var client = new PTBClient();
-            client.Instantiate(new PTBSettings());
+            client.Instantiate(fileManager);
             var ledgerEntries = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
             return ledgerEntries;
         }

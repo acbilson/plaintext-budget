@@ -4,24 +4,40 @@ using System.IO;
 using System.Collections.Generic;
 using PTB.Core.PTBFileAccess;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace PTB.Core
 {
     public interface IFileManager
     {
         List<PTBFile> GetLedgerFiles();
-
+        List<PTBFile> GetCategoriesFiles();
+        FileInfo GetTitleRegexFile();
     }
 
     public class FileManager : IFileManager
     {
-        private PTBSettings _settings;
-        private PTBSchema _schema;
+        public PTBSettings Settings;
+        public PTBSchema Schema;
+
+        public FileManager(string baseDirectory)
+        {
+            GetConfigurationFromPath(baseDirectory); 
+        }
 
         public FileManager(PTBSettings settings, PTBSchema schema)
         {
-            _settings = settings;
-            _schema = schema;
+            Settings = settings;
+            Schema = schema;
+        }
+
+        private void GetConfigurationFromPath(string baseDirectory)
+        {
+            string settingsPath = System.IO.Path.Combine(baseDirectory, "settings.json");
+            Settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
+
+            string schemaPath = System.IO.Path.Combine(baseDirectory, "schema.json");
+            Schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
         }
 
         private bool IsMaskMatch(string path, string fileMask) {
@@ -32,7 +48,7 @@ namespace PTB.Core
 
         private List<PTBFile> GetFiles(string folder, string fileName, string fileMask)
         {
-            var files = Directory.GetFiles(Path.Combine(_settings.HomeDirectory, folder))
+            var files = Directory.GetFiles(Path.Combine(Settings.HomeDirectory, folder))
                 .Where(path => IsMaskMatch(path, fileMask))
                 .Select(path => new PTBFile {
                     IsDefault = Path.GetFileNameWithoutExtension(path) == fileName,
@@ -43,22 +59,23 @@ namespace PTB.Core
 
         private FileInfo GetFile(string folder, string fileName)
         {
-            string path = Path.Combine(_settings.HomeDirectory, folder, fileName + _settings.FileExtension);
+            string path = Path.Combine(Settings.HomeDirectory, folder, fileName + Settings.FileExtension);
             return new FileInfo(path);
         }
 
         public List<PTBFile> GetLedgerFiles()
         {
-            return GetFiles(_schema.Ledger.Folder, _schema.Ledger.DefaultFileName, _schema.Ledger.FileMask);
+            return GetFiles(Schema.Ledger.Folder, Schema.Ledger.DefaultFileName, Schema.Ledger.FileMask);
         }
+
         public List<PTBFile> GetCategoriesFiles()
         {
-            return GetFiles(_schema.Categories.Folder, _schema.Categories.DefaultFileName, _schema.Categories.FileMask);
+            return GetFiles(Schema.Categories.Folder, Schema.Categories.DefaultFileName, Schema.Categories.FileMask);
         }
 
         public FileInfo GetTitleRegexFile()
         {
-            return GetFile(_schema.TitleRegex.Folder, _schema.TitleRegex.DefaultFileName);
+            return GetFile(Schema.TitleRegex.Folder, Schema.TitleRegex.DefaultFileName);
         }
 
 

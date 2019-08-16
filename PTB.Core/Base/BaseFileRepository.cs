@@ -7,6 +7,14 @@ namespace PTB.Core
     {
         protected PTBSettings _settings;
         protected PTBSchema _schema;
+        protected FileManager _fileManager;
+
+        public BaseFileRepository(FileManager fileManager)
+        {
+            _fileManager = fileManager;
+            _settings = _fileManager.Settings;
+            _schema = _fileManager.Schema;
+        }
 
         public BaseFileRepository(PTBSettings settings, PTBSchema schema)
         {

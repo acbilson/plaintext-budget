@@ -75,10 +75,17 @@ namespace PTB.Core.E2E
 
         #region Arrange - With
 
+        public void WithAFileManager()
+        {
+            var fileManager = new FileManager(CleanSettings, Schema);
+            FileManager = fileManager;
+        }
+
         public void WithAFileClient()
         {
+            WithAFileManager();
             var client = new PTBClient();
-            client.Instantiate(CleanSettings);
+            client.Instantiate(FileManager);
             Client = client;
         }
 
@@ -92,12 +99,6 @@ namespace PTB.Core.E2E
         {
             var parser = new LedgerParser(Schema.Ledger);
             LedgerParser = parser;
-        }
-
-        public void WithAFileManager()
-        {
-            var fileManager = new FileManager(CleanSettings, Schema);
-            FileManager = fileManager;
         }
 
         #endregion Arrange - With

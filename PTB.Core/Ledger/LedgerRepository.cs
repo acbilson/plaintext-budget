@@ -14,7 +14,7 @@ namespace PTB.Core.Ledger
         private LedgerParser _parser;
         private Encoding _encoding = Encoding.ASCII;
 
-        public LedgerRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
+        public LedgerRepository(FileManager fileManager) : base(fileManager)
         {
             _parser = new LedgerParser(_schema.Ledger);
         }

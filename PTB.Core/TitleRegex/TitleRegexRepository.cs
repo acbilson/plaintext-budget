@@ -11,7 +11,7 @@ namespace PTB.Core.TitleRegex
         private TitleRegexParser _parser;
         private Encoding _encoding = Encoding.ASCII;
 
-        public TitleRegexRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
+        public TitleRegexRepository(FileManager fileManager) : base(fileManager)
         {
             _parser = new TitleRegexParser(_schema.TitleRegex);
         }

@@ -11,9 +11,9 @@ namespace PTB.Core.Budget
         private string _folder = "Budget";
         private CategoriesParser _parser;
 
-        public BudgetRepository(PTBSettings settings, PTBSchema schema) : base(settings, schema)
+        public BudgetRepository(FileManager fileManager) : base(fileManager)
         {
-            _parser = new CategoriesParser(schema.Categories);
+            _parser = new CategoriesParser(_schema.Categories);
         }
 
         public string GetBudgetName()

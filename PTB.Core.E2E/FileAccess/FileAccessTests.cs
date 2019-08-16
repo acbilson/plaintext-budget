@@ -6,12 +6,16 @@ namespace PTB.Core.E2E
     [TestClass]
     public class FileAccessTests : GlobalSetup
     {
-        [TestInitialize]
-        public void Initialize()
+
+        [TestMethod]
+        public void ReadsConfigsFromPath()
         {
-            string folder = "FileAccess";
-            GetDefaultSchema();
-            GetDefaultSettings();
+            // Arrange - Act
+            var fileManager = new FileManager(CleanSettings.HomeDirectory);
+
+            // Assert
+            Assert.IsNotNull(fileManager.Settings);
+            Assert.IsNotNull(fileManager.Schema);
         }
 
         [TestMethod, Description("There are four files present in the Ledgers folder, but one does not match the ledger file mask")]
