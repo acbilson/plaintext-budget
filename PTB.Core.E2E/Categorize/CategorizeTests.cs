@@ -26,7 +26,7 @@ namespace PTB.Core.E2E
             List<Ledger.Ledger> ledgerEntries = WithAllLedgerEntries();
 
             // Assert
-            Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Restaurant"), $"Failed to categorize any ledger entries as Restaurant.");
+            Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Internet"), $"Failed to categorize any ledger entries as Internet.");
             Assert.IsTrue(ledgerEntries.Any((l) => l.Subcategory.TrimStart() == "Groceries"), "Failed to categorize any ledger entries as Groceries");
         }
     }

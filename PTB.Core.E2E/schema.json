@@ -46,7 +46,7 @@
     "DefaultFileName": "title-regex",
     "Folder": "Regex",
     "Delimiter": " ",
-    "LineSize": 63,
+    "LineSize": 84,
     "Columns": {
       "Priority": {
         "Index": 1,
@@ -60,8 +60,13 @@
       },
       "Regex": {
         "Index": 3,
-        "Size": 30,
+        "Size": 20,
         "Offset": 31
+      },
+      "Subject": {
+        "Index": 4,
+        "Size": 30,
+        "Offset": 51
       }
     }
   },

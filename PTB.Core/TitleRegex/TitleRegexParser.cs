@@ -34,8 +34,9 @@ namespace PTB.Core.TitleRegex
             string priority = CalculateByteIndex(delimiterLength, line, _schema.Columns.Priority);
             string subcategory = CalculateByteIndex(delimiterLength, line, _schema.Columns.Subcategory);
             string regex = CalculateByteIndex(delimiterLength, line, _schema.Columns.Regex);
+            string subject = CalculateByteIndex(delimiterLength, line, _schema.Columns.Subject);
 
-            response.Result = new TitleRegex(Convert.ToChar(priority), subcategory, regex);
+            response.Result = new TitleRegex(Convert.ToChar(priority), subcategory, regex, subject);
             return response;
         }
     }

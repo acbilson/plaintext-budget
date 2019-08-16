@@ -1,2 +1,19 @@
-3                     Restaurant                     BLAZEPIZZA
-2                      Groceries                      TRADERJOE
+1                         Coffee            STARBUCKS                      Starbucks
+1                         Coffee         OTHERBROTHER                  Other Brother
+1                      Groceries                JEWEL                          Jewel
+1                      Groceries            TRADERJOE                   Trader Joe's
+2                          Other           GOOGLEPLAY                    Google Play
+2                         Coffee         THECOMMONCUP                 The Common Cup
+2                         Coffee       INTELLIGENTSIA                 Intelligentsia
+2                         Online               AMAZON                         Amazon
+2                         Target               TARGET                         Target
+2                     Counseling SPRINGTREECOUNSELING          Springtree Counseling
+2                     Restaurant              POCKETS                        Pockets
+3                            Gas           PEOPLESGAS                    Peoples Gas
+3                           Auto              USAAP&C                       USAA P&C
+3                           Auto        USAAPCPREMIUM                   USAA Premium
+3                          Phone               VZWRLS                        Verizon
+3                          Phone              VERIZON                        Verizon
+3                          Phone         AT&TMOBILITY                           AT&T
+3                        Netflix              NETFLIX                        Netflix
+3                       Internet              COMCAST                        Comcast

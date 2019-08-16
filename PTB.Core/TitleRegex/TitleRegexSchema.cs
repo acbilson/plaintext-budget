@@ -13,6 +13,7 @@ namespace PTB.Core.TitleRegex
         public ColumnPriority Priority { get; set; }
         public ColumnSubcategory Subcategory { get; set; }
         public ColumnRegex Regex { get; set; }
+        public ColumnSubject Subject { get; set; }
     }
 
     public class ColumnPriority : SchemaColumn { }
@@ -20,4 +21,5 @@ namespace PTB.Core.TitleRegex
     public class ColumnSubcategory : SchemaColumn { }
 
     public class ColumnRegex : SchemaColumn { }
+    public class ColumnSubject : SchemaColumn { }
 }

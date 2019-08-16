@@ -6,14 +6,13 @@ namespace PTB.Core.TitleRegex.Tests
     [TestClass]
     public class TitleRegexParserTests : GlobalSetup
     {
-        [DataRow("1                      Groceries                          JEWEL", '1', "Groceries", "JEWEL")]
-        [DataRow("1                      Groceries                     TRADER JOE", '1', "Groceries", "TRADER JOE")]
-        [DataRow("1                         Coffee                     BROTHERS K", '1', "Coffee", "BROTHERS K")]
-        [DataRow("1                         Coffee                   OTHERBROTHER", '1', "Coffee", "OTHERBROTHER")]
-        [DataRow("1                         Coffee                      STARBUCKS", '1', "Coffee", "STARBUCKS")]
-        [DataRow("2                         Target                         TARGET", '2', "Target", "TARGET")]
+
+        [DataRow("1                         Coffee            BROTHERSK                     Brothers K", '1', "Coffee", "BROTHERSK", "Brothers K")]
+        [DataRow("1                         Coffee            STARBUCKS                      Starbucks", '1', "Coffee", "STARBUCKS", "Starbucks")]
+        [DataRow("1                      Groceries                JEWEL                          Jewel", '1', "Groceries", "JEWEL", "Jewel")]
+        [DataRow("2                      Groceries          TRADER.*JOE                   Trader Joe's", '2', "Groceries", "TRADER.*JOE", "Trader Joe's")]
         [TestMethod]
-        public void ParsesCleanData(string line, char priority, string subcategory, string regex)
+        public void ParsesCleanData(string line, char priority, string subcategory, string regex, string subject)
         {
             // Arrange
             line += System.Environment.NewLine;
@@ -24,9 +23,11 @@ namespace PTB.Core.TitleRegex.Tests
             var result = response.Result;
 
             // Assert
+            Assert.IsTrue(response.Success, $"Title regex parsing failed with this message: {response.Message}");
             Assert.AreEqual(priority, result.Priority);
             Assert.AreEqual(subcategory, result.Subcategory.TrimStart());
             Assert.AreEqual(regex, result.Regex.TrimStart());
+            Assert.AreEqual(subject, result.Subject.TrimStart());
         }
 
         [TestMethod]

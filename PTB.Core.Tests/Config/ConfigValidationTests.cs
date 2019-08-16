@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
-namespace PTB.Core.Tests.Data
+namespace PTB.Core.Config.Tests
 {
     [TestClass]
     public class ConfigValidationTests
@@ -82,6 +82,10 @@ namespace PTB.Core.Tests.Data
             Assert.IsNotNull(schema.TitleRegex.Columns.Regex.Index);
             Assert.IsNotNull(schema.TitleRegex.Columns.Regex.Offset);
             Assert.IsNotNull(schema.TitleRegex.Columns.Regex.Size);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subject);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subject.Index);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subject.Offset);
+            Assert.IsNotNull(schema.TitleRegex.Columns.Subject.Size);
 
             Assert.IsNotNull(schema.Categories);
             Assert.IsNotNull(schema.Categories.Delimiter);
