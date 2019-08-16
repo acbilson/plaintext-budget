@@ -3,6 +3,7 @@ using PTB.Core.Categories;
 using PTB.Core.Budget;
 using PTB.Core.Ledger;
 using PTB.Core.TitleRegex;
+using PTB.Core.Logging;
 
 namespace PTB.Core
 {
@@ -15,7 +16,7 @@ namespace PTB.Core
         public BudgetRepository Budget;
         public CategoriesRepository Categories;
 
-        public void Instantiate(FileManager fileManager)
+        public void Instantiate(FileManager fileManager, IPTBLogger logger)
         {
             Ledger = new LedgerRepository(fileManager);
             Regex = new TitleRegexRepository(fileManager);

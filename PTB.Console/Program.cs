@@ -1,5 +1,6 @@
 ﻿using PTB.Core;
 using PTB.Core.Categories;
+using PTB.Core.Logging;
 using PTB.Core.Statements;
 using PTB.Core.TitleRegex;
 using System;
@@ -22,7 +23,7 @@ namespace PTB.Console
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
             var client = new PTBClient();
-            client.Instantiate(new FileManager(""));
+            client.Instantiate(new FileManager(""), new PTBFileLogger(LoggingLevel.Debug, ""));
 
             switch (action)
             {

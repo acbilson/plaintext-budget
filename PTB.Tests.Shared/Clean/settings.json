@@ -1,5 +1,6 @@
 {
   "HomeDirectory": "C:\\Users\\abilson\\OneDrive - SPR Consulting\\Archive\\2019\\BudgetProject\\PTB_Home",
   "FileExtension": ".txt",
-  "FileDelimiter": "_"
+  "FileDelimiter": "_",
+  "LoggingLevel":  0
 }

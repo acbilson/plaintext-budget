@@ -8,6 +8,7 @@ using PTB.Core.TitleRegex;
 using System.Collections.Generic;
 using System.IO;
 using PTB.Core.Categories;
+using PTB.Core.Logging;
 
 namespace PTB.Core.E2E
 {
@@ -21,6 +22,7 @@ namespace PTB.Core.E2E
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
         public FileManager FileManager;
+        public IPTBLogger Logger;
 
         public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
 
@@ -43,7 +45,8 @@ namespace PTB.Core.E2E
             {
                 FileDelimiter = "_",
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean"
+                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean",
+                LoggingLevel = LoggingLevel.Debug
             };
             CleanSettings = settings;
         }
@@ -53,7 +56,8 @@ namespace PTB.Core.E2E
             {
                 FileDelimiter = "_",
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty"
+                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty",
+                LoggingLevel = LoggingLevel.Debug
             };
             DirtySettings = settings;
         }
@@ -82,11 +86,17 @@ namespace PTB.Core.E2E
             FileManager = fileManager;
         }
 
+        public void WithALogger()
+        {
+            var logger = new PTBFileLogger(CleanSettings.LoggingLevel, CleanSettings.HomeDirectory);
+        }
+
         public void WithAFileClient()
         {
             WithAFileManager();
+            WithALogger();
             var client = new PTBClient();
-            client.Instantiate(FileManager);
+            client.Instantiate(FileManager, Logger);
             Client = client;
         }
 

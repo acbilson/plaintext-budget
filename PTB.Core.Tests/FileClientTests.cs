@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.Logging;
 
 namespace PTB.Core.Tests
 {
@@ -10,10 +11,11 @@ namespace PTB.Core.Tests
         {
             // Arrange
             var fileManager = new FileManager(Settings, Schema);
+            var logger = new PTBFileLogger(LoggingLevel.Debug, Settings.HomeDirectory);
             var client = new PTBClient();
 
             // Act
-            client.Instantiate(fileManager);
+            client.Instantiate(fileManager, logger);
 
             //Assert
             Assert.IsNotNull(client.Ledger);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PTB.Core;
 using PTB.Core.Ledger;
+using PTB.Core.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +18,8 @@ namespace PTB.Web.Controllers
             var home = Environment.CurrentDirectory;
             var fileManager = new FileManager(home);
             var client = new PTBClient();
-            client.Instantiate(fileManager);
+            var logger = new PTBFileLogger(LoggingLevel.Debug, home);
+            client.Instantiate(fileManager, logger);
             var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
             return response.Result;
         }
