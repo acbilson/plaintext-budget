@@ -21,7 +21,7 @@
     <None Update="Clean\Ledgers\ledger_checking_18-01-01_18-12-31.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Clean\Ledgers\ledger_checking_19-01-01_19-12-31.txt">
+    <None Update="Clean\Ledgers\ledger-base.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Clean\Regex\title-regex.txt">

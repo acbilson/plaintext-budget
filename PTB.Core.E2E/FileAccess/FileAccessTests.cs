@@ -24,7 +24,7 @@ namespace PTB.Core.E2E
             var files = FileManager.GetLedgerFiles();
 
             // Assert
-            Assert.AreEqual(3, files.Count());
+            Assert.AreEqual(4, files.Count());
         }
 
         [TestMethod]

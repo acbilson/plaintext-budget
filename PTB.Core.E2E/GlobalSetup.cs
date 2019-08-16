@@ -29,6 +29,9 @@ namespace PTB.Core.E2E
             GetDefaultSchema();
             GetDefaultSettings();
             GetDirtySettings();
+
+            // copies a fresh ledger each time since many e2e tests write to it
+            CopyLedger();
         }
 
         #region Initialize
@@ -61,32 +64,14 @@ namespace PTB.Core.E2E
             Schema = schema;
         }
 
-        public void CopyFiles(List<string> paths)
+        public void CopyLedger()
         {
-            foreach (var path in paths)
-            {
-                string extension = Path.GetExtension(path);
-                string newFileName = string.Concat(Path.GetFileNameWithoutExtension(path), "-copy", extension);
-                string destPath = Path.Combine(Path.GetDirectoryName(path), newFileName);
-                File.Copy(path, destPath, overwrite: true);
-                CopiedFiles.Add(new Tuple<string, string>(path, destPath));
-            }
+            string srcPath = $@".\Clean\{Schema.Ledger.Folder}\ledger-base{CleanSettings.FileExtension}";
+            string destPath = Path.Combine(CleanSettings.HomeDirectory, Schema.Ledger.Folder, Schema.Ledger.DefaultFileName + CleanSettings.FileExtension);
+            File.Copy(srcPath, destPath, overwrite: true);
         }
 
         #endregion Initialize
-
-        #region Cleanup
-        public void RestoreFiles()
-        {
-            foreach (var filePair in CopiedFiles)
-            {
-                File.Copy(filePair.Item2, filePair.Item1, overwrite: true);
-                File.Delete(filePair.Item2);
-            }
-        }
-
-
-        #endregion Cleanup
 
         #region Arrange - With
 
