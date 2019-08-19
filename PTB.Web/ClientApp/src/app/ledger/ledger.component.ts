@@ -12,7 +12,7 @@ export class LedgerComponent implements OnInit {
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     const startIndex = 0;
     const ledgerCount = 25;
-    const uri = baseUrl + 'api/Ledger/ReadLedgers' + '?startIndex=' + startIndex + '&count=' + ledgerCount;
+    const uri = 'http://localhost:5000/' + 'api/Ledger/ReadLedgers' + '?startIndex=' + startIndex + '&count=' + ledgerCount;
     http.get<ILedger[]>(uri).subscribe(result => { this.ledgers = result; }, error => console.error(error));
 
     // this is dummy data while the subscription loads

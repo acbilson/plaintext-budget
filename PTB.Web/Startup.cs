@@ -8,6 +8,8 @@ namespace PTB.Web
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +27,15 @@ namespace PTB.Web
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            // courtesy of https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.2
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins, builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200", "http://localhost:5000");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +44,9 @@ namespace PTB.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // allow cross-origin to host SPA on a different port
+                app.UseCors(MyAllowSpecificOrigins);
             }
             else
             {
@@ -41,6 +55,7 @@ namespace PTB.Web
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
 
             app.UseMvc(routes =>
             {

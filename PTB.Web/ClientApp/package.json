@@ -45,7 +45,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 5000 --extract-css",
+    "start": "ng serve --port 4200 --extract-css",
     "build": "ng build --extract-css",
     "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
     "test": "ng test",

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using PTB.Core;
 using PTB.Core.Ledger;
 using PTB.Core.Logging;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 
 namespace PTB.Web.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class LedgerController : ControllerBase
@@ -15,10 +17,11 @@ namespace PTB.Web.Controllers
         [HttpGet("[action]")]
         public List<Ledger> ReadLedgers(int startIndex, int count)
         {
-            var home = Environment.CurrentDirectory;
-            var fileManager = new FileManager(home);
+            //var homeDirectory = Environment.CurrentDirectory;
+            var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
+            var fileManager = new FileManager(homeDirectory);
             var client = new PTBClient();
-            var logger = new PTBFileLogger(LoggingLevel.Debug, home);
+            var logger = new PTBFileLogger(LoggingLevel.Debug, homeDirectory);
             client.Instantiate(fileManager, logger);
             var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
             return response.Result;

@@ -18,6 +18,7 @@ namespace PTB.Core
 
         public void Instantiate(FileManager fileManager, IPTBLogger logger)
         {
+            FileManager = fileManager;
             Ledger = new LedgerRepository(fileManager);
             Regex = new TitleRegexRepository(fileManager);
             Budget = new BudgetRepository(fileManager);

@@ -1,5 +1,10 @@
 {
   "Ledger": {
+    "DefaultFileName": "ledger_checking_19-01-01_19-12-31",
+    "Delimiter": " ",
+    "FileMask": "ledger_.*_\\d{2}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}",
+    "Folder": "Ledgers",
+    "LineSize": 140,
     "Columns": {
       "Date": {
         "Index": 1,
@@ -21,31 +26,27 @@
         "Size": 30,
         "Offset": 23
       },
-      "Title": {
+      "Subject": {
         "Index": 5,
-        "Size": 50,
+        "Size": 30,
         "Offset": 53
       },
-      "Location": {
+      "Title": {
         "Index": 6,
-        "Size": 15,
-        "Offset": 103
+        "Size": 50,
+        "Offset": 83
       },
       "Locked": {
         "Index": 7,
         "Size": 1,
-        "Offset": 118
+        "Offset": 133
       }
-    },
-    "Delimiter": " ",
-    "Folder": "Ledgers",
-    "DefaultFileName": "ledger_checking_19-01-01_19-12-31",
-    "LineSize": 125
+    }
   },
   "TitleRegex": {
     "DefaultFileName": "title-regex",
-    "Folder": "Regex",
     "Delimiter": " ",
+    "Folder": "Regex",
     "LineSize": 84,
     "Columns": {
       "Priority": {
@@ -72,8 +73,9 @@
   },
   "Categories": {
     "DefaultFileName": "categories_19-01-01",
-    "Folder": "Categories",
     "Delimiter": " ",
+    "FileMask": "categories_\\d{2}-\\d{2}-\\d{2}",
+    "Folder": "Categories",
     "LineSize": 61,
     "Columns": {
       "Category": {
@@ -89,6 +91,10 @@
     }
   },
   "Budget": {
-    "CategorySeparator": "-"
+    "CategorySeparator": "-",
+    "DefaultFileName": "budget-19-01-01",
+    "Delimiter": " ",
+    "Folder": "Budget",
+    "LineSize": 43
   }
 }
