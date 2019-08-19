@@ -2,7 +2,7 @@
 <table class="table" (scroll)="scrollHandler($event)">
     <thead>
         <tr>
-            <!--<th scope="col">ID</th>-->
+            <th scope="col">ID</th>
             <th scope="col">Date</th>
             <th scope="col">Amount</th>
             <th scope="col">Subcategory</th>
@@ -12,7 +12,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let ledger of ledgers" scope="row">
-            <!--<td class="ledger-index"><label>{{ledger.index | prependZeros }}</label></td>-->
+            <td class="ledger-index"><label>{{ledger.index | prependZeros }}</label></td>
             <td class="ledger-date"><label>{{ledger.date | trim }}</label></td>
             <td class="ledger-amount">
                 <div *ngIf="ledger.type == 'D'; then ledgerTypeThen else ledgerTypeElse"></div>

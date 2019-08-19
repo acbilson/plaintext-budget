@@ -31,8 +31,13 @@ export class LedgerComponent implements OnInit {
     
     if(position >= bottom )   {
     
-      let lastIndex = this.ledgers[this.ledgers.length-1].index;
-      this.readLedgers(lastIndex, 10);
+      // index of the last leger entry in the row
+      let lastIndex = this.ledgers[this.ledgers.length - 1].index;
+
+      // adds ledger size plus carriage return to skip returning the last row again (need to retrieve schema via API)
+      let finalIndex = lastIndex + 142;
+
+      this.readLedgers(finalIndex, 10);
     }
   }
 
