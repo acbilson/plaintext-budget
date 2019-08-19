@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import {ILedger} from './ledger';
 import { PtbService } from '../ptb.service';
 
@@ -21,9 +21,26 @@ export class LedgerComponent implements OnInit {
     this.readLedgers(0,25);
   }
 
+  private getLedgerByIndex(index: string): ILedger {
+    return this.ledgers.find(ledger => parseInt(ledger.index) == parseInt(index));
+  }
+
+  updateLedgerSubcategory(index: string, subcategory: string): void {
+    var ledger = this.getLedgerByIndex(index);
+    ledger.subcategory = subcategory;
+    this.ptbService.updateLedger(ledger);
+  }
+
+  updateLedgerSubject(index: string, subject: string): void {
+    var ledger = this.getLedgerByIndex(index);
+    ledger.subject = subject;
+    this.ptbService.updateLedger(ledger);
+  }
+
   @HostListener('document:scroll', ['$event'])
   scrollHandler(event: UIEvent) {
 
+    // adds a few extra pixels to make the scroll begin just before scrolling ends for better user experience
     let extraPixels = 10;
     let position = window.innerHeight + window.pageYOffset;
     let bottom = document.documentElement.offsetHeight - extraPixels;
@@ -32,7 +49,7 @@ export class LedgerComponent implements OnInit {
     if(position >= bottom )   {
     
       // index of the last leger entry in the row
-      let lastIndex = this.ledgers[this.ledgers.length - 1].index;
+      let lastIndex = parseInt(this.ledgers[this.ledgers.length - 1].index);
 
       // adds ledger size plus carriage return to skip returning the last row again (need to retrieve schema via API)
       let finalIndex = lastIndex + 142;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Newtonsoft.Json;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PTB.Core;
 using PTB.Core.Ledger;
@@ -13,9 +14,7 @@ namespace PTB.Web.Controllers
     [ApiController]
     public class LedgerController : ControllerBase
     {
-        // GET: api/Ledger?startIndex=0&count=10
-        [HttpGet("[action]")]
-        public List<Ledger> ReadLedgers(int startIndex, int count)
+        private PTBClient InstantiatePTBClient()
         {
             //var homeDirectory = Environment.CurrentDirectory;
             var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
@@ -23,15 +22,29 @@ namespace PTB.Web.Controllers
             var client = new PTBClient();
             var logger = new PTBFileLogger(LoggingLevel.Debug, homeDirectory);
             client.Instantiate(fileManager, logger);
+            return client;
+        }
+        // GET: api/ReadLedgers?startIndex=0&count=10
+        [HttpGet("[action]")]
+        public List<Ledger> ReadLedgers(int startIndex, int count)
+        {
+            var client = InstantiatePTBClient();
             var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
             return response.Result;
         }
 
-        // GET: api/Ledger/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        // GET: api/UpdateLedger
+        [HttpPut("[action]")]
+        public void UpdateLedger([FromBody] Ledger ledger)
         {
-            return "value";
+            var client = InstantiatePTBClient();
+            //var ledger = JsonConvert.DeserializeObject<Ledger>(value);
+            var response = client.Ledger.UpdateDefaultLedgerEntry(ledger);
+            if (!response.Success)
+            {
+                throw new Exception("Failed to update ledger");
+
+            }
         }
 
         // POST: api/Ledger

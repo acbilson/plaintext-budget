@@ -19,13 +19,15 @@
                 <ng-template #ledgerTypeThen><label class="ledger-amount-debit">{{ ledger.amount | trim | debit }}</label></ng-template>
                 <ng-template #ledgerTypeElse><label class="ledger-amount-credit">{{ ledger.amount | trim }}</label></ng-template>
             </td>
-            <td class="ledger-subcategory"><input class="ledger-subcategory-input" [ngModel]="ledger.subcategory | trim" (ngModelChange)="ledger.subcategory=$event" name="subcategory" type="text" /></td>
+            <td class="ledger-subcategory">
+                <input class="ledger-subcategory-input" [ngModel]="ledger.subcategory | trim" (change)="updateLedgerSubcategory(ledger.index, $event.target.value)" name="subcategory" type="text" />
+            </td>
             <td class="ledger-title">
                 <div *ngIf="ledger.subject.trim() == ''; then ledgerTitleThen else ledgerTitleElse"></div>
-                <ng-template #ledgerTitleThen><input class="ledger-title-input" [ngModel]="ledger.title | trim" (ngModelChange)="ledger.title=$event" name="title" type="text" /></ng-template>
-                <ng-template #ledgerTitleElse><input class="ledger-title-input" [ngModel]="ledger.subject | trim" (ngModelChange)="ledger.subject=$event" name="title" type="text" /></ng-template>
+                <ng-template #ledgerTitleThen><input class="ledger-title-input" [ngModel]="ledger.title | trim" name="title" type="text" /></ng-template>
+                <ng-template #ledgerTitleElse><input class="ledger-title-input" [ngModel]="ledger.subject | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
             </td>
-            <td class="ledger-locked"><input class="ledger-locked-input" [ngModel]="ledger.locked | trim" (ngModelChange)="ledger.locked=$event" name="locked" type="text" /></td>
+            <td class="ledger-locked"><label>{{ ledger.locked | trim }}</label></td>
         </tr>
     </tbody>
 </table>
