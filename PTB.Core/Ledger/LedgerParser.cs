@@ -44,6 +44,12 @@ namespace PTB.Core.Ledger
             return response;
         }
 
+        private string PrependSpace(string field, SchemaColumn column)
+        {
+            return field.Length == column.Size ? field : new string(' ', column.Size - field.Trim().Length) + field.Trim();
+
+        }
+
         public string ParseLedger(Ledger ledger)
         {
             var builder = new StringBuilder();
@@ -53,9 +59,9 @@ namespace PTB.Core.Ledger
             builder.Append(_schema.Delimiter);
             builder.Append(ledger.Amount);
             builder.Append(_schema.Delimiter);
-            builder.Append(ledger.Subcategory);
+            builder.Append(PrependSpace(ledger.Subcategory, _schema.Columns.Subcategory));
             builder.Append(_schema.Delimiter);
-            builder.Append(ledger.Subject);
+            builder.Append(PrependSpace(ledger.Subject, _schema.Columns.Subject));
             builder.Append(_schema.Delimiter);
             builder.Append(ledger.Title);
             builder.Append(_schema.Delimiter);

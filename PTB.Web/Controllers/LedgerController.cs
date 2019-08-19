@@ -38,12 +38,10 @@ namespace PTB.Web.Controllers
         public void UpdateLedger([FromBody] Ledger ledger)
         {
             var client = InstantiatePTBClient();
-            //var ledger = JsonConvert.DeserializeObject<Ledger>(value);
             var response = client.Ledger.UpdateDefaultLedgerEntry(ledger);
             if (!response.Success)
             {
                 throw new Exception("Failed to update ledger");
-
             }
         }
 

@@ -28,12 +28,14 @@ export class LedgerComponent implements OnInit {
   updateLedgerSubcategory(index: string, subcategory: string): void {
     var ledger = this.getLedgerByIndex(index);
     ledger.subcategory = subcategory;
+    ledger.locked = '1';
     this.ptbService.updateLedger(ledger);
   }
 
   updateLedgerSubject(index: string, subject: string): void {
     var ledger = this.getLedgerByIndex(index);
     ledger.subject = subject;
+    ledger.locked = '1';
     this.ptbService.updateLedger(ledger);
   }
 

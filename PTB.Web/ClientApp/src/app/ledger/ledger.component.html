@@ -24,7 +24,7 @@
             </td>
             <td class="ledger-title">
                 <div *ngIf="ledger.subject.trim() == ''; then ledgerTitleThen else ledgerTitleElse"></div>
-                <ng-template #ledgerTitleThen><input class="ledger-title-input" [ngModel]="ledger.title | trim" name="title" type="text" /></ng-template>
+                <ng-template #ledgerTitleThen><input class="ledger-title-input" [ngModel]="ledger.title | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
                 <ng-template #ledgerTitleElse><input class="ledger-title-input" [ngModel]="ledger.subject | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
             </td>
             <td class="ledger-locked"><label>{{ ledger.locked | trim }}</label></td>
