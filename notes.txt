@@ -1,0 +1,7 @@
+The following command will host the WebAPI when run from PTB.Web:
+dotnet run
+
+This command will host the Angular SPA when run from the ClientApp folder in PTB.Web:
+npm run start
+
+Together, a fully-functional website!

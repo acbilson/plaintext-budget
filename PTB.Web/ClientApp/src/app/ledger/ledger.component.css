@@ -2,6 +2,7 @@
 }
 
 .ledger-date {
+    width: 10%;
 }
 
 .ledger-type {
@@ -9,6 +10,7 @@
 }
 
 .ledger-amount {
+    width: 10%;
     text-align: right;
 }
 
@@ -20,14 +22,29 @@
 }
 
 .ledger-title {
+    width: 50%;
+}
+
+.ledger-title-input {
+    width: 100%;
 }
 
 .ledger-subcategory {
+    width: 30%;
+}
+
+.ledger-subcategory-input {
+    width: 100%;
 }
 
 .ledger-location {
 }
 
 .ledger-locked {
+    width: 5%;
     text-align: center;
+}
+
+.ledger-locked-input {
+    width: 10px;
 }
