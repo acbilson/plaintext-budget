@@ -1,5 +1,5 @@
 <p *ngIf="!ledgers"><em>Loading...</em></p>
-<table class="table">
+<table class="table" (scroll)="scrollHandler($event)">
     <thead>
         <tr>
             <!--<th scope="col">ID</th>-->

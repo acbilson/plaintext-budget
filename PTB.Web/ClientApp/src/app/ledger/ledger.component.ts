@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, HostListener, ElementRef } from '@angular/core';
 import {ILedger} from './ledger';
 import { PtbService } from '../ptb.service';
 
@@ -12,7 +12,7 @@ export class LedgerComponent implements OnInit {
   public ledgerCount: number;
   public ledgers: ILedger[];
 
-  constructor(private ptbService: PtbService, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private ptbService: PtbService, private el: ElementRef, @Inject('BASE_URL') baseUrl: string) {
     this.ptbService = ptbService;
     this.ledgers = [];
   };
@@ -21,9 +21,24 @@ export class LedgerComponent implements OnInit {
     this.readLedgers(0,25);
   }
 
+  @HostListener('document:scroll', ['$event'])
+  scrollHandler(event: UIEvent) {
+
+    let extraPixels = 10;
+    let position = window.innerHeight + window.pageYOffset;
+    let bottom = document.documentElement.offsetHeight - extraPixels;
+    //console.log('pos is '+position+' and bottom is '+bottom);
+    
+    if(position >= bottom )   {
+    
+      let lastIndex = this.ledgers[this.ledgers.length-1].index;
+      this.readLedgers(lastIndex, 10);
+    }
+  }
+
   readLedgers(startIndex: number, count: number): void {
     this.ptbService.readLedgers(startIndex, count).subscribe(result => { 
-      this.ledgers = result; 
+      this.ledgers = this.ledgers.concat(result);
       console.log("retrieved " + this.ledgers.length + " ledger entries.");
     }, error => console.error(error));
   }
