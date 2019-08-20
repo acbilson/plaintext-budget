@@ -1,5 +1,6 @@
-import { Component, OnInit, Inject, HostListener, ElementRef, SimpleChanges } from '@angular/core';
-import {ILedger} from './ledger';
+import { Component, OnInit, Inject, HostListener } from '@angular/core';
+import { ILedger } from './ledger';
+import { IPTBFile } from './ptbfile';
 import { PtbService } from '../ptb.service';
 
 @Component({
@@ -11,13 +12,15 @@ export class LedgerComponent implements OnInit {
   public startIndex: number;
   public ledgerCount: number;
   public ledgers: ILedger[];
+  public ledgerFiles: IPTBFile[];
 
-  constructor(private ptbService: PtbService, private el: ElementRef, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private ptbService: PtbService) {
     this.ptbService = ptbService;
     this.ledgers = [];
   };
 
   ngOnInit() {
+    this.getLedgerFiles();
     this.readLedgers(0,25);
   }
 
@@ -65,6 +68,14 @@ export class LedgerComponent implements OnInit {
       this.ledgers = this.ledgers.concat(result);
       console.log("retrieved " + this.ledgers.length + " ledger entries.");
     }, error => console.error(error));
+  }
+
+  getLedgerFiles(): void {
+    this.ptbService.getLedgerFiles().subscribe(result => { 
+      this.ledgerFiles = result;
+      console.log("retrieved " + this.ledgerFiles.length + " ledger files.");
+    }, error => console.error(error));
+
   }
 }
 

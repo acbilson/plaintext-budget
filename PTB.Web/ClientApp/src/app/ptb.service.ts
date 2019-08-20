@@ -3,6 +3,7 @@ import { ILedger } from './ledger/ledger';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { IPTBFile } from './ledger/ptbfile';
 
 @Injectable()
 export class PtbService {
@@ -29,5 +30,10 @@ export class PtbService {
 
       const uri = 'http://localhost:5000/' + 'api/Ledger/ReadLedgers' + '?startIndex=' + index + '&count=' + count;
       return this.http.get<ILedger[]>(uri);
+    }
+
+    getLedgerFiles() {
+      const uri = 'http://localhost:5000/' + 'api/File/GetLedgerFiles';
+      return this.http.get<IPTBFile[]>(uri);
     }
 }

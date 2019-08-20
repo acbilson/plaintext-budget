@@ -15,9 +15,6 @@
     text-align: right;
 }
 
-.ledger-amount-credit {
-}
-
 .ledger-amount-debit {
     color: red;
 }
@@ -36,9 +33,6 @@
 
 .ledger-subcategory-input {
     width: 100%;
-}
-
-.ledger-location {
 }
 
 .ledger-locked {
