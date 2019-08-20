@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ILedger } from './ledger';
 import { IPTBFile } from './ptbfile';
 import { PtbService } from '../ptb.service';
@@ -17,6 +17,7 @@ export class LedgerComponent implements OnInit {
   constructor(private ptbService: PtbService) {
     this.ptbService = ptbService;
     this.ledgers = [];
+    this.ledgerFiles = [];
   };
 
   ngOnInit() {

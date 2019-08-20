@@ -2,6 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { PtbService } from './ptb.service';
 import { ILedger } from './ledger/ledger';
+import { IPTBFile } from './ledger/ptbfile';
 
 describe('PtbService', () => {
   let service : PtbService;
@@ -45,7 +46,7 @@ describe('PtbService', () => {
         locked: "1" },      
       ];
 
-    it('Returns an Observable<ILedger[]>', () => {
+    it('returns an Observable<ILedger[]>', () => {
 
       const index = 0;
       const count = 25;
@@ -75,12 +76,38 @@ describe('PtbService', () => {
         location: "", 
         locked: "0" };
 
-    it('Sends ledger in request body', () => {
+    it('sends ledger in request body', () => {
 
       service.updateLedger(testLedgerToUpdate);
 
         const request = httpMock.expectOne('http://localhost:5000/api/Ledger/UpdateLedger');
         expect(request.request.body).toEqual(testLedgerToUpdate); 
+        httpMock.verify();
+    });
+  });
+
+  describe('GetLedgerFiles', () => {
+
+    const testLedgerFiles : IPTBFile[] = 
+      [{
+        isDefault: true, 
+        fullName: 'defaultPath' 
+        },
+      {
+        isDefault: false,
+        fullName: 'anotherPath'
+      }];
+
+    it('returns an Observable<IPTBFile[]>', () => {
+
+      service.getLedgerFiles().subscribe((result) => {
+
+        expect(result.length).toBe(testLedgerFiles.length);
+        expect(result).toEqual(testLedgerFiles);
+        });;
+
+        const request = httpMock.expectOne('http://localhost:5000/api/File/GetLedgerFiles');
+        request.flush(testLedgerFiles);
         httpMock.verify();
     });
   });

@@ -26,15 +26,15 @@ export class PtbService {
       );
     }
 
-    readLedgers(index: number, count: number) {
+    readLedgers(index: number, count: number) : Observable<ILedger[]> {
 
       const uri = `http://localhost:5000/api/Ledger/ReadLedgers?startIndex=${index}&count=${count}`;
       console.log(uri);
       return this.http.get<ILedger[]>(uri);
     }
 
-    getLedgerFiles() {
-      const uri = 'http://localhost:5000/' + 'api/File/GetLedgerFiles';
+    getLedgerFiles() : Observable<IPTBFile[]> {
+      const uri = 'http://localhost:5000/api/File/GetLedgerFiles';
       return this.http.get<IPTBFile[]>(uri);
     }
 }
