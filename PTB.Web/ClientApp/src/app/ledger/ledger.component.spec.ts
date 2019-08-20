@@ -36,8 +36,10 @@ class MockPtbService {
 
   public ledgers: ILedger[];
   public ledgerFiles: IPTBFile[];
+  public updatedLedger: ILedger;
 
   constructor() {
+
     this.ledgers = [
       { index: "0", 
         date: "19-01-01", 
@@ -62,16 +64,21 @@ class MockPtbService {
       this.ledgerFiles = [{
         isDefault: true,
         fullName: 'fakepath'
-
       }];
+
+      this.updatedLedger = this.ledgers[0];
   }
   
-  readLedgers(index: number, count: number) {
-    return defer(() => Promise.resolve(this.ledgers));
+  readLedgers(index: number, count: number) : Promise<ILedger[]> {
+    return Promise.resolve(this.ledgers);
   }
 
-  getLedgerFiles() {
-    return defer(() => Promise.resolve(this.ledgerFiles));
+  getLedgerFiles() : Promise<IPTBFile[]> {
+    return Promise.resolve(this.ledgerFiles);
+  }
+
+  updateLedger(ledger: ILedger) : Promise<ILedger> {
+    return Promise.resolve(this.updatedLedger);
   }
 }
 
@@ -95,7 +102,7 @@ fdescribe('LedgerComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LedgerComponent);
-    component = fixture.componentInstance;
+    component = fixture.debugElement.componentInstance;
     fixture.detectChanges();
     mockPtbService = new MockPtbService();
   });
@@ -104,13 +111,75 @@ fdescribe('LedgerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('sets properties', (done) => {
-    component.ngOnInit();
-    fixture.whenStable()
-    .then(() => {
-      expect(component.ledgers.length).toEqual(mockPtbService.ledgers.length);
-      expect(component.ledgers).toEqual(mockPtbService.ledgers);
+  fdescribe('ReadLedgers', () => {
+
+    fit('returns ledgers', async () => {
+
+      // Arrange - Act
+      const ledgers = await component.readLedgers(0, 25);
+
+      // Assert
+      expect(ledgers.length).toEqual(mockPtbService.ledgers.length);
+      expect(ledgers).toEqual(mockPtbService.ledgers);
     });
-    done();
+  });
+
+  fdescribe('GetLedgerFiles', () => {
+
+    fit('returns ledger files', async () => {
+
+      // Arrange - Act
+      const ledgerFiles = await component.getLedgerFiles();
+
+      // Assert
+      expect(ledgerFiles.length).toEqual(mockPtbService.ledgerFiles.length);
+      expect(ledgerFiles).toEqual(mockPtbService.ledgerFiles);
+    });
+  });
+
+  fdescribe('UpdateLedgerSubject', () => {
+
+    fit('calls update and returns ledger', async () => {
+
+      // Arrange - set ledgers
+      component.ledgers = mockPtbService.ledgers;
+      fixture.detectChanges();
+
+      // Arrange - watch service
+      let ledgerToUpdate = mockPtbService.updatedLedger;
+      ledgerToUpdate.subcategory = "CustomSubcategory";
+      ledgerToUpdate.locked = "1";
+      let mockService = TestBed.get(PtbService);
+      spyOn(mockService, 'updateLedger').and.returnValue(Promise.resolve(ledgerToUpdate));
+
+      // Act
+      const updatedLedger = await component.updateLedgerSubcategory(ledgerToUpdate.index, ledgerToUpdate.subcategory);
+
+      // Assert
+      expect(updatedLedger).toEqual(ledgerToUpdate);
+    });
+  });
+
+  fdescribe('UpdateLedgerSubcategory', () => {
+
+    fit('calls update and returns ledger', async () => {
+
+      // Arrange - set ledgers
+      component.ledgers = mockPtbService.ledgers;
+      fixture.detectChanges();
+
+      // Arrange - watch service
+      let ledgerToUpdate = mockPtbService.updatedLedger;
+      ledgerToUpdate.subject = "CustomSubject";
+      ledgerToUpdate.locked = "1";
+      let mockService = TestBed.get(PtbService);
+      spyOn(mockService, 'updateLedger').and.returnValue(Promise.resolve(ledgerToUpdate));
+
+      // Act
+      const updatedLedger = await component.updateLedgerSubject(ledgerToUpdate.index, ledgerToUpdate.subject);
+
+      // Assert
+      expect(updatedLedger).toEqual(ledgerToUpdate);
+    });
   });
 });

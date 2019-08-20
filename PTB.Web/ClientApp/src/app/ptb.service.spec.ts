@@ -51,7 +51,7 @@ describe('PtbService', () => {
       const index = 0;
       const count = 25;
 
-      service.readLedgers(index, count).subscribe((result) => {
+      service.readLedgers(index, count).then((result) => {
 
         expect(result.length).toBe(testLedgers.length);
         expect(result).toEqual(testLedgers);
@@ -81,7 +81,7 @@ describe('PtbService', () => {
       service.updateLedger(testLedgerToUpdate);
 
         const request = httpMock.expectOne('http://localhost:5000/api/Ledger/UpdateLedger');
-        expect(request.request.body).toEqual(testLedgerToUpdate); 
+        expect(request.request.body).toEqual(testLedgerToUpdate);
         httpMock.verify();
     });
   });
@@ -100,7 +100,7 @@ describe('PtbService', () => {
 
     it('returns an Observable<IPTBFile[]>', () => {
 
-      service.getLedgerFiles().subscribe((result) => {
+      service.getLedgerFiles().then((result) => {
 
         expect(result.length).toBe(testLedgerFiles.length);
         expect(result).toEqual(testLedgerFiles);

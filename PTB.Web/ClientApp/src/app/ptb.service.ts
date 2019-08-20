@@ -15,26 +15,22 @@ export class PtbService {
     this.httpOptions = { headers: new HttpHeaders({'Content-Type': 'application/json'}) };
      }
 
-   updateLedger(ledger: ILedger): void {
+   updateLedger(ledger: ILedger): Promise<ILedger> {
 
     const uri = 'http://localhost:5000/api/Ledger/UpdateLedger';
     console.log(uri);
-    this.http.put<ILedger>(uri, ledger, {headers: new HttpHeaders().set('Content-Type', 'application/json')})
-    .subscribe(
-      data => { console.log(`Success! ${data}`); }, 
-      error => { console.log(error); }
-      );
+    return this.http.put<ILedger>(uri, ledger, {headers: new HttpHeaders().set('Content-Type', 'application/json')}).toPromise();
     }
 
-    readLedgers(index: number, count: number) : Observable<ILedger[]> {
+    readLedgers(index: number, count: number) : Promise<ILedger[]> {
 
       const uri = `http://localhost:5000/api/Ledger/ReadLedgers?startIndex=${index}&count=${count}`;
       console.log(uri);
-      return this.http.get<ILedger[]>(uri);
+      return this.http.get<ILedger[]>(uri).toPromise();
     }
 
-    getLedgerFiles() : Observable<IPTBFile[]> {
+    getLedgerFiles() : Promise<IPTBFile[]> {
       const uri = 'http://localhost:5000/api/File/GetLedgerFiles';
-      return this.http.get<IPTBFile[]>(uri);
+      return this.http.get<IPTBFile[]>(uri).toPromise();
     }
 }
