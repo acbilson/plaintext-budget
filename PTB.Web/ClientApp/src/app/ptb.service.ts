@@ -17,7 +17,7 @@ export class PtbService {
 
    updateLedger(ledger: ILedger): void {
 
-    const uri = 'http://localhost:5000/' + 'api/Ledger/UpdateLedger';
+    const uri = 'http://localhost:5000/api/Ledger/UpdateLedger';
     console.log(uri);
     this.http.put<ILedger>(uri, ledger, {headers: new HttpHeaders().set('Content-Type', 'application/json')})
     .subscribe(
@@ -28,7 +28,8 @@ export class PtbService {
 
     readLedgers(index: number, count: number) {
 
-      const uri = 'http://localhost:5000/' + 'api/Ledger/ReadLedgers' + '?startIndex=' + index + '&count=' + count;
+      const uri = `http://localhost:5000/api/Ledger/ReadLedgers?startIndex=${index}&count=${count}`;
+      console.log(uri);
       return this.http.get<ILedger[]>(uri);
     }
 
