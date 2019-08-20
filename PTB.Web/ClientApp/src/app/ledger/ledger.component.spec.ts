@@ -82,7 +82,7 @@ class MockPtbService {
   }
 }
 
-fdescribe('LedgerComponent', () => {
+describe('LedgerComponent', () => {
   let component: LedgerComponent;
   let fixture: ComponentFixture<LedgerComponent>;
   let mockPtbService: MockPtbService;
@@ -107,13 +107,13 @@ fdescribe('LedgerComponent', () => {
     mockPtbService = new MockPtbService();
   });
 
-  fit('instantiates', () => {
+  it('instantiates', () => {
     expect(component).toBeTruthy();
   });
 
-  fdescribe('ReadLedgers', () => {
+  describe('ReadLedgers', () => {
 
-    fit('returns ledgers', async () => {
+    it('returns ledgers', async () => {
 
       // Arrange - Act
       const ledgers = await component.readLedgers(0, 25);
@@ -124,9 +124,9 @@ fdescribe('LedgerComponent', () => {
     });
   });
 
-  fdescribe('GetLedgerFiles', () => {
+  describe('GetLedgerFiles', () => {
 
-    fit('returns ledger files', async () => {
+    it('returns ledger files', async () => {
 
       // Arrange - Act
       const ledgerFiles = await component.getLedgerFiles();
@@ -137,9 +137,9 @@ fdescribe('LedgerComponent', () => {
     });
   });
 
-  fdescribe('UpdateLedgerSubject', () => {
+  describe('UpdateLedgerSubject', () => {
 
-    fit('calls update and returns ledger', async () => {
+    it('calls update and returns ledger', async () => {
 
       // Arrange - set ledgers
       component.ledgers = mockPtbService.ledgers;
@@ -160,9 +160,9 @@ fdescribe('LedgerComponent', () => {
     });
   });
 
-  fdescribe('UpdateLedgerSubcategory', () => {
+  describe('UpdateLedgerSubcategory', () => {
 
-    fit('calls update and returns ledger', async () => {
+    it('calls update and returns ledger', async () => {
 
       // Arrange - set ledgers
       component.ledgers = mockPtbService.ledgers;
