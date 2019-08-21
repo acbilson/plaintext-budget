@@ -29,11 +29,12 @@ namespace PTB.Web
             });
 
             // courtesy of https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.2
+            // 4200 is the Angular port, and 4500 is the Protractor e2e port, and 5000 is the .NET Core server port
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins, builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200", "http://localhost:4500");
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
         }

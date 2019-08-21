@@ -11,8 +11,6 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./ledger-table.component.css']
 })
 export class LedgerTableComponent implements OnInit {
-  public startIndex: number;
-  public ledgerCount: number;
   public ledgers: ILedger[];
   public ledgerFiles: IPTBFile[];
 

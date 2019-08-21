@@ -35,7 +35,7 @@ namespace PTB.Web.Controllers
 
         // GET: api/UpdateLedger
         [HttpPut("[action]")]
-        public void UpdateLedger([FromBody] Ledger ledger)
+        public Ledger UpdateLedger([FromBody] Ledger ledger)
         {
             var client = InstantiatePTBClient();
             var response = client.Ledger.UpdateDefaultLedgerEntry(ledger);
@@ -43,6 +43,7 @@ namespace PTB.Web.Controllers
             {
                 throw new Exception("Failed to update ledger");
             }
+            return ledger;
         }
 
         // POST: api/Ledger
