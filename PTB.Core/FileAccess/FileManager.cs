@@ -25,7 +25,7 @@ namespace PTB.Core
 
         public FileManager(string baseDirectory)
         {
-            GetConfigurationFromPath(baseDirectory); 
+            GetConfigurationFromPath(baseDirectory);
         }
 
         public FileManager(PTBSettings settings, PTBSchema schema)

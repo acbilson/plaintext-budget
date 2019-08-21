@@ -18,9 +18,8 @@ namespace PTB.Web.Controllers
             //var homeDirectory = Environment.CurrentDirectory;
             var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
             var fileManager = new FileManager(homeDirectory);
-            var client = PTBClient.Instance;
-            var logger = PTBFileLogger.Instance;
-            logger.Configure(LoggingLevel.Debug, homeDirectory);
+            var client = new PTBClient();
+            var logger = new PTBFileLogger(LoggingLevel.Debug, homeDirectory);
             client.Instantiate(fileManager, logger);
             return client;
         }

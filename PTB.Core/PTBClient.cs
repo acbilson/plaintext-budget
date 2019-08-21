@@ -9,6 +9,9 @@ namespace PTB.Core
 {
     public class PTBClient
     {
+        private static readonly PTBClient _instance = new PTBClient();
+        public static PTBClient Instance => _instance;
+
         public FileManager FileManager;
 
         public LedgerRepository Ledger;
@@ -16,7 +19,9 @@ namespace PTB.Core
         public BudgetRepository Budget;
         public CategoriesRepository Categories;
 
-        public void Instantiate(FileManager fileManager, IPTBLogger logger)
+        private PTBClient() { }
+
+        public void Instantiate(FileManager fileManager, PTBFileLogger logger)
         {
             FileManager = fileManager;
             Ledger = new LedgerRepository(fileManager);

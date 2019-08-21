@@ -22,7 +22,7 @@ namespace PTB.Core.E2E
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
         public FileManager FileManager;
-        public IPTBLogger Logger;
+        public PTBFileLogger Logger;
 
         public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
 
@@ -88,7 +88,8 @@ namespace PTB.Core.E2E
 
         public void WithALogger()
         {
-            var logger = new PTBFileLogger(CleanSettings.LoggingLevel, CleanSettings.HomeDirectory);
+            var logger = PTBFileLogger.Instance;
+            logger.Configure(CleanSettings.LoggingLevel, CleanSettings.HomeDirectory);
             Logger = logger;
         }
 
@@ -96,7 +97,7 @@ namespace PTB.Core.E2E
         {
             WithALogger();
             WithAFileManager();
-            var client = new PTBClient();
+            var client = PTBClient.Instance;
             client.Instantiate(FileManager, Logger);
             Client = client;
         }

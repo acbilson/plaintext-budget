@@ -2,7 +2,6 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { ILedger } from './ledger';
 import { IPTBFile } from './ptbfile';
 import { PtbService } from '../ptb.service';
-import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -18,14 +17,14 @@ export class LedgerTableComponent implements OnInit {
     this.ptbService = ptbService;
     this.ledgers = [];
     this.ledgerFiles = [];
-  };
+  }
 
   ngOnInit() {
     // gets all the available ledger files
     this.getLedgerFiles().then(files => this.ledgerFiles = files);
 
     // reads the first twentyfive ledger entries
-    this.readLedgers(0,25).then(ledgers => this.ledgers = ledgers);
+    this.readLedgers(0, 25).then(ledgers => this.ledgers = ledgers);
   }
 
   private getLedgerByIndex(index: string): ILedger {
@@ -33,10 +32,10 @@ export class LedgerTableComponent implements OnInit {
   }
 
   async updateLedgerSubcategory(index: string, subcategory: string): Promise<ILedger> {
-    let updatedLedger : ILedger;
+    let updatedLedger: ILedger;
 
     try {
-      var ledger = this.getLedgerByIndex(index);
+      let ledger = this.getLedgerByIndex(index);
       ledger.subcategory = subcategory;
       ledger.locked = '1';
 
@@ -45,7 +44,7 @@ export class LedgerTableComponent implements OnInit {
     catch (error) {
       console.log(error);
     }
-    
+
     return updatedLedger;
   }
 
@@ -63,7 +62,7 @@ export class LedgerTableComponent implements OnInit {
     catch (error) {
       console.log(error);
     }
-    
+
     return updatedLedger;
   }
 
@@ -71,19 +70,19 @@ export class LedgerTableComponent implements OnInit {
   scrollHandler(event: UIEvent) {
 
     // adds a few extra pixels to make the scroll begin just before scrolling ends for better user experience
-    let extraPixels = 10;
-    let position = window.innerHeight + window.pageYOffset;
-    let bottom = document.documentElement.offsetHeight - extraPixels;
+    const extraPixels = 10;
+    const position = window.innerHeight + window.pageYOffset;
+    const bottom = document.documentElement.offsetHeight - extraPixels;
     //console.log('pos is '+position+' and bottom is '+bottom);
-    
-    if(position >= bottom )   {
-    
+
+    if (position >= bottom ) {
+
       // index of the last leger entry in the row
-      let lastIndex = parseInt(this.ledgers[this.ledgers.length - 1].index);
+      const lastIndex = parseInt(this.ledgers[this.ledgers.length - 1].index);
 
       // adds ledger size plus carriage return to skip returning the last row again (need to retrieve schema via API)
-      let finalIndex = lastIndex + 142;
-      let ledgerCount = 10;
+      const finalIndex = lastIndex + 142;
+      const ledgerCount = 10;
 
       this.readLedgers(finalIndex, ledgerCount)
       .then(ledgers => {
@@ -101,6 +100,7 @@ export class LedgerTableComponent implements OnInit {
 
     try {
       ledgers = await this.ptbService.readLedgers(startIndex, count);
+      this.ptbService.log(1, 'ledger-table', `read ${ledgers.length} ledgers`);
     } catch (error) {
       console.log(`failed to retrieve ledgers with message: ${error.message}`);
     }

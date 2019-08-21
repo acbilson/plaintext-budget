@@ -2,31 +2,36 @@
 
 namespace PTB.Core.Logging
 {
-    public interface IPTBLogger
-    {
-        void LogInfo(string message);
-        void LogDebug(string message);
-
-        void LogWarning(string message);
-
-        void LogError(string message);
-        void LogError(Exception exception);
-
-        void SetContext(string context);
-    }
-
-    public class PTBFileLogger : IPTBLogger
+    public class PTBFileLogger
     {
         private System.IO.FileInfo _loggingFile;
         private LoggingLevel _level;
         private string _context = "NA";
+        private static readonly PTBFileLogger _instance = new PTBFileLogger();
 
-        public PTBFileLogger(LoggingLevel level, string baseDirectory)
+        public static PTBFileLogger Instance => _instance;
+
+        private PTBFileLogger() { }
+
+        public void Configure(LoggingLevel level, string baseDirectory)
         {
             _level = level;
             _loggingFile = new System.IO.FileInfo(System.IO.Path.Combine(baseDirectory, "ptb.log"));
             System.IO.File.Delete(_loggingFile.FullName);
         }
+
+        public void Log(LogMessage logMessage)
+        {
+          string message = "";
+          switch (logMessage.Level) {
+            case LoggingLevel.Info: { message = $"INFO-{logMessage.Context} - {logMessage.Message}"; break; }
+            case LoggingLevel.Debug: { message = $"DBUG-{logMessage.Context} - {logMessage.Message}"; break; }
+            case LoggingLevel.Warning: { message = $"WARN-{logMessage.Context} - {logMessage.Message}"; break; }
+            case LoggingLevel.Error: { message = $"ERR-{logMessage.Context} - {logMessage.Message}"; break; }
+            }
+
+          this.Log(message);
+          }
 
         private void Log(string message)
         {

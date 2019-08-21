@@ -9,12 +9,11 @@ namespace PTB.Core.Categories
 {
     public class CategoriesRepository : BaseFileRepository
     {
-        private string _folder = "Categories";
         private CategoriesParser _parser;
-        private IPTBLogger _logger;
+        private PTBFileLogger _logger;
         private Encoding _encoding = Encoding.ASCII;
 
-        public CategoriesRepository(FileManager fileManager, IPTBLogger logger) : base(fileManager)
+        public CategoriesRepository(FileManager fileManager, PTBFileLogger logger) : base(fileManager)
         {
             _parser = new CategoriesParser(_schema.Categories);
             _logger = logger;

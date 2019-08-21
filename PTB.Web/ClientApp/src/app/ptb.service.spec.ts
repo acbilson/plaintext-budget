@@ -5,8 +5,8 @@ import { ILedger } from './ledger/ledger';
 import { IPTBFile } from './ledger/ptbfile';
 
 describe('PtbService', () => {
-  let service : PtbService;
-  let httpMock : HttpTestingController;
+  let service: PtbService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,25 +25,25 @@ describe('PtbService', () => {
 
   describe('ReadLedgers', () => {
 
-    const testLedgers : ILedger[] = [
-      { index: "0", 
-        date: "19-01-01", 
-        type: "D", 
-        amount: "80.17", 
-        subcategory: "", 
-        title: "dskjfs;f0038", 
-        subject: "", 
-        location: "", 
-        locked: "0" },
-        { index: "1", 
-        date: "19-01-02", 
-        type: "C", 
-        amount: "890.17", 
-        subcategory: "Coffee", 
-        title: "starbucksd;lajwer", 
-        subject: "Starbucks", 
-        location: "", 
-        locked: "1" },      
+    const testLedgers: ILedger[] = [
+      { index: '0',
+        date: '19-01-01',
+        type: 'D',
+        amount: '80.17',
+        subcategory: '',
+        title: 'dskjfs;f0038',
+        subject: '',
+        location: '',
+        locked: '0' },
+        { index: '1',
+        date: '19-01-02',
+        type: 'C',
+        amount: '890.17',
+        subcategory: 'Coffee',
+        title: 'starbucksd;lajwer',
+        subject: 'Starbucks',
+        location: '',
+        locked: '1' },
       ];
 
     it('returns a Promise<ILedger[]>', () => {
@@ -69,19 +69,19 @@ describe('PtbService', () => {
 
   describe('UpdateLedger', () => {
 
-    const testLedgerToUpdate : ILedger = 
-      { index: "0", 
-        date: "19-01-01", 
-        type: "D", 
-        amount: "80.17", 
-        subcategory: "", 
-        title: "dskjfs;f0038", 
-        subject: "", 
-        location: "", 
-        locked: "0" };
+    const testLedgerToUpdate: ILedger = {
+      index: '0',
+        date: '19-01-01',
+        type: 'D',
+        amount: '80.17',
+        subcategory: '',
+        title: 'dskjfs;f0038',
+        subject: '',
+        location: '',
+        locked: '0' };
 
     it('sends ledger in request body', () => {
-      
+
       // Act
       service.updateLedger(testLedgerToUpdate);
 
@@ -94,10 +94,10 @@ describe('PtbService', () => {
 
   describe('GetLedgerFiles', () => {
 
-    const testLedgerFiles : IPTBFile[] = 
+    const testLedgerFiles: IPTBFile[] =
       [{
-        isDefault: true, 
-        fullName: 'defaultPath' 
+        isDefault: true,
+        fullName: 'defaultPath'
         },
       {
         isDefault: false,
@@ -112,7 +112,7 @@ describe('PtbService', () => {
         // Assert - result
         expect(result.length).toBe(testLedgerFiles.length);
         expect(result).toEqual(testLedgerFiles);
-        });;
+        });
 
         // Assert - request
         const request = httpMock.expectOne('http://localhost:5000/api/File/GetLedgerFiles');

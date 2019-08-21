@@ -1,39 +1,44 @@
-﻿using Newtonsoft.Json;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PTB.Core;
 using PTB.Core.Ledger;
 using PTB.Core.Logging;
 using System;
 using System.Collections.Generic;
-using PTB.Core.PTBFileAccess;
 
 namespace PTB.Web.Controllers
 {
-    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : ControllerBase
+    public class LoggingController : ControllerBase
     {
         private PTBClient InstantiatePTBClient()
         {
             //var homeDirectory = Environment.CurrentDirectory;
             var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
             var fileManager = new FileManager(homeDirectory);
-            var client = PTBClient.Instance;
             var logger = PTBFileLogger.Instance;
             logger.Configure(LoggingLevel.Debug, homeDirectory);
+            var client = PTBClient.Instance;
             client.Instantiate(fileManager, logger);
             return client;
         }
-        // TODO: Return a new type that wraps the FileInfo object which can't be serialized
-        // GET: api/File/GetLedgerFiles
+        // GET: api/ReadLedgers?startIndex=0&count=10
         [HttpGet("[action]")]
-        public List<PTBFile> GetLedgerFiles()
+        public List<Ledger> ReadLedgers(int startIndex, int count)
         {
             var client = InstantiatePTBClient();
-            var ledgerFiles = client.FileManager.GetLedgerFiles();
-            return ledgerFiles;
+            var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
+            return response.Result;
+        }
+
+        // POST: api/Logging/Log
+        [HttpPost("[action]")]
+        public void Log([FromBody] LogMessage logMessage)
+        {
+            var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
+            var logger = PTBFileLogger.Instance;
+            logger.Configure(LoggingLevel.Debug, homeDirectory);
+            logger.Log(logMessage);
         }
     }
 }
