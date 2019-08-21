@@ -46,17 +46,21 @@ describe('PtbService', () => {
         locked: "1" },      
       ];
 
-    it('returns an Observable<ILedger[]>', () => {
+    it('returns a Promise<ILedger[]>', () => {
 
+      // Arrange
       const index = 0;
       const count = 25;
 
+      // Act
       service.readLedgers(index, count).then((result) => {
 
+        // Assert - results
         expect(result.length).toBe(testLedgers.length);
         expect(result).toEqual(testLedgers);
         });
 
+        // Assert - request
         const request = httpMock.expectOne(`http://localhost:5000/api/Ledger/ReadLedgers?startIndex=${index}&count=${count}`);
         request.flush(testLedgers);
         httpMock.verify();
@@ -77,12 +81,14 @@ describe('PtbService', () => {
         locked: "0" };
 
     it('sends ledger in request body', () => {
-
+      
+      // Act
       service.updateLedger(testLedgerToUpdate);
 
-        const request = httpMock.expectOne('http://localhost:5000/api/Ledger/UpdateLedger');
-        expect(request.request.body).toEqual(testLedgerToUpdate);
-        httpMock.verify();
+      // Assert
+      const request = httpMock.expectOne('http://localhost:5000/api/Ledger/UpdateLedger');
+      expect(request.request.body).toEqual(testLedgerToUpdate);
+      httpMock.verify();
     });
   });
 
@@ -98,14 +104,17 @@ describe('PtbService', () => {
         fullName: 'anotherPath'
       }];
 
-    it('returns an Observable<IPTBFile[]>', () => {
+    it('returns a Promise<IPTBFile[]>', () => {
 
+      // Act
       service.getLedgerFiles().then((result) => {
 
+        // Assert - result
         expect(result.length).toBe(testLedgerFiles.length);
         expect(result).toEqual(testLedgerFiles);
         });;
 
+        // Assert - request
         const request = httpMock.expectOne('http://localhost:5000/api/File/GetLedgerFiles');
         request.flush(testLedgerFiles);
         httpMock.verify();
