@@ -33,7 +33,7 @@ namespace PTB.Web
             {
                 options.AddPolicy(MyAllowSpecificOrigins, builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200", "http://localhost:5000");
+                    builder.WithOrigins("http://localhost:4200", "http://localhost:4500");
                 });
             });
         }
