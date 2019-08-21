@@ -3,6 +3,7 @@ using PTB.Core.Logging;
 using PTB.Core.Statements;
 using PTB.Core.TitleRegex;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -55,12 +56,12 @@ namespace PTB.Console
                 {
                     var client = InitiateClient();
 
-                    var importFiles = client.FileManager.GetStatementFiles();
+                    List<string> importFilePaths = client.FileManager.GetStatementFilePaths();
 
-                    foreach (var importFile in importFiles)
+                    foreach (var importPath in importFilePaths)
                     {
                         var parser = new PNCParser();
-                        client.Ledger.ImportToDefaultLedger(importFile.FullName, parser, append: true);
+                        client.Ledger.ImportToDefaultLedger(importPath, parser, append: true);
                     }
                 }
 

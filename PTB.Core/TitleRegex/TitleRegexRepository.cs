@@ -19,9 +19,9 @@ namespace PTB.Core.TitleRegex
         public TitleRegexReadResponse ReadAllTitleRegex()
         {
             var response = TitleRegexReadResponse.Default;
-            FileInfo titleRegexFile = _fileManager.GetTitleRegexFile();
+            string titleRegexPath = _fileManager.GetTitleRegexFilePath();
 
-            using (var stream = new FileStream(titleRegexFile.FullName, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(titleRegexPath, FileMode.Open, FileAccess.Read))
             {
                 int bufferLength = _schema.TitleRegex.LineSize + Environment.NewLine.Length;
                 int lineIndex = _schema.TitleRegex.LineSize - 1;

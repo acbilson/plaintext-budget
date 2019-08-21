@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.PTBFileAccess;
 
 namespace PTB.Core.E2E
 {
@@ -41,9 +42,9 @@ namespace PTB.Core.E2E
             var files = FileManager.GetLedgerFiles();
 
             // Assert
-            var file = files.First(f => f.IsDefault);
+            PTBFile file = files.First(f => f.IsDefault);
             Assert.IsNotNull(file, "Should have identified the default ledger file");
-            Assert.AreEqual(Schema.Ledger.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Info.Name));
+            Assert.AreEqual(Schema.Ledger.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.FullName));
         }
 
         [TestMethod]
@@ -69,9 +70,9 @@ namespace PTB.Core.E2E
             var files = FileManager.GetCategoriesFiles();
 
             // Assert
-            var file = files.First(f => f.IsDefault);
+            PTBFile file = files.First(f => f.IsDefault);
             Assert.IsNotNull(file, "Should have identified the default categories file");
-            Assert.AreEqual(Schema.Categories.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Info.Name));
+            Assert.AreEqual(Schema.Categories.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.FullName));
         }
 
         [TestMethod]
@@ -81,10 +82,10 @@ namespace PTB.Core.E2E
             WithAFileManager();
 
             // Act
-            var file = FileManager.GetTitleRegexFile();
+            string filePath = FileManager.GetTitleRegexFilePath();
 
             // Assert
-            Assert.AreEqual(Schema.TitleRegex.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.Name));
+            Assert.AreEqual(Schema.TitleRegex.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(filePath));
         }
     }
 }

@@ -7,6 +7,6 @@ namespace PTB.Core.PTBFileAccess
     public class PTBFile
     {
         public bool IsDefault { get; set; }
-        public System.IO.FileInfo Info { get; set; }
+        public string FullName { get; set; }
     }
 }

@@ -31,6 +31,7 @@ export class PtbService {
 
     getLedgerFiles() : Promise<IPTBFile[]> {
       const uri = 'http://localhost:5000/api/File/GetLedgerFiles';
+      console.log(uri);
       return this.http.get<IPTBFile[]>(uri).toPromise();
     }
 }

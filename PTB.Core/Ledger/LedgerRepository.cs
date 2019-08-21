@@ -21,9 +21,7 @@ namespace PTB.Core.Ledger
 
         public void ImportToDefaultLedger(string path, IStatementParser parser, bool append = false)
         {
-            FileInfo ledgerFile = _fileManager.GetDefaultLedgerFile();
-
-            using (var writer = new StreamWriter(ledgerFile.FullName, append))
+            using (var writer = new StreamWriter(path, append))
             {
                 string line;
                 using (StreamReader reader = new StreamReader(path))
@@ -66,9 +64,9 @@ namespace PTB.Core.Ledger
                 throw new Exception($"The start index {startIndex} does not match the index of any ledger line. It should be divisible by {_schema.Ledger.LineSize}");
             }
 
-            FileInfo ledgerFile = _fileManager.GetDefaultLedgerFile();
+            string ledgerPath = _fileManager.GetDefaultLedgerFilePath();
 
-            using (var stream = new FileStream(ledgerFile.FullName, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.Read))
             {
                 int byteIndex = startIndex;
                 int bytesRead = 0;
@@ -106,10 +104,10 @@ namespace PTB.Core.Ledger
                 return response;
             }
 
-            FileInfo ledgerFile = _fileManager.GetDefaultLedgerFile();
+            string ledgerPath = _fileManager.GetDefaultLedgerFilePath();
             string line = _parser.ParseLedger(ledgerToUpdate);
 
-            using (var stream = new FileStream(ledgerFile.FullName, FileMode.Open, FileAccess.Write))
+            using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.Write))
             {
                 byte[] buffer = _encoding.GetBytes(line);
                 SetBufferStartIndex(stream, ledgerToUpdate.Index);
@@ -126,8 +124,8 @@ namespace PTB.Core.Ledger
 
         public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
-            FileInfo ledgerFile = _fileManager.GetDefaultLedgerFile();
-            using (var stream = new FileStream(ledgerFile.FullName, FileMode.Open, FileAccess.ReadWrite))
+            string ledgerPath = _fileManager.GetDefaultLedgerFilePath();
+            using (var stream = new FileStream(ledgerPath, FileMode.Open, FileAccess.ReadWrite))
             {
                 int bufferLength = _schema.Ledger.LineSize + Environment.NewLine.Length;
                 int lineIndex = _schema.Ledger.LineSize - 1;

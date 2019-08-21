@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using System.Collections;
-using System.IO;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using PTB.Core.PTBFileAccess;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 
 namespace PTB.Core
 {
@@ -13,10 +12,10 @@ namespace PTB.Core
         List<PTBFile> GetLedgerFiles();
         List<PTBFile> GetCategoriesFiles();
 
-        FileInfo GetTitleRegexFile();
-        FileInfo GetDefaultLedgerFile();
-        FileInfo GetDefaultCategoriesFile();
-        List<FileInfo> GetStatementFiles();
+        string GetDefaultLedgerFilePath();
+        string GetDefaultCategoriesFilePath();
+        string GetTitleRegexFilePath();
+        List<string> GetStatementFilePaths();
     }
 
     public class FileManager : IFileManager
@@ -56,21 +55,21 @@ namespace PTB.Core
                 .Where(path => IsMaskMatch(path, fileMask))
                 .Select(path => new PTBFile {
                     IsDefault = Path.GetFileNameWithoutExtension(path) == fileName,
-                    Info = new FileInfo(path)
+                    FullName = new FileInfo(path).FullName
                 }).ToList();
             return files;
         }
 
-        private FileInfo GetFile(string folder, string fileName)
+        private string GetFile(string folder, string fileName)
         {
             string path = Path.Combine(Settings.HomeDirectory, folder, fileName + Settings.FileExtension);
-            return new FileInfo(path);
+            return new FileInfo(path).FullName;
         }
 
-        public List<FileInfo> GetStatementFiles()
+        public List<string> GetStatementFilePaths()
         {
-             List<FileInfo> filePaths = Directory.GetFiles(Path.Combine(Settings.HomeDirectory, "Import"), "*.csv")
-                .Select(path => new FileInfo(path)).ToList();
+             List<string> filePaths = Directory.GetFiles(Path.Combine(Settings.HomeDirectory, "Import"), "*.csv")
+                .Select(path => new FileInfo(path).FullName).ToList();
             return filePaths;
         }
 
@@ -79,24 +78,24 @@ namespace PTB.Core
             return GetFiles(Schema.Ledger.Folder, Schema.Ledger.DefaultFileName, Schema.Ledger.FileMask);
         }
 
-        public FileInfo GetDefaultLedgerFile()
+        public string GetDefaultLedgerFilePath()
         {
             var files = GetLedgerFiles();
-            return files.First(f => f.IsDefault == true).Info;
+            return files.First(f => f.IsDefault == true).FullName;
         }
 
         public List<PTBFile> GetCategoriesFiles()
         {
             return GetFiles(Schema.Categories.Folder, Schema.Categories.DefaultFileName, Schema.Categories.FileMask);
         }
-        public FileInfo GetDefaultCategoriesFile()
+        public string GetDefaultCategoriesFilePath()
         {
             var files = GetCategoriesFiles();
-            return files.First(f => f.IsDefault == true).Info;
+            return files.First(f => f.IsDefault == true).FullName;
         }
 
 
-        public FileInfo GetTitleRegexFile()
+        public string GetTitleRegexFilePath()
         {
             return GetFile(Schema.TitleRegex.Folder, Schema.TitleRegex.DefaultFileName);
         }

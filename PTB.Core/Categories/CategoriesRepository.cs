@@ -25,9 +25,9 @@ namespace PTB.Core.Categories
         {
             var response = CategoriesReadResponse.Default;
 
-            FileInfo categoriesFile = _fileManager.GetDefaultCategoriesFile();
+            string categoriesPath = _fileManager.GetDefaultCategoriesFilePath();
 
-            using (var stream = new FileStream(categoriesFile.FullName, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(categoriesPath, FileMode.Open, FileAccess.Read))
             {
                 int bufferLength = _schema.Categories.LineSize + System.Environment.NewLine.Length;
                 int lineIndex = _schema.Categories.LineSize - 1;

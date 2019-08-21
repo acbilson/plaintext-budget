@@ -3,6 +3,7 @@ import { ILedger } from './ledger';
 import { IPTBFile } from './ptbfile';
 import { PtbService } from '../ptb.service';
 import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-ledger',
@@ -38,7 +39,7 @@ export class LedgerComponent implements OnInit {
 
     try {
       var ledger = this.getLedgerByIndex(index);
-      ledger.subject = subcategory;
+      ledger.subcategory = subcategory;
       ledger.locked = '1';
 
       updatedLedger = await this.ptbService.updateLedger(ledger);
@@ -84,8 +85,15 @@ export class LedgerComponent implements OnInit {
 
       // adds ledger size plus carriage return to skip returning the last row again (need to retrieve schema via API)
       let finalIndex = lastIndex + 142;
+      let ledgerCount = 10;
 
-      this.readLedgers(finalIndex, 10);
+      this.readLedgers(finalIndex, ledgerCount)
+      .then(ledgers => {
+        //console.log(`number of ledgers before read: ${this.ledgers.length}`);
+        this.ledgers = this.ledgers.concat(ledgers);
+        //console.log(`number of ledgers after read: ${this.ledgers.length}. Should be ${ledgers.length} + ${this.ledgers.length}`);
+      })
+      .catch(error => console.log(`failed to retrieve next ${ledgerCount} ledgers with message: ${error.message}`));
     }
   }
 
@@ -96,7 +104,7 @@ export class LedgerComponent implements OnInit {
     try {
       ledgers = await this.ptbService.readLedgers(startIndex, count);
     } catch (error) {
-      console.log(error);
+      console.log(`failed to retrieve ledgers with message: ${error.message}`);
     }
 
     return ledgers;
@@ -109,7 +117,7 @@ export class LedgerComponent implements OnInit {
       files = await this.ptbService.getLedgerFiles();
     }
     catch (error) {
-      console.log(error);
+      console.log(`failed to retrieve ledger files with message: ${error.message}`);
     }
 
     return files;
