@@ -40,7 +40,8 @@ namespace PTB.Core.Budget
     
         public void CreateBudget(List<Categories.Categories> categories)
         {
-            string path = Path.Combine(_settings.HomeDirectory, _schema.Budget.Folder, _schema.Budget.DefaultFileName + _settings.FileExtension);
+            string budgetName = GetBudgetName();
+            string path = Path.Combine(_settings.HomeDirectory, _schema.Budget.Folder, budgetName + _settings.FileExtension);
 
             // creates the Budget directory if this is the first time creating a budget
             Directory.CreateDirectory(new FileInfo(path).Directory.FullName);

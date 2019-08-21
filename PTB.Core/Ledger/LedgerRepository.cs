@@ -19,12 +19,14 @@ namespace PTB.Core.Ledger
             _parser = new LedgerParser(_schema.Ledger);
         }
 
-        public void ImportToDefaultLedger(string path, IStatementParser parser, bool append = false)
+        public void ImportToDefaultLedger(string importPath, IStatementParser parser, bool append = false)
         {
-            using (var writer = new StreamWriter(path, append))
+            string ledgerPath = _fileManager.GetDefaultLedgerFilePath();
+
+            using (var writer = new StreamWriter(ledgerPath, append))
             {
                 string line;
-                using (StreamReader reader = new StreamReader(path))
+                using (StreamReader reader = new StreamReader(importPath))
                 {
                     while ((line = reader.ReadLine()) != null)
                     {
