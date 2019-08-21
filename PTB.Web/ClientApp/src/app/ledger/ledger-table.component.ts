@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-ledger',
-  templateUrl: './ledger.component.html',
-  styleUrls: ['./ledger.component.css']
+  selector: 'app-ledger-table',
+  templateUrl: './ledger-table.component.html',
+  styleUrls: ['./ledger-table.component.css']
 })
-export class LedgerComponent implements OnInit {
+export class LedgerTableComponent implements OnInit {
   public startIndex: number;
   public ledgerCount: number;
   public ledgers: ILedger[];

@@ -1,11 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { LedgerComponent } from './ledger.component';
+import { LedgerTableComponent } from './ledger-table.component';
 import { Pipe, PipeTransform, Injectable } from '@angular/core';
 import { ILedger } from './ledger';
 import { IPTBFile } from './ptbfile';
 import { FormsModule } from '@angular/forms';
 import { PtbService } from '../ptb.service';
-import { defer } from 'rxjs/observable/defer';
 
 @Pipe({ name: 'prependZeros' })
 class MyPrependPipeMock implements PipeTransform {
@@ -83,14 +82,14 @@ class MockPtbService {
 }
 
 describe('LedgerComponent', () => {
-  let component: LedgerComponent;
-  let fixture: ComponentFixture<LedgerComponent>;
+  let component: LedgerTableComponent;
+  let fixture: ComponentFixture<LedgerTableComponent>;
   let mockPtbService: MockPtbService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [ LedgerComponent, 
+      declarations: [ LedgerTableComponent, 
                       MyPrependPipeMock, 
                       MyTrimPipeMock,
                       MyDebitPipeMock ],
@@ -101,7 +100,7 @@ describe('LedgerComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LedgerComponent);
+    fixture = TestBed.createComponent(LedgerTableComponent);
     component = fixture.debugElement.componentInstance;
     fixture.detectChanges();
     mockPtbService = new MockPtbService();

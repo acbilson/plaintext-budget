@@ -8,9 +8,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { LedgerComponent } from './ledger/ledger.component';
+import { LedgerTableComponent } from './ledger/ledger-table.component';
 
 // pipes
 import { PrependZerosPipe } from './custom-pipes/prepend-zeros.pipe';
@@ -25,9 +23,7 @@ import { PtbService } from './ptb.service';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
-    LedgerComponent,
+    LedgerTableComponent,
     PrependZerosPipe,
     TrimPipe,
     DebitPipe
@@ -38,9 +34,9 @@ import { PtbService } from './ptb.service';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'ledger', component: LedgerComponent },
+    /*  { path: 'counter', component: CounterComponent },
+      { path: 'fetch-data', component: FetchDataComponent }, */
+      { path: 'ledger', component: LedgerTableComponent },
     ])
   ],
   providers: [PtbService],
