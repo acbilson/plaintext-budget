@@ -11,6 +11,7 @@ namespace PTB.Web
     public class Startup
     {
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string HomeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
 
         public Startup(IConfiguration configuration)
         {
@@ -25,11 +26,8 @@ namespace PTB.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Adds singletons
-            //var homeDirectory = Environment.CurrentDirectory;
-            string homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
-
-            var logger = new PTBFileLogger(LoggingLevel.Debug, homeDirectory);
-            var fileManager = new FileManager(homeDirectory);
+            var logger = new PTBFileLogger(LoggingLevel.Debug, HomeDirectory);
+            var fileManager = new FileManager(HomeDirectory);
             services.AddSingleton(logger);
             services.AddSingleton(fileManager);
 
@@ -67,7 +65,6 @@ namespace PTB.Web
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
 
             app.UseMvc(routes =>
             {
