@@ -1,31 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using PTB.Core.Base;
+using System.Collections.Generic;
 
 namespace PTB.Core.TitleRegex
 {
-    public class TitleRegexToStringResponse
+    public class TitleRegexReadResponse : BaseReadResponse
     {
-        public string Result { get; set; }
-        public bool Success { get; set; }
-        public string Message { get; set; }
-
-        public static TitleRegexToStringResponse Default => new TitleRegexToStringResponse { Result = string.Empty, Success = true, Message = string.Empty };
-    }
-
-    public class StringToTitleRegexResponse
-    {
-        public TitleRegex Result { get; set; }
-        public bool Success { get; set; }
-        public string Message { get; set; }
-
-        public static StringToTitleRegexResponse Default => new StringToTitleRegexResponse { Success = true, Message = string.Empty };
-    }
-
-    public class TitleRegexReadResponse
-    {
-        public List<TitleRegex> TitleRegices;
-
         public List<string> SkippedMessages;
 
-        public static TitleRegexReadResponse Default => new TitleRegexReadResponse { TitleRegices = new List<TitleRegex>(), SkippedMessages = new List<string>() };
+        public new static TitleRegexReadResponse Default => new TitleRegexReadResponse { Success = true, Message = string.Empty, ReadResult = new List<PTBRow>(), SkippedMessages = new List<string>() };
     }
 }

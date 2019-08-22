@@ -27,7 +27,7 @@ namespace PTB.Web
 
             // Adds singletons
             var logger = new PTBFileLogger(LoggingLevel.Debug, HomeDirectory);
-            var fileManager = new FileManager(HomeDirectory);
+            var fileManager = new BaseFileManager(HomeDirectory);
             services.AddSingleton(logger);
             services.AddSingleton(fileManager);
 

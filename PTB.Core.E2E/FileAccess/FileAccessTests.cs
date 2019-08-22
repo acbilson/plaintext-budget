@@ -12,7 +12,7 @@ namespace PTB.Core.E2E
         public void ReadsConfigsFromPath()
         {
             // Arrange - Act
-            var fileManager = new FileManager(CleanSettings.HomeDirectory);
+            var fileManager = new BaseFileManager(CleanSettings.HomeDirectory);
 
             // Assert
             Assert.IsNotNull(fileManager.Settings);
@@ -42,9 +42,9 @@ namespace PTB.Core.E2E
             var files = FileManager.GetLedgerFiles();
 
             // Assert
-            PTBFile file = files.First(f => f.IsDefault);
+            BasePTBFile file = files.First(f => f.IsDefault);
             Assert.IsNotNull(file, "Should have identified the default ledger file");
-            Assert.AreEqual(Schema.Ledger.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.FullName));
+            Assert.AreEqual(Schema.Ledger.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.FullPath));
         }
 
         [TestMethod]
@@ -70,9 +70,9 @@ namespace PTB.Core.E2E
             var files = FileManager.GetCategoriesFiles();
 
             // Assert
-            PTBFile file = files.First(f => f.IsDefault);
+            BasePTBFile file = files.First(f => f.IsDefault);
             Assert.IsNotNull(file, "Should have identified the default categories file");
-            Assert.AreEqual(Schema.Categories.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.FullName));
+            Assert.AreEqual(Schema.Categories.DefaultFileName, System.IO.Path.GetFileNameWithoutExtension(file.FullPath));
         }
 
         [TestMethod]

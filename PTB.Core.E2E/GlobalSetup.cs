@@ -21,7 +21,7 @@ namespace PTB.Core.E2E
         public PTBClient Client;
         public PNCParser PNCParser;
         public LedgerParser LedgerParser;
-        public FileManager FileManager;
+        public BaseFileManager FileManager;
         public PTBFileLogger Logger;
 
         public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
@@ -82,7 +82,7 @@ namespace PTB.Core.E2E
 
         public void WithAFileManager()
         {
-            var fileManager = new FileManager(CleanSettings, Schema);
+            var fileManager = new BaseFileManager(CleanSettings, Schema);
             FileManager = fileManager;
         }
 

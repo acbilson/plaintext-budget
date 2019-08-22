@@ -16,10 +16,10 @@ namespace PTB.Core.TitleRegex
         public ColumnSubject Subject { get; set; }
     }
 
-    public class ColumnPriority : SchemaColumn { }
+    public class ColumnPriority : ColumnSchema { }
 
-    public class ColumnSubcategory : SchemaColumn { }
+    public class ColumnSubcategory : ColumnSchema { }
 
-    public class ColumnRegex : SchemaColumn { }
-    public class ColumnSubject : SchemaColumn { }
+    public class ColumnRegex : ColumnSchema { }
+    public class ColumnSubject : ColumnSchema { }
 }

@@ -16,9 +16,9 @@ namespace PTB.Web.Controllers
     public class FileController : ControllerBase
     {
         private PTBFileLogger _logger;
-        private FileManager _fileManager;
+        private BaseFileManager _fileManager;
 
-        public FileController(PTBFileLogger logger, FileManager fileManager)
+        public FileController(PTBFileLogger logger, BaseFileManager fileManager)
         {
             _logger = logger;
             _fileManager = fileManager;
@@ -32,7 +32,7 @@ namespace PTB.Web.Controllers
         }
         // GET: api/File/GetLedgerFiles
         [HttpGet("[action]")]
-        public List<PTBFile> GetLedgerFiles()
+        public List<BasePTBFile> GetLedgerFiles()
         {
             var client = InstantiatePTBClient();
             var ledgerFiles = client.FileManager.GetLedgerFiles();

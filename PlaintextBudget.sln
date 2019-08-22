@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Core.E2E", "PTB.Core.E2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Web", "PTB.Web\PTB.Web.csproj", "{84C3692C-1235-40DC-A623-DF6A4415BAB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Tests.Shared", "PTB.Tests.Shared\PTB.Tests.Shared.csproj", "{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Tests.Shared", "PTB.Tests.Shared\PTB.Tests.Shared.csproj", "{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,9 +15,9 @@ namespace PTB.Web.Controllers
     public class LedgerController : ControllerBase
     {
         private PTBFileLogger _logger;
-        private FileManager _fileManager;
+        private BaseFileManager _fileManager;
 
-        public LedgerController(PTBFileLogger logger, FileManager fileManager)
+        public LedgerController(PTBFileLogger logger, BaseFileManager fileManager)
         {
             _logger = logger;
             _fileManager = fileManager;

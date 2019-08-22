@@ -8,12 +8,14 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using PTB.Core.Logging;
+using PTB.Core;
+using PTB.Core.TitleRegex;
 
-namespace PTB.Core.Ledger
+namespace PTB.Ledger
 {
     public class LedgerRepository : BaseFileRepository
     {
-        public LedgerRepository(IPTBLogger logger, BaseParser parser, Base.FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
+        public LedgerRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
         {
             _logger.SetContext(nameof(LedgerRepository));
         }
@@ -74,7 +76,7 @@ namespace PTB.Core.Ledger
 
         public bool IsLedgerLocked(PTBRow row) => GetColumnValueByName("locked", row) == "1";
 
-        public void CategorizeDefaultLedger()
+        public void CategorizeDefaultLedger(IEnumerable<TitleRegex.TitleRegex> titleRegices)
         {
             using (var stream = new FileStream(_file.FullName, FileMode.Open, FileAccess.ReadWrite))
             {
@@ -112,19 +114,17 @@ namespace PTB.Core.Ledger
                         continue;
                     }
 
-                    var titleRegices = new List<PTBRow>();
-
                     foreach (var titleRegex in titleRegices)
                     {
-                        string match = GetRegexMatch(GetColumnValueByName("regex", titleRegex));
+                        string match = GetRegexMatch(titleRegex.Regex);
 
                         string title = GetColumnValueByName("title", parseResponse.Row);
                         bool isMatch = Regex.IsMatch(title, match, RegexOptions.IgnoreCase);
 
                         if (isMatch)
                         {
-                            SetColumnValueByName("subcategory", GetColumnValueByName("subcategory", titleRegex), parseResponse.Row);
-                            SetColumnValueByName("subject", GetColumnValueByName("subject", titleRegex), parseResponse.Row);
+                            SetColumnValueByName("subcategory", titleRegex.Subcategory, parseResponse.Row);
+                            SetColumnValueByName("subject", titleRegex.Subject, parseResponse.Row);
                             var newParseResponse = _parser.ParseRow(parseResponse.Row);
                             newParseResponse.Line += Environment.NewLine;
                             byte[] newBuffer = _encoding.GetBytes(newParseResponse.Line);

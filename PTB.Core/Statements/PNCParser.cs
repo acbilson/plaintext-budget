@@ -1,4 +1,6 @@
-﻿using PTB.Core.Ledger;
+﻿using System.Linq;
+using PTB.Core.Base;
+using PTB.Core.Ledger;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,12 +10,18 @@ namespace PTB.Core.Statements
     public class PNCParser : IStatementParser
     {
         private const char DELIMITER = ',';
-        private LedgerSchema _schema;
+        private FolderSchema _schema;
 
-        public StatementParseResponse ParseLine(string line, LedgerSchema schema)
+        public PNCParser(FolderSchema schema)
+        {
+            _schema = schema;
+        }
+
+        private ColumnSchema GetColumnByName(string name) => _schema.Columns.First(column => column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        public StatementParseResponse ParseLine(string line)
         {
             var response = StatementParseResponse.Default;
-            _schema = schema;
 
             if (IsSummaryLine(line))
             {
@@ -28,8 +36,8 @@ namespace PTB.Core.Statements
             string amount = ParseAmount(lines[1]);
             string title = ParseTitle(lines[2], lines[3]);
             char type = ParseType(lines[5]);
-            string subcategory = new String(' ', _schema.Columns.Subcategory.Size);
-            string subject = new String(' ', _schema.Columns.Subject.Size);
+            string subcategory = new String(' ', GetColumnByName("subcategory").Size);
+            string subject = new String(' ', GetColumnByName("subject").Size);
             char locked = '0';
 
             char delimiter = ' ';
@@ -99,7 +107,7 @@ namespace PTB.Core.Statements
             }
 
             amount = AddTrailingZeros(amount);
-            return PrependSpaces(amount, _schema.Columns.Amount.Size);
+            return PrependSpaces(amount, GetColumnByName("amount").Size);
         }
 
         private string ParseTitle(string value, string value2)
@@ -114,12 +122,13 @@ namespace PTB.Core.Statements
 
             // crops title if it's too long
             // TODO: improve cropping logic
-            if (title.Length > _schema.Columns.Title.Size)
+            int titleSize = GetColumnByName("title").Size;
+            if (title.Length > titleSize)
             {
-                title = title.Substring(0, _schema.Columns.Title.Size);
+                title = title.Substring(0, titleSize);
             }
 
-            return PrependSpaces(title, _schema.Columns.Title.Size);
+            return PrependSpaces(title, titleSize);
         }
 
         private char ParseType(string value)

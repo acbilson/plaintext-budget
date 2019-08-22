@@ -9,9 +9,9 @@ namespace PTB.Web.Controllers
     public class LoggingController : ControllerBase
     {
         private PTBFileLogger _logger;
-        private FileManager _fileManager;
+        private BaseFileManager _fileManager;
 
-        public LoggingController(PTBFileLogger logger, FileManager fileManager)
+        public LoggingController(PTBFileLogger logger, BaseFileManager fileManager)
         {
             _logger = logger;
             _fileManager = fileManager;

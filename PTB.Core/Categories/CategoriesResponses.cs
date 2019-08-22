@@ -1,31 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using PTB.Core.Base;
+using System.Collections.Generic;
 
 namespace PTB.Core.Categories
 {
-    public class CategoriesToStringResponse
+    public class CategoriesReadResponse : BaseReadResponse
     {
-        public string Result { get; set; }
-        public bool Success { get; set; }
-        public string Message { get; set; }
-
-        public static CategoriesToStringResponse Default => new CategoriesToStringResponse { Result = string.Empty, Success = true, Message = string.Empty };
-    }
-
-    public class StringToCategoriesResponse
-    {
-        public Categories Result { get; set; }
-        public bool Success { get; set; }
-        public string Message { get; set; }
-
-        public static StringToCategoriesResponse Default => new StringToCategoriesResponse { Success = true, Message = string.Empty };
-    }
-
-    public class CategoriesReadResponse
-    {
-        public List<Categories> Categories;
-
         public List<string> SkippedMessages;
 
-        public static CategoriesReadResponse Default => new CategoriesReadResponse { Categories = new List<Categories>(), SkippedMessages = new List<string>() };
+        public new static CategoriesReadResponse Default => new CategoriesReadResponse { Success = true, Message = string.Empty, SkippedMessages = new List<string>(), ReadResult = new List<PTBRow>() };
     }
 }

@@ -10,7 +10,7 @@ namespace PTB.Core.Tests
         public void InstantiatesWithCleanConfigs()
         {
             // Arrange
-            var fileManager = new FileManager(Settings, Schema);
+            var fileManager = new BaseFileManager(Settings, Schema);
             var logger = new PTBFileLogger(LoggingLevel.Debug, Settings.HomeDirectory);
             var client = PTBClient.Instance;
 

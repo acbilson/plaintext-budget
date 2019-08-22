@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
+using PTB.Core.Logging;
+using PTB.Core.Base;
 
 namespace PTB.Core.Budget
 {
-    public class BudgetRepository : BaseFileRepository
+    public class BudgetRepository : BaseReportRepository
     {
-        private string _folder = "Budget";
-        private CategoriesParser _parser;
-
-        public BudgetRepository(FileManager fileManager) : base(fileManager)
+        public BudgetRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
         {
-            _parser = new CategoriesParser(_schema.Categories);
+            _logger.SetContext(nameof(BudgetRepository));
         }
+        /*
 
         public string GetBudgetName()
         {
@@ -72,5 +72,6 @@ namespace PTB.Core.Budget
                 }
             }
         }
+        */
     }
 }
