@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PTB.Core;
+using PTB.Core.Logging;
 
 namespace PTB.Web
 {
@@ -21,6 +23,15 @@ namespace PTB.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Adds singletons
+            //var homeDirectory = Environment.CurrentDirectory;
+            string homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
+
+            var logger = new PTBFileLogger(LoggingLevel.Debug, homeDirectory);
+            var fileManager = new FileManager(homeDirectory);
+            services.AddSingleton(logger);
+            services.AddSingleton(fileManager);
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

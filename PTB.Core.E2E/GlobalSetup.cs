@@ -88,8 +88,7 @@ namespace PTB.Core.E2E
 
         public void WithALogger()
         {
-            var logger = PTBFileLogger.Instance;
-            logger.Configure(CleanSettings.LoggingLevel, CleanSettings.HomeDirectory);
+            var logger = new PTBFileLogger(CleanSettings.LoggingLevel, CleanSettings.HomeDirectory);
             Logger = logger;
         }
 

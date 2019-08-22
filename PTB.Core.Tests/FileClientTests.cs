@@ -11,8 +11,7 @@ namespace PTB.Core.Tests
         {
             // Arrange
             var fileManager = new FileManager(Settings, Schema);
-            var logger = PTBFileLogger.Instance;
-            logger.Configure(LoggingLevel.Debug, Settings.HomeDirectory);
+            var logger = new PTBFileLogger(LoggingLevel.Debug, Settings.HomeDirectory);
             var client = PTBClient.Instance;
 
             // Act

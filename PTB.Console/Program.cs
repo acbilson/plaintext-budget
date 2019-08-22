@@ -17,8 +17,7 @@ namespace PTB.Console
             string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
             var client = PTBClient.Instance;
             var fileManager = new FileManager(baseDir);
-            var logger = PTBFileLogger.Instance;
-            logger.Configure(LoggingLevel.Debug, baseDir);
+            var logger = new PTBFileLogger(LoggingLevel.Debug, home);
             client.Instantiate(fileManager, logger);
             return client;
         }

@@ -2,18 +2,26 @@
 
 namespace PTB.Core.Logging
 {
+    public interface IPTBLogger
+    {
+        void Log(LogMessage logMessage);
+        void LogInfo(string message);
+        void LogDebug(string message);
+        void LogWarning(string message);
+        void LogError(string message);
+        void LogError(Exception exception);
+
+        void SetContext(string context);
+        void SetLevel(LoggingLevel level);
+    }
+
     public class PTBFileLogger
     {
         private System.IO.FileInfo _loggingFile;
         private LoggingLevel _level;
         private string _context = "NA";
-        private static readonly PTBFileLogger _instance = new PTBFileLogger();
 
-        public static PTBFileLogger Instance => _instance;
-
-        private PTBFileLogger() { }
-
-        public void Configure(LoggingLevel level, string baseDirectory)
+        public PTBFileLogger(LoggingLevel level, string baseDirectory)
         {
             _level = level;
             _loggingFile = new System.IO.FileInfo(System.IO.Path.Combine(baseDirectory, "ptb.log"));
@@ -45,6 +53,12 @@ namespace PTB.Core.Logging
         {
             _context = context;
         }
+
+        public void SetLevel(LoggingLevel level)
+        {
+            _level = level;
+        }
+
 
         public void LogInfo(string message)
         {

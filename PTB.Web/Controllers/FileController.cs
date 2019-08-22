@@ -15,24 +15,28 @@ namespace PTB.Web.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
+        private PTBFileLogger _logger;
+        private FileManager _fileManager;
+
+        public FileController(PTBFileLogger logger, FileManager fileManager)
+        {
+            _logger = logger;
+            _fileManager = fileManager;
+        }
+
         private PTBClient InstantiatePTBClient()
         {
-            //var homeDirectory = Environment.CurrentDirectory;
-            var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
-            var fileManager = new FileManager(homeDirectory);
             var client = PTBClient.Instance;
-            var logger = PTBFileLogger.Instance;
-            logger.Configure(LoggingLevel.Debug, homeDirectory);
-            client.Instantiate(fileManager, logger);
+            client.Instantiate(_fileManager, _logger);
             return client;
         }
-        // TODO: Return a new type that wraps the FileInfo object which can't be serialized
         // GET: api/File/GetLedgerFiles
         [HttpGet("[action]")]
         public List<PTBFile> GetLedgerFiles()
         {
             var client = InstantiatePTBClient();
             var ledgerFiles = client.FileManager.GetLedgerFiles();
+            _logger.LogDebug($"Retrieved {ledgerFiles.Count} ledger files from folder");
             return ledgerFiles;
         }
     }

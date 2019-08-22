@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PTB.Core;
+using PTB.Core.Exceptions;
 using PTB.Core.Ledger;
 using PTB.Core.Logging;
 using System;
@@ -13,15 +14,19 @@ namespace PTB.Web.Controllers
     [ApiController]
     public class LedgerController : ControllerBase
     {
+        private PTBFileLogger _logger;
+        private FileManager _fileManager;
+
+        public LedgerController(PTBFileLogger logger, FileManager fileManager)
+        {
+            _logger = logger;
+            _fileManager = fileManager;
+        }
+
         private PTBClient InstantiatePTBClient()
         {
-            //var homeDirectory = Environment.CurrentDirectory;
-            var homeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
-            var fileManager = new FileManager(homeDirectory);
             var client = PTBClient.Instance;
-            var logger = PTBFileLogger.Instance;
-            logger.Configure(LoggingLevel.Debug, homeDirectory);
-            client.Instantiate(fileManager, logger);
+            client.Instantiate(_fileManager, _logger);
             return client;
         }
         // GET: api/ReadLedgers?startIndex=0&count=10
@@ -39,10 +44,14 @@ namespace PTB.Web.Controllers
         {
             var client = InstantiatePTBClient();
             var response = client.Ledger.UpdateDefaultLedgerEntry(ledger);
+
             if (!response.Success)
             {
-                throw new Exception("Failed to update ledger");
+                string message = $"Failed to update ledger with index: {ledger.Index}";
+                _logger.LogError(message);
+                throw new WebException(message);
             }
+
             return ledger;
         }
     }
