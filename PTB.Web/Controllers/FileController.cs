@@ -36,8 +36,14 @@ namespace PTB.Web.Controllers
         {
             var client = InstantiatePTBClient();
             var ledgerFiles = client.FileManager.GetLedgerFiles();
-            _logger.LogDebug($"Retrieved {ledgerFiles.Count} ledger files from folder");
+            Log($"Retrieved {ledgerFiles.Count} ledger files from folder");
             return ledgerFiles;
+        }
+
+        private void Log(string message)
+        {
+            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FileController).Name);
+            _logger.Log(logMessage);
         }
     }
 }

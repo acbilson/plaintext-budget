@@ -35,6 +35,7 @@ namespace PTB.Web.Controllers
         {
             var client = InstantiatePTBClient();
             var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
+            Log($"Read {response.Result.Count} ledger entries from the default ledger");
             return response.Result;
         }
 
@@ -48,11 +49,24 @@ namespace PTB.Web.Controllers
             if (!response.Success)
             {
                 string message = $"Failed to update ledger with index: {ledger.Index}";
-                _logger.LogError(message);
+                LogError(message);
                 throw new WebException(message);
             }
 
+            Log($"Updated ledger with index: {ledger.Index}");
             return ledger;
         }
+
+        private void LogError(string message)
+        {
+            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FileController).Name);
+            _logger.Log(logMessage);
+        }
+        private void Log(string message)
+        {
+            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FileController).Name);
+            _logger.Log(logMessage);
+        }
+
     }
 }
