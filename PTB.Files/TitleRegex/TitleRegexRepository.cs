@@ -1,21 +1,22 @@
 ﻿using PTB.Core.Base;
 using PTB.Core.Files;
 using PTB.Core.Logging;
+using PTB.Files.FolderAccess;
 
 namespace PTB.Files.TitleRegex
 {
-    public class TitleRegexRepository : BaseFileRepository
+    public class TitleRegexRepository : BaseFileService
     {
-        public TitleRegexRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
+        public TitleRegexRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema) : base(logger, parser, schema)
         {
             _logger.SetContext(nameof(TitleRegexRepository));
         }
 
-        public BaseReadResponse ReadAllTitleRegex()
+        public BaseReadResponse ReadAllTitleRegex(TitleRegexFile file)
         {
             var response = BaseReadResponse.Default;
 
-            response = base.Read(0, _file.LineCount);
+            response = base.Read(file, 0, file.LineCount);
 
             return response;
         }

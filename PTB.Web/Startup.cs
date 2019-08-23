@@ -27,9 +27,9 @@ namespace PTB.Web
 
             // Adds singletons
             var logger = new PTBFileLogger(LoggingLevel.Debug, HomeDirectory);
-            var fileManager = new BaseFileManager(HomeDirectory);
+            //var fileManager = new BaseFileManager(HomeDirectory);
             services.AddSingleton(logger);
-            services.AddSingleton(fileManager);
+            //services.AddSingleton(fileManager);
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

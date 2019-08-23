@@ -1,6 +1,6 @@
 ﻿using PTB.Core.Base;
 
-namespace PTB.Core.Budget
+namespace PTB.Reports.Budget
 {
     public class BudgetSchema : FolderSchema
     {

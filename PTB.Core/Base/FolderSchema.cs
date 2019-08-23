@@ -4,6 +4,7 @@ namespace PTB.Core.Base
 {
     public class FolderSchema
     {
+        public string FileMask { get; set; }
         public string Folder { get; set; }
         public string Delimiter { get; set; }
         public string DefaultFileName { get; set; }

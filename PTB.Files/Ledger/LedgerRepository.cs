@@ -1,7 +1,9 @@
-﻿using PTB.Core.Base;
+﻿using PTB.Files.FolderAccess;
+using PTB.Core.Base;
 using PTB.Core.Exceptions;
 using PTB.Core.Files;
 using PTB.Core.Logging;
+using PTB.Core.Statements;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,26 +12,23 @@ using System.Text.RegularExpressions;
 
 namespace PTB.Files.Ledger
 {
-    public class LedgerRepository : BaseFileRepository
+    public class LedgerService : BaseFileService
     {
-        public LedgerRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
+        public LedgerService(IPTBLogger logger, LedgerFileParser parser, LedgerSchema schema) : base(logger, parser, schema)
         {
-            _logger.SetContext(nameof(LedgerRepository));
+            _logger.SetContext(nameof(LedgerService));
         }
 
-        /*
-        public void ImportToDefaultLedger(string importPath, IStatementParser parser, bool append = false)
+        public void Import(LedgerFile file, string importPath, IStatementParser parser, bool append = false)
         {
-            string ledgerPath = _fileManager.GetDefaultLedgerFilePath();
-
-            using (var writer = new StreamWriter(ledgerPath, append))
+            using (var writer = new StreamWriter(file.FullPath, append))
             {
                 string line;
                 using (StreamReader reader = new StreamReader(importPath))
                 {
                     while ((line = reader.ReadLine()) != null)
                     {
-                        StatementParseResponse response = parser.ParseLine(line, _schema);
+                        StatementParseResponse response = parser.ParseLine(line);
 
                         if (response.Success)
                         {
@@ -38,19 +37,19 @@ namespace PTB.Files.Ledger
                     }
                 }
             }
-        } */
+        }
 
-        public BaseReadResponse ReadDefaultLedgerEntries(int startIndex, int ledgerCount)
+        public BaseReadResponse Read(LedgerFile file, int startIndex, int ledgerCount)
         {
             var response = BaseReadResponse.Default;
-            response = base.Read(startIndex, ledgerCount);
+            response = base.Read(file, startIndex, ledgerCount);
             return response;
         }
 
-        public BaseUpdateResponse UpdateDefaultLedgerEntry(int index, PTBRow row)
+        public BaseUpdateResponse Update(LedgerFile file, int index, PTBRow row)
         {
             var response = BaseUpdateResponse.Default;
-            base.Update(index, row);
+            base.Update(file, index, row);
             return response;
         }
 
@@ -61,23 +60,11 @@ namespace PTB.Files.Ledger
             return row.Columns.First(column => column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase))?.ColumnValue;
         }
 
-        public PTBRow SetColumnValueByName(string name, string value, PTBRow row)
-        {
-            row.Columns.ForEach(column =>
-            {
-                if (column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase))
-                {
-                    column.ColumnValue = value;
-                }
-            });
-            return row;
-        }
+        public bool IsLedgerLocked(PTBRow row) => row.GetValueByName("locked") == "1";
 
-        public bool IsLedgerLocked(PTBRow row) => GetColumnValueByName("locked", row) == "1";
-
-        public void CategorizeDefaultLedger()
+        public void Categorize(LedgerFile file, List<PTBRow> titleRegices)
         {
-            using (var stream = new FileStream(_file.FullName, FileMode.Open, System.IO.FileAccess.ReadWrite))
+            using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.ReadWrite))
             {
                 int bufferLength = _schema.LineSize + Environment.NewLine.Length;
                 int lineIndex = _schema.LineSize - 1;
@@ -113,19 +100,17 @@ namespace PTB.Files.Ledger
                         continue;
                     }
 
-                    var titleRegices = new List<PTBRow>();
-
                     foreach (var titleRegex in titleRegices)
                     {
-                        string match = GetRegexMatch(GetColumnValueByName("regex", titleRegex));
+                        string match = GetRegexMatch(titleRegex.GetValueByName("regex"));
 
-                        string title = GetColumnValueByName("title", parseResponse.Row);
+                        string title = parseResponse.Row.GetValueByName("title");
                         bool isMatch = Regex.IsMatch(title, match, RegexOptions.IgnoreCase);
 
                         if (isMatch)
                         {
-                            SetColumnValueByName("subcategory", GetColumnValueByName("subcategory", titleRegex), parseResponse.Row);
-                            SetColumnValueByName("subject", GetColumnValueByName("subject", titleRegex), parseResponse.Row);
+                            parseResponse.Row.SetValueByName("subcategory", titleRegex.GetValueByName("subcategory"));
+                            parseResponse.Row.SetValueByName("subject", titleRegex.GetValueByName("subcategory"));
                             var newParseResponse = _parser.ParseRow(parseResponse.Row);
                             newParseResponse.Line += Environment.NewLine;
                             byte[] newBuffer = _encoding.GetBytes(newParseResponse.Line);

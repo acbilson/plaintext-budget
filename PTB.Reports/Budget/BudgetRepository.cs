@@ -3,11 +3,11 @@ using PTB.Core.Files;
 using PTB.Core.Logging;
 using PTB.Core.Reports;
 
-namespace PTB.Core.Budget
+namespace PTB.Reports.Budget
 {
     public class BudgetRepository : BaseReportRepository
     {
-        public BudgetRepository(IPTBLogger logger, BaseReportParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
+        public BudgetRepository(IPTBLogger logger, BaseReportParser parser, FolderSchema schema) : base(logger, parser, schema)
         {
             _logger.SetContext(nameof(BudgetRepository));
         }

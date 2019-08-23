@@ -1,5 +1,6 @@
 ﻿using PTB.Core.Base;
 using PTB.Core.Exceptions;
+using PTB.Core.FolderAccess;
 using PTB.Core.Logging;
 using System;
 using System.IO;
@@ -8,20 +9,18 @@ using System.Text;
 
 namespace PTB.Core.Files
 {
-    public class BaseFileRepository : IPTBRepository
+    public class BaseFileService : IPTBRepository
     {
         protected Encoding _encoding = Encoding.ASCII;
         protected FolderSchema _schema;
         protected BaseFileParser _parser;
-        protected PTB.Core.Files.PTBFile _file;
         protected IPTBLogger _logger;
 
-        public BaseFileRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file)
+        public BaseFileService(IPTBLogger logger, BaseFileParser parser, FolderSchema schema)
         {
             _logger = logger;
             _schema = schema;
             _parser = parser;
-            _file = file;
         }
 
         protected bool HasByteOrderMark(byte[] buffer) => buffer[0] == 239;
@@ -49,7 +48,7 @@ namespace PTB.Core.Files
 
         protected int GetFileLineCount(string path) => Convert.ToInt32(new System.IO.FileInfo(path).Length / (_schema.LineSize + Environment.NewLine.Length));
 
-        public BaseReadResponse Read(int index, int count)
+        public BaseReadResponse Read(BasePTBFile file, int index, int count)
         {
             var response = BaseReadResponse.Default;
 
@@ -58,7 +57,7 @@ namespace PTB.Core.Files
                 throw new Exception($"The start index {index} does not match the index of any line. It should be divisible by {_schema.LineSize}");
             }
 
-            using (var stream = new FileStream(_file.FullPath, FileMode.Open, System.IO.FileAccess.Read))
+            using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.Read))
             {
                 int byteIndex = index;
                 int bytesRead = 0;
@@ -87,7 +86,7 @@ namespace PTB.Core.Files
             return response;
         }
 
-        public BaseUpdateResponse Update(int index, PTBRow row)
+        public BaseUpdateResponse Update(BasePTBFile file, int index, PTBRow row)
         {
             var response = BaseUpdateResponse.Default;
 
@@ -107,7 +106,7 @@ namespace PTB.Core.Files
                 return response;
             }
 
-            using (var stream = new FileStream(_file.FullPath, FileMode.Open, System.IO.FileAccess.Write))
+            using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.Write))
             {
                 byte[] buffer = _encoding.GetBytes(parseResponse.Line);
                 SetBufferStartIndex(stream, index);
@@ -118,7 +117,7 @@ namespace PTB.Core.Files
             return response;
         }
 
-        public BaseAppendResponse Append(PTBRow row)
+        public BaseAppendResponse Append(BasePTBFile file, PTBRow row)
         {
             throw new NotImplementedException();
         }

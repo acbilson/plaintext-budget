@@ -2,7 +2,7 @@
 
 namespace PTB.Core.Logging
 {
-    public class PTBFileLogger
+    public class PTBFileLogger : IPTBLogger
     {
         private System.IO.FileInfo _loggingFile;
         private LoggingLevel _level;

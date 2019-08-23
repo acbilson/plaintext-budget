@@ -46,6 +46,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PTB.Core\PTB.Core.csproj" />
+    <ProjectReference Include="..\PTB.Files\PTB.Files.csproj" />
+    <ProjectReference Include="..\PTB.Reports\PTB.Reports.csproj" />
   </ItemGroup>
 
   <ItemGroup>

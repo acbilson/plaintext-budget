@@ -1,17 +1,55 @@
-﻿using PTB.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using PTB.Core;
 using PTB.Core.Base;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
-using PTB.Core.TitleRegex;
+using PTB.Files.FolderAccess;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
+using PTB.Files.Ledger;
+using PTB.Core.Files;
 
 namespace PTB.Console
 {
     public class Program
     {
+        private static void Main(string[] args)
+        {
+
+            string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
+            string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
+
+            var settingsText = File.ReadAllText(Path.Combine(baseDir, "settings.json"));
+            var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
+
+            var schemaText = File.ReadAllText(Path.Combine(baseDir, "schema.json"));
+            var schema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
+
+            var logger = new PTBFileLogger(settings.LoggingLevel, baseDir);
+
+            // manages all files that are not report files
+            //var fileFolderManager = new FileFolderManager(settings, schema, logger);
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IPTBLogger>(logger)
+                .AddSingleton<FileSchema>(schema)
+                .AddSingleton<LedgerSchema>(schema.Ledger)
+                .AddSingleton<PTBSettings>(settings)
+                .AddSingleton<FileFolderManager>()
+                .AddSingleton<LedgerFileParser>()
+                .AddSingleton<LedgerService>()
+            .BuildServiceProvider();
+
+            var fileFolderManager = serviceProvider.GetService<FileFolderManager>();
+            var fileFolders = fileFolderManager.GetFileFolders();
+            var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
+            var ledgerRepository = serviceProvider.GetService<LedgerService>();
+            var ledgers = ledgerRepository.Read(defaultLedgerFile, 0, 10);
+        }
+        /*
         private static PTBClient InitiateClient()
         {
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
@@ -87,5 +125,6 @@ namespace PTB.Console
                 }
             } while (exit == false);
         }
+        */
     }
 }

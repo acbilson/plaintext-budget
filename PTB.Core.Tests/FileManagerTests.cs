@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.FileAccess;
+using PTB.Core.FolderAccess;
 using PTB.Core.Logging;
 
 namespace PTB.Core.Tests
@@ -11,8 +11,6 @@ namespace PTB.Core.Tests
         public void InstantiatesWithCleanConfigs()
         {
             // Arrange
-            var fileManager = new BaseFileManager(Settings, Schema);
-            var logger = new PTBFileLogger(LoggingLevel.Debug, Settings.HomeDirectory);
         }
     }
 }

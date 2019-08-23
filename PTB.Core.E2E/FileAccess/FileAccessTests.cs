@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.PTBFileAccess;
+using PTB.Core.FileAccess;
 
 namespace PTB.Core.E2E
 {
@@ -12,11 +12,7 @@ namespace PTB.Core.E2E
         public void ReadsConfigsFromPath()
         {
             // Arrange - Act
-            var fileManager = new BaseFileManager(CleanSettings.HomeDirectory);
-
-            // Assert
-            Assert.IsNotNull(fileManager.Settings);
-            Assert.IsNotNull(fileManager.Schema);
+            var fileManager = new BaseFileManager(CleanSettings, Schema);
         }
 
         [TestMethod, Description("There are four files present in the Ledgers folder, but one does not match the ledger file mask")]

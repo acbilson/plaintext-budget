@@ -59,12 +59,12 @@ namespace PTB.Web.Controllers
 
         private void LogError(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FileController).Name);
+            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FolderController).Name);
             _logger.Log(logMessage);
         }
         private void Log(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FileController).Name);
+            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FolderController).Name);
             _logger.Log(logMessage);
         }
 

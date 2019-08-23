@@ -1,11 +1,13 @@
-﻿namespace PTB.Core.Base
+﻿using PTB.Core.FolderAccess;
+
+namespace PTB.Core.Base
 {
     public interface IPTBRepository
     {
-        BaseReadResponse Read(int index, int count);
+        BaseReadResponse Read(BasePTBFile file, int index, int count);
 
-        BaseUpdateResponse Update(int index, PTBRow row);
+        BaseUpdateResponse Update(BasePTBFile file, int index, PTBRow row);
 
-        BaseAppendResponse Append(PTBRow row);
+        BaseAppendResponse Append(BasePTBFile file, PTBRow row);
     }
 }

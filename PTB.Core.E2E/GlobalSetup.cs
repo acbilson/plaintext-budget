@@ -2,13 +2,15 @@ using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using PTB.Core.Ledger;
-using PTB.Core.Statements;
-using PTB.Core.TitleRegex;
+using PTB.Files.Ledger;
+using PTB.Files.Statements;
+using PTB.Files.TitleRegex;
 using System.Collections.Generic;
 using System.IO;
-using PTB.Core.Categories;
+using PTB.Files.Categories;
 using PTB.Core.Logging;
+using PTB.Core.FileAccess;
+using PTB.Core.Files;
 
 namespace PTB.Core.E2E
 {
@@ -20,7 +22,7 @@ namespace PTB.Core.E2E
         public PTBSchema Schema;
         public PTBClient Client;
         public PNCParser PNCParser;
-        public LedgerParser LedgerParser;
+        public BaseFileParser Parser;
         public BaseFileManager FileManager;
         public PTBFileLogger Logger;
 
@@ -43,7 +45,7 @@ namespace PTB.Core.E2E
         {
             var settings = new PTBSettings
             {
-                FileDelimiter = "_",
+                FileDelimiter = '_',
                 FileExtension = ".txt",
                 HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean",
                 LoggingLevel = LoggingLevel.Info
@@ -54,7 +56,7 @@ namespace PTB.Core.E2E
         {
             var settings = new PTBSettings
             {
-                FileDelimiter = "_",
+                FileDelimiter = '_',
                 FileExtension = ".txt",
                 HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty",
                 LoggingLevel = LoggingLevel.Info
