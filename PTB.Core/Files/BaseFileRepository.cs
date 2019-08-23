@@ -1,4 +1,5 @@
-﻿using PTB.Core.Base;
+﻿using PTB.Core.Files;
+using PTB.Core.Base;
 using PTB.Core.Exceptions;
 using PTB.Core.Logging;
 using System;
@@ -6,17 +7,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace PTB.Core
+namespace PTB.Core.Files
 {
     public class BaseFileRepository : IPTBRepository
     {
         protected Encoding _encoding = Encoding.ASCII;
         protected FolderSchema _schema;
-        protected BaseParser _parser;
-        protected BasePTBFile _file;
+        protected BaseFileParser _parser;
+        protected PTB.Core.Files.PTBFile _file;
         protected IPTBLogger _logger;
 
-        public BaseFileRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file)
+        public BaseFileRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file)
         {
             _logger = logger;
             _schema = schema;
@@ -58,7 +59,7 @@ namespace PTB.Core
                 throw new Exception($"The start index {index} does not match the index of any line. It should be divisible by {_schema.LineSize}");
             }
 
-            using (var stream = new FileStream(_file.FullPath, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(_file.FullPath, FileMode.Open, System.IO.FileAccess.Read))
             {
                 int byteIndex = index;
                 int bytesRead = 0;
@@ -107,7 +108,7 @@ namespace PTB.Core
                 return response;
             }
 
-            using (var stream = new FileStream(_file.FullPath, FileMode.Open, FileAccess.Write))
+            using (var stream = new FileStream(_file.FullPath, FileMode.Open, System.IO.FileAccess.Write))
             {
                 byte[] buffer = _encoding.GetBytes(parseResponse.Line);
                 SetBufferStartIndex(stream, index);

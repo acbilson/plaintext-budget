@@ -1,18 +1,19 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using PTB.Core.Base;
 
-namespace PTB.Core.Base
+namespace PTB.Core.Files
 {
     public class PTBFolder
     {
         public string DefaultFileName { get; set; }
         public string Name { get; set; }
-        public List<BasePTBFile> Files { get; set; }
+        public List<PTBFile> Files { get; set; }
 
-        public BasePTBFile GetDefault() => Files.First(file => file.FileName == DefaultFileName);
+        public PTBFile GetDefault() => Files.First(file => file.FileName == DefaultFileName);
     }
 
-    public class BasePTBFile
+    public class PTBFile
     {
         public string FullName { get; set; }
         public string FullPath { get; set; }
@@ -24,7 +25,7 @@ namespace PTB.Core.Base
         public string FileName => FullName.Substring(FirstDelimiterIndex, SecondDelimiterIndex);
 
         private char _delimiter;
-        public BasePTBFile(char fileDelimiter)
+        public PTBFile(char fileDelimiter)
         {
             _delimiter = fileDelimiter;
 

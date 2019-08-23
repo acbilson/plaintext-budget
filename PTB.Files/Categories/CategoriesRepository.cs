@@ -5,12 +5,13 @@ using System.Text;
 using PTB.Core.Exceptions;
 using PTB.Core.Logging;
 using PTB.Core.Base;
+using PTB.Core.Files;
 
-namespace PTB.Core.Categories
+namespace PTB.Files.Categories
 {
     public class CategoriesRepository : BaseFileRepository
     {
-        public CategoriesRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
+        public CategoriesRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
         {
             _logger.SetContext(nameof(CategoriesRepository));
         }

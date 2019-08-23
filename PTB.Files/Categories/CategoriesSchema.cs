@@ -1,7 +1,7 @@
 ﻿using PTB.Core.Base;
 using System.Linq;
 
-namespace PTB.Core.Categories
+namespace PTB.Files.Categories
 {
     public class CategoriesSchema : FolderSchema
     {

@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using PTB.Core.Base;
+using PTB.Core.Files;
 
-namespace PTB.Core.Base
+namespace PTB.Core.FileAccess
 {
 
     public class BaseFileManager
     {
         public PTBSettings Settings;
-        public PTBSchema Schema;
+        public FolderSchema Schema;
 
         public BaseFileManager(string baseDirectory)
         {
             GetConfigurationFromPath(baseDirectory);
         }
 
-        public BaseFileManager(PTBSettings settings, PTBSchema schema)
+        public BaseFileManager(PTBSettings settings, FolderSchema schema)
         {
             Settings = settings;
             Schema = schema;
@@ -29,7 +31,7 @@ namespace PTB.Core.Base
             Settings = JsonConvert.DeserializeObject<PTBSettings>(System.IO.File.ReadAllText(settingsPath));
 
             string schemaPath = System.IO.Path.Combine(baseDirectory, "schema.json");
-            Schema = JsonConvert.DeserializeObject<PTBSchema>(System.IO.File.ReadAllText(schemaPath));
+            Schema = JsonConvert.DeserializeObject<FolderSchema>(System.IO.File.ReadAllText(schemaPath));
         }
 
         private bool IsMaskMatch(string path, string fileMask) {
@@ -38,11 +40,11 @@ namespace PTB.Core.Base
 
         }
 
-        private List<BasePTBFile> GetFiles(string folder, string fileName, string fileMask)
+        private List<PTBFile> GetFiles(string folder, string fileName, string fileMask)
         {
             var files = Directory.GetFiles(Path.Combine(Settings.HomeDirectory, folder))
                 .Where(path => IsMaskMatch(path, fileMask))
-                .Select(path => new BasePTBFile(Settings.FileDelimiter) {
+                .Select(path => new PTBFile(Settings.FileDelimiter) {
                     FullPath = new FileInfo(path).FullName
                 }).ToList();
             return files;
@@ -59,20 +61,6 @@ namespace PTB.Core.Base
              List<string> filePaths = Directory.GetFiles(Path.Combine(Settings.HomeDirectory, "Import"), "*.csv")
                 .Select(path => new FileInfo(path).FullName).ToList();
             return filePaths;
-        }
-
-        public List<BasePTBFile> GetLedgerFiles()
-        {
-            return GetFiles(Schema.Ledger.Folder, Schema.Ledger.DefaultFileName, Schema.Ledger.FileMask);
-        }
-        public List<BasePTBFile> GetCategoriesFiles()
-        {
-            return GetFiles(Schema.Categories.Folder, Schema.Categories.DefaultFileName, Schema.Categories.FileMask);
-        }
-
-        public string GetTitleRegexFilePath()
-        {
-            return GetFile(Schema.TitleRegex.Folder, Schema.TitleRegex.DefaultFileName);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using PTB.Core.Base;
-using PTB.Core.Ledger;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using PTB.Core.Statements;
+using PTB.Core;
 
-namespace PTB.Core.Statements
+namespace PTB.Files.Statements
 {
     public class PNCParser : IStatementParser
     {

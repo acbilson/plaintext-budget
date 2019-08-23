@@ -8,12 +8,13 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using PTB.Core.Logging;
+using PTB.Core.Files;
 
-namespace PTB.Core.Ledger
+namespace PTB.Files.Ledger
 {
     public class LedgerRepository : BaseFileRepository
     {
-        public LedgerRepository(IPTBLogger logger, BaseParser parser, Base.FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
+        public LedgerRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
         {
             _logger.SetContext(nameof(LedgerRepository));
         }
@@ -76,7 +77,7 @@ namespace PTB.Core.Ledger
 
         public void CategorizeDefaultLedger()
         {
-            using (var stream = new FileStream(_file.FullName, FileMode.Open, FileAccess.ReadWrite))
+            using (var stream = new FileStream(_file.FullName, FileMode.Open, System.IO.FileAccess.ReadWrite))
             {
                 int bufferLength = _schema.LineSize + Environment.NewLine.Length;
                 int lineIndex = _schema.LineSize - 1;

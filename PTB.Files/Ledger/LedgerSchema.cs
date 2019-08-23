@@ -1,9 +1,9 @@
 ﻿using PTB.Core.Base;
 using System.Linq;
 
-namespace PTB.Core.Ledger
+namespace PTB.Files.Ledger
 {
-    public class LedgerSchema : Base.FolderSchema
+    public class LedgerSchema : FolderSchema
     {
         public string FileMask { get; set; }
     }

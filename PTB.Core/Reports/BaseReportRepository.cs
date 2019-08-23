@@ -1,18 +1,18 @@
-﻿using PTB.Core.Logging;
+﻿using PTB.Core.Base;
+using PTB.Core.Files;
+using PTB.Core.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PTB.Core.Base
+namespace PTB.Core.Reports
 {
     public class BaseReportRepository : IPTBRepository
     {
         protected IPTBLogger _logger;
-        protected BaseParser _parser;
+        protected BaseReportParser _parser;
         protected FolderSchema _schema;
-        protected BasePTBFile _file;
+        protected PTBFile _file;
 
-        public BaseReportRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file)
+        public BaseReportRepository(IPTBLogger logger, BaseReportParser parser, FolderSchema schema, PTBFile file)
         {
             _logger = logger;
             _schema = schema;

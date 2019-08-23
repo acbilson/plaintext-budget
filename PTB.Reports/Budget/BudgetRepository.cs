@@ -1,16 +1,17 @@
-﻿using PTB.Core.Categories;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
 using PTB.Core.Logging;
 using PTB.Core.Base;
+using PTB.Core.Reports;
+using PTB.Core.Files;
 
 namespace PTB.Core.Budget
 {
     public class BudgetRepository : BaseReportRepository
     {
-        public BudgetRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
+        public BudgetRepository(IPTBLogger logger, BaseReportParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
         {
             _logger.SetContext(nameof(BudgetRepository));
         }

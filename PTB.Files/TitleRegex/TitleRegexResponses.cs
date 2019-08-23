@@ -1,7 +1,7 @@
 ﻿using PTB.Core.Base;
 using System.Collections.Generic;
 
-namespace PTB.Core.TitleRegex
+namespace PTB.Files.TitleRegex
 {
     public class TitleRegexReadResponse : BaseReadResponse
     {

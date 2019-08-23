@@ -1,14 +1,15 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using PTB.Core.Base;
 
-namespace PTB.Core.Base
+namespace PTB.Core.Files
 {
-    public class BaseParser
+    public class BaseFileParser
     {
         private FolderSchema _schema;
 
-        public BaseParser(FolderSchema schema)
+        public BaseFileParser(FolderSchema schema)
         {
             _schema = schema;
         }

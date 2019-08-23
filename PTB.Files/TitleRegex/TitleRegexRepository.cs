@@ -1,15 +1,16 @@
 ﻿using PTB.Core.Base;
 using PTB.Core.Exceptions;
+using PTB.Core.Files;
 using PTB.Core.Logging;
 using System;
 using System.IO;
 using System.Text;
 
-namespace PTB.Core.TitleRegex
+namespace PTB.Files.TitleRegex
 {
     public class TitleRegexRepository : BaseFileRepository
     {
-        public TitleRegexRepository(IPTBLogger logger, BaseParser parser, FolderSchema schema, BasePTBFile file) : base(logger, parser, schema, file)
+        public TitleRegexRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema, PTBFile file) : base(logger, parser, schema, file)
         {
             _logger.SetContext(nameof(TitleRegexRepository));
         }
