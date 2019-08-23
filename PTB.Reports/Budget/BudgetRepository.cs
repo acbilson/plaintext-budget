@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System;
-using System.IO;
-using System.Linq;
-using PTB.Core.Logging;
-using PTB.Core.Base;
-using PTB.Core.Reports;
+﻿using PTB.Core.Base;
 using PTB.Core.Files;
+using PTB.Core.Logging;
+using PTB.Core.Reports;
 
 namespace PTB.Core.Budget
 {
@@ -15,6 +11,7 @@ namespace PTB.Core.Budget
         {
             _logger.SetContext(nameof(BudgetRepository));
         }
+
         /*
 
         public string GetBudgetName()
@@ -38,7 +35,7 @@ namespace PTB.Core.Budget
             return emptyAmount + appendedZeros;
         }
         public string GetSubcategoryString(string subcategory) => string.Concat(GetEmptyAmount(), _schema.Categories.Delimiter, subcategory);
-    
+
         public void CreateBudget(List<Categories.Categories> categories)
         {
             string budgetName = GetBudgetName();
@@ -60,7 +57,6 @@ namespace PTB.Core.Budget
             {
                 foreach (var group in groupedCategories)
                 {
-
                     writer.WriteLine(GetCategoryString(group.Category));
 
                     foreach (var subcategory in group.Subcategories)

@@ -1,6 +1,4 @@
-﻿using PTB.Core.Base;
-
-namespace PTB.Core.Statements
+﻿namespace PTB.Core.Statements
 {
     public interface IStatementParser
     {

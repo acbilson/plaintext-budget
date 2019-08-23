@@ -2,19 +2,6 @@
 
 namespace PTB.Core.Logging
 {
-    public interface IPTBLogger
-    {
-        void Log(LogMessage logMessage);
-        void LogInfo(string message);
-        void LogDebug(string message);
-        void LogWarning(string message);
-        void LogError(string message);
-        void LogError(Exception exception);
-
-        void SetContext(string context);
-        void SetLevel(LoggingLevel level);
-    }
-
     public class PTBFileLogger
     {
         private System.IO.FileInfo _loggingFile;
@@ -30,16 +17,17 @@ namespace PTB.Core.Logging
 
         public void Log(LogMessage logMessage)
         {
-          string message = "";
-          switch (logMessage.Level) {
-            case LoggingLevel.Info: { message = $"INFO-{logMessage.Context} - {logMessage.Message}"; break; }
-            case LoggingLevel.Debug: { message = $"DBUG-{logMessage.Context} - {logMessage.Message}"; break; }
-            case LoggingLevel.Warning: { message = $"WARN-{logMessage.Context} - {logMessage.Message}"; break; }
-            case LoggingLevel.Error: { message = $"ERR-{logMessage.Context} - {logMessage.Message}"; break; }
+            string message = "";
+            switch (logMessage.Level)
+            {
+                case LoggingLevel.Info: { message = $"INFO-{logMessage.Context} - {logMessage.Message}"; break; }
+                case LoggingLevel.Debug: { message = $"DBUG-{logMessage.Context} - {logMessage.Message}"; break; }
+                case LoggingLevel.Warning: { message = $"WARN-{logMessage.Context} - {logMessage.Message}"; break; }
+                case LoggingLevel.Error: { message = $"ERR-{logMessage.Context} - {logMessage.Message}"; break; }
             }
 
-          this.Log(message);
-          }
+            this.Log(message);
+        }
 
         private void Log(string message)
         {
@@ -58,7 +46,6 @@ namespace PTB.Core.Logging
         {
             _level = level;
         }
-
 
         public void LogInfo(string message)
         {
@@ -99,13 +86,5 @@ namespace PTB.Core.Logging
                 Log($"ERR-{_context}: Message: {exception.ToString()}");
             }
         }
-    }
-
-    public enum LoggingLevel
-    {
-        Info = 0,
-        Debug = 1,
-        Warning = 2,
-        Error = 3
     }
 }

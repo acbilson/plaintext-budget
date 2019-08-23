@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using PTB.Core.Base;
+using System.Linq;
 using System.Text;
-using PTB.Core.Base;
 
 namespace PTB.Core.Files
 {

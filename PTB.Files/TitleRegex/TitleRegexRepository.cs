@@ -1,10 +1,6 @@
 ﻿using PTB.Core.Base;
-using PTB.Core.Exceptions;
 using PTB.Core.Files;
 using PTB.Core.Logging;
-using System;
-using System.IO;
-using System.Text;
 
 namespace PTB.Files.TitleRegex
 {

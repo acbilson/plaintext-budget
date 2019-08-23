@@ -6,6 +6,7 @@ namespace PTB.Core.TitleRegex.Tests
     [TestClass]
     public class TitleRegexParserTests : GlobalSetup
     {
+        /*
 
         [DataRow("1                         Coffee            BROTHERSK                     Brothers K", '1', "Coffee", "BROTHERSK", "Brothers K")]
         [DataRow("1                         Coffee            STARBUCKS                      Starbucks", '1', "Coffee", "STARBUCKS", "Starbucks")]
@@ -16,7 +17,7 @@ namespace PTB.Core.TitleRegex.Tests
         {
             // Arrange
             line += System.Environment.NewLine;
-            var parser = new TitleRegexParser(Schema.TitleRegex);
+            var parser = new TitleRegexParser(Schema);
 
             // Act
             var response = parser.ParseLine(line);
@@ -59,5 +60,6 @@ namespace PTB.Core.TitleRegex.Tests
             Assert.IsFalse(response.Success);
             Assert.AreEqual("Line length does not match schema, which may indicate data corruption.", response.Message);
         }
+        */
     }
 }

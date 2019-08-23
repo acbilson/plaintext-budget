@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.FileAccess;
 using PTB.Core.Logging;
 
 namespace PTB.Core.Tests
@@ -12,16 +13,6 @@ namespace PTB.Core.Tests
             // Arrange
             var fileManager = new BaseFileManager(Settings, Schema);
             var logger = new PTBFileLogger(LoggingLevel.Debug, Settings.HomeDirectory);
-            var client = PTBClient.Instance;
-
-            // Act
-            client.Instantiate(fileManager, logger);
-
-            //Assert
-            Assert.IsNotNull(client.Ledger);
-            Assert.IsNotNull(client.Regex);
-            Assert.IsNotNull(client.Budget);
-            Assert.IsNotNull(client.Categories);
         }
     }
 }

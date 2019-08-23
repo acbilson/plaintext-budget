@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using PTB.Core.Base;
-
-namespace PTB.Core
+﻿namespace PTB.Core
 {
     public class PTBClient
     {

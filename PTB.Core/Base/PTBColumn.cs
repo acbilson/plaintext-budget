@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PTB.Core.Base
+﻿namespace PTB.Core.Base
 {
-    public class PTBRow
-    {
-        public List<PTBColumn> Columns { get; set; }
-    }
-
     public class PTBColumn : ColumnSchema
     {
         public PTBColumn() { }
@@ -22,7 +13,9 @@ namespace PTB.Core.Base
         }
 
         private string _columnValue;
-        public string ColumnValue {
+
+        public string ColumnValue
+        {
             get { return _columnValue; }
             set { _columnValue = new string(' ', Size - value.Trim().Length) + value; }
         }

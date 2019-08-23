@@ -1,12 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.Base;
 using Newtonsoft.Json;
+using PTB.Files.Ledger;
 
 namespace PTB.Core.Tests
 {
     [TestClass]
     public class GlobalSetup
     {
+        public LedgerSchema LedgerSchema;
         public FolderSchema Schema;
         public PTBSettings Settings;
 
@@ -14,6 +16,7 @@ namespace PTB.Core.Tests
         public void Initialize()
         {
             Schema = GetDefaultSchema();
+            LedgerSchema = GetLedgerSchema();
             Settings = GetDefaultSettings();
         }
 
@@ -26,6 +29,11 @@ namespace PTB.Core.Tests
                 HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1"
 
             };
+        }
+
+        public LedgerSchema GetLedgerSchema()
+        {
+            return new LedgerSchema();
         }
 
         public FolderSchema GetDefaultSchema()

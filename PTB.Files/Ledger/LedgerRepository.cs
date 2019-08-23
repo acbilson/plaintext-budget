@@ -1,14 +1,12 @@
-﻿using System.Linq;
-using PTB.Core.Base;
+﻿using PTB.Core.Base;
 using PTB.Core.Exceptions;
-using PTB.Core.Statements;
+using PTB.Core.Files;
+using PTB.Core.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using System.Text.RegularExpressions;
-using PTB.Core.Logging;
-using PTB.Core.Files;
 
 namespace PTB.Files.Ledger
 {
@@ -62,9 +60,11 @@ namespace PTB.Files.Ledger
         {
             return row.Columns.First(column => column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase))?.ColumnValue;
         }
+
         public PTBRow SetColumnValueByName(string name, string value, PTBRow row)
         {
-            row.Columns.ForEach(column => {
+            row.Columns.ForEach(column =>
+            {
                 if (column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     column.ColumnValue = value;

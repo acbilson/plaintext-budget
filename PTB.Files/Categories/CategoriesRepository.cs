@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using PTB.Core.Exceptions;
-using PTB.Core.Logging;
-using PTB.Core.Base;
+﻿using PTB.Core.Base;
 using PTB.Core.Files;
+using PTB.Core.Logging;
 
 namespace PTB.Files.Categories
 {

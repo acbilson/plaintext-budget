@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.Tests;
+using PTB.Files.Statements;
 
 namespace PTB.Core.Statements.Tests
 {
@@ -20,14 +21,14 @@ namespace PTB.Core.Statements.Tests
         public void ParseCleanData(string data, string date, string amount, string title, string subject, char type)
         {
             // Arrange
-            var parser = new PNCParser();
+            var parser = new PNCParser(Schema);
 
             // Act
-            StatementParseResponse response = parser.ParseLine(data, Schema.Ledger);
+            StatementParseResponse response = parser.ParseLine(data);
 
             // Assert
             Assert.IsTrue(response.Success);
-            Assert.AreEqual(Schema.Ledger.LineSize, response.Result.Length);
+            Assert.AreEqual(Schema.LineSize, response.Result.Length);
         }
 
         [DataRow("00000000004604718986,2019/06/18,2019/07/16,7320.66,7763.23")]
@@ -35,10 +36,10 @@ namespace PTB.Core.Statements.Tests
         public void SkipsSummaryColumn(string data)
         {
             // Arrange
-            var parser = new PNCParser();
+            var parser = new PNCParser(Schema);
 
             // Act
-            StatementParseResponse response = parser.ParseLine(data, Schema.Ledger);
+            StatementParseResponse response = parser.ParseLine(data);
 
             // Assert
             Assert.IsFalse(response.Success);

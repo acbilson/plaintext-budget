@@ -1,10 +1,10 @@
-﻿using System.Linq;
+﻿using PTB.Core;
 using PTB.Core.Base;
+using PTB.Core.Statements;
 using System;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using PTB.Core.Statements;
-using PTB.Core;
 
 namespace PTB.Files.Statements
 {
