@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.FolderAccess;
+using PTB.Files.FolderAccess;
 
 namespace PTB.Core.E2E
 {
@@ -11,10 +13,10 @@ namespace PTB.Core.E2E
         public void GetsAllFiles()
         {
             // Arrange
-            WithAFileFolderService();
+            var fileFolderService = Provider.GetService<FileFolderService>();
 
             // Act
-            var fileFolders = FileFolderService.GetFileFolders();
+            var fileFolders = fileFolderService.GetFileFolders();
 
             // Assert - Gets correct file count
             Assert.AreEqual(3, fileFolders.LedgerFolder.Files.Count, $"Should have retrieved 3 ledger files, but retrieved {fileFolders.LedgerFolder.Files.Count}");

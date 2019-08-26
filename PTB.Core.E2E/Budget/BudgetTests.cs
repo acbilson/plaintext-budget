@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,6 @@ namespace PTB.Core.E2E
         public void GeneratesBudget()
         {
             // Arrange
-            WithACategoriesService();
             var categories = WithAllCategories();
 
             // Act

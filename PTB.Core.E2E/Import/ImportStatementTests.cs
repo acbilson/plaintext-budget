@@ -11,8 +11,6 @@ namespace PTB.Core.E2E
         public void ImportsEntireStatement()
         {
             // Arrange
-            WithAPNCParser();
-            WithALedgerService();
 
             // Act
             WhenACleanStatementIsImported();
@@ -25,8 +23,6 @@ namespace PTB.Core.E2E
         public void ImportsParsableStatement()
         {
             // Arrange
-            WithAPNCParser();
-            WithALedgerService();
 
             // Act
             WhenACleanStatementIsImported();

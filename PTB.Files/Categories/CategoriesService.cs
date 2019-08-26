@@ -7,7 +7,7 @@ namespace PTB.Files.Categories
 {
     public class CategoriesService : BaseFileService
     {
-        public CategoriesService(IPTBLogger logger, CategoriesFileParser parser, FolderSchema schema) : base(logger, parser, schema)
+        public CategoriesService(IPTBLogger logger, CategoriesFileParser parser, CategoriesSchema schema) : base(logger, parser, schema)
         {
             _logger.SetContext(nameof(CategoriesService));
         }

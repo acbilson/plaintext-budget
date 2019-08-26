@@ -1,6 +1,7 @@
 ﻿using PTB.Core;
 using PTB.Core.Base;
 using PTB.Core.Statements;
+using PTB.Files.Ledger;
 using System;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace PTB.Files.Statements
         private const char DELIMITER = ',';
         private FolderSchema _schema;
 
-        public PNCParser(FolderSchema schema)
+        public PNCParser(LedgerSchema schema)
         {
             _schema = schema;
         }

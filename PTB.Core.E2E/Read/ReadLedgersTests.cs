@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Files.Ledger;
 
 namespace PTB.Core.E2E
 {
@@ -9,11 +11,11 @@ namespace PTB.Core.E2E
         public void ReadAllLedgerEntries()
         {
             // Arrange
-            WithALedgerService();
+            var ledgerService = Provider.GetService<LedgerService>();
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
 
             // Act
-            var response = LedgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
+            var response = ledgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
 
             // Assert
             Assert.AreEqual(30, response.ReadResult.Count);
@@ -25,11 +27,11 @@ namespace PTB.Core.E2E
             // Arrange
             int startIndex = 0;
             int ledgersToRead = 5;
-            WithALedgerService();
+            var ledgerService = Provider.GetService<LedgerService>();
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
 
             // Act
-            var response = LedgerService.Read(defaultLedgerFile, startIndex, ledgersToRead);
+            var response = ledgerService.Read(defaultLedgerFile, startIndex, ledgersToRead);
 
             // Assert
             Assert.AreEqual(ledgersToRead, response.ReadResult.Count);

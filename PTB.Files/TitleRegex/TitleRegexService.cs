@@ -7,7 +7,7 @@ namespace PTB.Files.TitleRegex
 {
     public class TitleRegexService : BaseFileService
     {
-        public TitleRegexService(IPTBLogger logger, TitleRegexFileParser parser, FolderSchema schema) : base(logger, parser, schema)
+        public TitleRegexService(IPTBLogger logger, TitleRegexFileParser parser, TitleRegexSchema schema) : base(logger, parser, schema)
         {
             _logger.SetContext(nameof(TitleRegexService));
         }

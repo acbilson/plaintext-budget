@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.Base;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,6 @@ namespace PTB.Core.E2E
         public void CategorizesCorrectLedgerEntries()
         {
             // Arrange
-            WithALedgerService();
-            WithACategoriesService();
-            WithATitleRegexService();
 
             // Act
             WhenALedgerIsCategorized();

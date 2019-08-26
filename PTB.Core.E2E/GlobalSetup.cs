@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,6 +13,7 @@ using PTB.Core.Logging;
 using PTB.Core.Files;
 using PTB.Files.FolderAccess;
 using PTB.Core.Base;
+using PTB.Core.Statements;
 
 namespace PTB.Core.E2E
 {
@@ -22,17 +24,10 @@ namespace PTB.Core.E2E
         public PTBSettings DirtySettings;
         public FileSchema Schema;
         public PTBFileLogger Logger;
-        public PNCParser PNCParser;
-        public LedgerFileParser LedgerFileParser;
-        public CategoriesFileParser CategoriesFileParser;
-        public TitleRegexFileParser TitleRegexFileParser;
-        public FileFolderService FileFolderService;
-        public LedgerService LedgerService;
-        public CategoriesService CategoriesService;
-        public TitleRegexService TitleRegexService;
 
         public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
         public FileFolders FileFolders;
+        public ServiceProvider Provider;
 
         [TestInitialize] 
         public void GlobalInitialize()
@@ -41,12 +36,12 @@ namespace PTB.Core.E2E
             GetDirtySettings();
             GetDefaultSchema();
             WithALogger();
+            WithAServiceCollection();
 
             // copies a fresh ledger each time since many e2e tests write to it
             CopyLedger();
 
             // reads all files
-            WithAFileFolderService();
             WithFileFolders();
         }
 
@@ -91,17 +86,39 @@ namespace PTB.Core.E2E
 
         public void WithFileFolders()
         {
-            FileFolders = FileFolderService.GetFileFolders();
+            var fileFolderService = Provider.GetService<FileFolderService>();
+            FileFolders = fileFolderService.GetFileFolders();
         }
 
         #endregion Initialize
 
         #region Arrange - With
 
-        public void WithAFileFolderService()
+        public void WithAServiceCollection()
         {
-            var fileFolderService = new FileFolderService(CleanSettings, Schema, Logger);
-            FileFolderService = fileFolderService;
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IPTBLogger>(Logger)
+
+                .AddSingleton<PTBSettings>(CleanSettings)
+
+                .AddSingleton<FileSchema>(Schema)
+                .AddSingleton<LedgerSchema>(Schema.Ledger)
+                .AddSingleton<CategoriesSchema>(Schema.Categories)
+                .AddSingleton<TitleRegexSchema>(Schema.TitleRegex)
+
+                .AddSingleton<IStatementParser, PNCParser>()
+                .AddSingleton<LedgerFileParser>()
+                .AddSingleton<CategoriesFileParser>()
+                .AddSingleton<TitleRegexFileParser>()
+
+                .AddScoped<FileFolderService>()
+
+                .AddScoped<LedgerService>()
+                .AddScoped<CategoriesService>()
+                .AddScoped<TitleRegexService>()
+            .BuildServiceProvider();
+
+           Provider = serviceProvider;
         }
 
         public void WithALogger()
@@ -110,59 +127,15 @@ namespace PTB.Core.E2E
             Logger = logger;
         }
 
-        public void WithAPNCParser()
-        {
-            var parser = new PNCParser(Schema.Ledger);
-            PNCParser = parser;
-        }
-
-        public void WithALedgerFileParser()
-        {
-            var parser = new LedgerFileParser(Schema.Ledger, Logger);
-            LedgerFileParser = parser;
-        }
-        public void WithACategoriesFileParser()
-        {
-            var parser = new CategoriesFileParser(Schema.Categories, Logger);
-            CategoriesFileParser = parser;
-        }
-
-        public void WithATitleRegexFileParser()
-        {
-            var parser = new TitleRegexFileParser(Schema.TitleRegex, Logger);
-            TitleRegexFileParser = parser;
-        }
-
-
-        public void WithALedgerService()
-        {
-            WithALedgerFileParser();
-            var service = new LedgerService(Logger, LedgerFileParser, Schema.Ledger);
-            LedgerService = service;
-        }
-
-        public void WithACategoriesService()
-        {
-            WithACategoriesFileParser();
-            var service = new CategoriesService(Logger, CategoriesFileParser, Schema.Categories);
-            CategoriesService = service;
-        }
-
-        public void WithATitleRegexService()
-        {
-            WithATitleRegexFileParser();
-            var service = new TitleRegexService(Logger, TitleRegexFileParser, Schema.TitleRegex);
-            TitleRegexService = service;
-        }
-
         #endregion Arrange - With
 
         #region Act - When
 
         public void WhenAllFileFoldersHaveBeenRetrieved()
         {
-            var fileFolders = FileFolderService.GetFileFolders();
-            FileFolders = FileFolders;
+            var fileFolderService = Provider.GetService<FileFolderService>();
+            var fileFolders = fileFolderService.GetFileFolders();
+            FileFolders = fileFolders;
         }
 
         public void WhenACleanStatementIsImported()
@@ -170,22 +143,27 @@ namespace PTB.Core.E2E
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Statements\datafile.csv");
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
 
-            LedgerService.Import(defaultLedgerFile, path, PNCParser);
+            var statementParser = Provider.GetService<IStatementParser>();
+            var ledgerService = Provider.GetService<LedgerService>();
+            ledgerService.Import(defaultLedgerFile, path, statementParser);
         }
 
         public void WhenALedgerIsCategorized()
         {
             var defaultTitleRegexFile = FileFolders.TitleRegexFolder.GetDefaultFile();
-            BaseReadResponse response = TitleRegexService.Read(defaultTitleRegexFile);
+            var titleRegexService = Provider.GetService<TitleRegexService>();
+            BaseReadResponse response = titleRegexService.Read(defaultTitleRegexFile);
 
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
-            LedgerService.Categorize(defaultLedgerFile, response.ReadResult);
+            var ledgerService = Provider.GetService<LedgerService>();
+            ledgerService.Categorize(defaultLedgerFile, response.ReadResult);
         }
 
         public BaseUpdateResponse WhenALedgerIsUpdated(int index, PTBRow ledgerToUpdate)
         {
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
-            var response = LedgerService.Update(defaultLedgerFile, index, ledgerToUpdate);
+            var ledgerService = Provider.GetService<LedgerService>();
+            var response = ledgerService.Update(defaultLedgerFile, index, ledgerToUpdate);
             return response;
         }
 
@@ -195,10 +173,11 @@ namespace PTB.Core.E2E
 
         public PTBRow WithTheFirstParsedLedger()
         {
+            var ledgerFileParser = Provider.GetService<LedgerFileParser>();
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             string firstLine = ledgerEntries.Substring(0, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
-            var response = LedgerFileParser.ParseLine(firstLine, 0);
+            var response = ledgerFileParser.ParseLine(firstLine, 0);
             return response.Row;
         }
 
@@ -211,14 +190,16 @@ namespace PTB.Core.E2E
         public List<PTBRow> WithAllLedgerEntries()
         {
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
-            var response = LedgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
+            var ledgerService = Provider.GetService<LedgerService>();
+            var response = ledgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
             return response.ReadResult;
         }
 
         public List<PTBRow> WithAllCategories()
         {
             var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
-            var categories = CategoriesService.Read(defaultCategoriesFile);
+            var categoriesService = Provider.GetService<CategoriesService>();
+            var categories = categoriesService.Read(defaultCategoriesFile);
             return categories.ReadResult;
         }
 
@@ -305,11 +286,12 @@ namespace PTB.Core.E2E
 
         private PTBRow GetLedgerOnLine(int lineNumber)
         {
+            var ledgerFileParser = Provider.GetService<LedgerFileParser>();
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             int ledgerIndex = CalculateLedgerIndex(lineNumber);
             string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
-            var response = LedgerFileParser.ParseLine(line, ledgerIndex);
+            var response = ledgerFileParser.ParseLine(line, ledgerIndex);
 
             Assert.IsTrue(response.Success, $"Failed to parse ledger with message {response.Message}");
             return response.Row;

@@ -11,8 +11,6 @@ namespace PTB.Core.E2E
         public void ShouldUpdateFourthLedgerEntry()
         {
             // Arrange
-            WithALedgerFileParser();
-            WithALedgerService();
             var ledgerToUpdate = WithTheFourthLedger();
             string newSubcategory = "TestCategory";
             ledgerToUpdate["subcategory"] = new String(' ', Schema.Ledger["subcategory"].Size - newSubcategory.Length) + newSubcategory;

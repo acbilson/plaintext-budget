@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -7,6 +8,9 @@ using System.Collections.Generic;
 using System.IO;
 using PTB.Core.E2E;
 using PTB.Core.Base;
+using PTB.Files.Ledger;
+using PTB.Files.Categories;
+using PTB.Files.TitleRegex;
 
 namespace PTB.Core.PTBSystem
 {
@@ -17,10 +21,9 @@ namespace PTB.Core.PTBSystem
         public void FullSystemTest()
         {
             // Arrange
-            WithAPNCParser();
-            WithALedgerService();
-            WithACategoriesService();
-            WithATitleRegexService();
+            var ledgerService = Provider.GetService<LedgerService>();
+            var categoriesService = Provider.GetService<CategoriesService>();
+            var titleRegexService = Provider.GetService<TitleRegexService>();
 
             // Act - Import
             WhenACleanStatementIsImported();
@@ -39,8 +42,8 @@ namespace PTB.Core.PTBSystem
             // Act - Read
             var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
             var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
-            var categoriesResponse = CategoriesService.Read(defaultCategoriesFile, 0, defaultCategoriesFile.LineCount);
-            var ledgerResponse = LedgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
+            var categoriesResponse = categoriesService.Read(defaultCategoriesFile, 0, defaultCategoriesFile.LineCount);
+            var ledgerResponse = ledgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
 
             // Assert - Read
             //ShouldNotHaveAnySkippedCategories(categoriesResponse);
