@@ -64,6 +64,8 @@ namespace PTB.Core.Files
                 response.Row.Columns.Add(column);
             }
 
+            response.Row.Index = index;
+
             return response;
         }
     }

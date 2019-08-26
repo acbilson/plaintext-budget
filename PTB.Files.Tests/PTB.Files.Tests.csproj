@@ -18,4 +18,8 @@
     <ProjectReference Include="..\PTB.Files\PTB.Files.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FolderAccess\" />
+  </ItemGroup>
+
 </Project>

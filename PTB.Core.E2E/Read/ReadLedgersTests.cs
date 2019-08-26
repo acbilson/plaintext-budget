@@ -9,13 +9,14 @@ namespace PTB.Core.E2E
         public void ReadAllLedgerEntries()
         {
             // Arrange
-            WithAFileClient();
+            WithALedgerService();
+            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
 
             // Act
-            var response = Client.Ledger.ReadDefaultLedgerEntries(0, 10000);
+            var response = LedgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
 
             // Assert
-            Assert.AreEqual(30, response.Result.Count);
+            Assert.AreEqual(30, response.ReadResult.Count);
         }
 
         [TestMethod]
@@ -24,13 +25,14 @@ namespace PTB.Core.E2E
             // Arrange
             int startIndex = 0;
             int ledgersToRead = 5;
-            WithAFileClient();
+            WithALedgerService();
+            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
 
             // Act
-            var response = Client.Ledger.ReadDefaultLedgerEntries(startIndex, ledgersToRead);
+            var response = LedgerService.Read(defaultLedgerFile, startIndex, ledgersToRead);
 
             // Assert
-            Assert.AreEqual(ledgersToRead, response.Result.Count);
+            Assert.AreEqual(ledgersToRead, response.ReadResult.Count);
         }
     }
 }

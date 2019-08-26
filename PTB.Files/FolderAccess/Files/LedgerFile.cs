@@ -19,11 +19,10 @@ namespace PTB.Files.FolderAccess
 
         public LedgerFile(char fileDelimiter, int lineSize, System.IO.FileInfo file): base(fileDelimiter, lineSize, file)
         {
-            string fileName = System.IO.Path.GetFileNameWithoutExtension(file.Name);
-            string[] fileParts = fileName.Split(fileDelimiter);
+            string[] fileParts = GetFileNameParts(file.Name);
             LedgerName = fileParts[1];
-            StartDate = DateTime.ParseExact(fileParts[2], "yy-MM-dd", CultureInfo.InvariantCulture);
-            EndDate = DateTime.ParseExact(fileParts[3], "yy-MM-dd", CultureInfo.InvariantCulture);
+            StartDate = ParseDate(fileParts[2]);
+            StartDate = ParseDate(fileParts[3]);
         }
     }
 }

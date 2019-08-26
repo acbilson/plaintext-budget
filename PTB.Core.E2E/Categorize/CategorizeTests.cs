@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.Base;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,11 +12,13 @@ namespace PTB.Core.E2E
         public void CategorizesCorrectLedgerEntries()
         {
             // Arrange
-            WithAFileClient();
+            WithALedgerService();
+            WithACategoriesService();
+            WithATitleRegexService();
 
             // Act
             WhenALedgerIsCategorized();
-            List<Ledger.Ledger> ledgerEntries = WithAllLedgerEntries();
+            List<PTBRow> ledgerEntries = WithAllLedgerEntries();
 
             // Assert
             ShouldHaveCategorizedAtLeastOneLedger(ledgerEntries);

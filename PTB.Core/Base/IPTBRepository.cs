@@ -2,7 +2,7 @@
 
 namespace PTB.Core.Base
 {
-    public interface IPTBRepository
+    public interface IPTBFileService
     {
         BaseReadResponse Read(BasePTBFile file, int index, int count);
 

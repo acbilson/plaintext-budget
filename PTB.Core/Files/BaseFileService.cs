@@ -9,7 +9,7 @@ using System.Text;
 
 namespace PTB.Core.Files
 {
-    public class BaseFileService : IPTBRepository
+    public class BaseFileService : IPTBFileService
     {
         protected Encoding _encoding = Encoding.ASCII;
         protected FolderSchema _schema;
@@ -18,15 +18,37 @@ namespace PTB.Core.Files
 
         public BaseFileService(IPTBLogger logger, BaseFileParser parser, FolderSchema schema)
         {
-            _logger = logger;
             _schema = schema;
             _parser = parser;
+            _logger = logger;
+            _logger.SetContext(nameof(BaseFileService));
         }
 
-        protected bool HasByteOrderMark(byte[] buffer) => buffer[0] == 239;
+        protected void ValidateBuffer(byte[] buffer, string fileName)
+        {
+            if (HasByteOrderMark(buffer))
+            {
+                string message = $"The {fileName} ledger has a byte order mark added by a utf-8 compatible editor. Please remove from the text file to continue.";
+                _logger.LogError(message);
+                throw new ParseException(message);
+            }
+
+            if (HasUnixNewLine(buffer))
+            {
+                string message = $"The {fileName} ledger has Unix new lines instead of Windows new lines. Please convert to Windows new lines to continue.";
+                _logger.LogError(message);
+                throw new ParseException(message);
+            }
+        }
+
+        protected bool IsFirstLine(int bytesRead, int bufferLength) => bytesRead == bufferLength;
+
+        // the byte order mark (byteID 239) is added by some utf-8 compatible text editors. Can remove using Vim by :set nobomb; wq
+        private bool HasByteOrderMark(byte[] buffer) => buffer[0] == 239;
 
         // Windows new line has both byte 13 (\n) and byte 10 (\r). Unix only has byte 13 (\n), so it will not contain byte 10 (\r)
-        protected bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
+        // editing text files on a Unix-based can convert the line endings. Fix by running the unixtodos command
+        private bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
 
         protected long GetLineNumber(long streamPosition, int lineSize) => streamPosition / (lineSize + System.Environment.NewLine.Length);
 
@@ -54,7 +76,9 @@ namespace PTB.Core.Files
 
             if (!IndexStartsAtCorrectByte(index))
             {
-                throw new Exception($"The start index {index} does not match the index of any line. It should be divisible by {_schema.LineSize}");
+                string message = $"The start index {index} to read from file {file.FileName} does not match the index of any line. It should be divisible by {_schema.LineSize}";
+                _logger.LogError(message);
+                throw new FileException(message);
             }
 
             using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.Read))
@@ -69,12 +93,19 @@ namespace PTB.Core.Files
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0 && count > 0)
                 {
                     string line = _encoding.GetString(buffer);
+
+                    if (IsFirstLine(bytesRead, buffer.Length))
+                    {
+                        ValidateBuffer(buffer, file.FileName);
+                    }
+
                     parseResponse = _parser.ParseLine(line, byteIndex);
 
                     if (!parseResponse.Success)
                     {
                         long lineNumber = GetLineNumber(stream.Position, _schema.LineSize);
-                        throw new ParseException($"Review the file for data corruption at line {lineNumber}. Message is: {parseResponse.Message}");
+                        string message = $"Review file {file.FileName} for data corruption at line {lineNumber}. Message is: {parseResponse.Message}";
+                        throw new ParseException(message);
                     }
 
                     response.ReadResult.Add(parseResponse.Row);
@@ -92,9 +123,9 @@ namespace PTB.Core.Files
 
             if (!IndexStartsAtCorrectByte(index))
             {
-                response.Success = false;
-                response.Message = $"Could not update with these values. The start index {index} does not match the index of any line. It should be divisible by {_schema.LineSize}";
-                return response;
+                string message = $"The start index {index} to update file {file.FileName} does not match the index of any line. It should be divisible by {_schema.LineSize}";
+                _logger.LogError(message);
+                throw new FileException(message);
             }
 
             var parseResponse = _parser.ParseRow(row);

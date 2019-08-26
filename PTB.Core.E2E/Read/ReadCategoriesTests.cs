@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.Categories;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PTB.Core.E2E
 {
@@ -8,16 +6,18 @@ namespace PTB.Core.E2E
     public class ReadCategories : GlobalSetup
     {
         [TestMethod]
-        public void ReadAllCategories()
+        public void ReadsDefaultCategories()
         {
             // Arrange
-            WithAFileClient();
+            WithACategoriesService();
+            var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
 
             // Act
-            CategoriesReadResponse response = Client.Categories.ReadAllDefaultCategories();
+            var response = CategoriesService.Read(defaultCategoriesFile, 0, defaultCategoriesFile.LineCount);
 
             // Assert
-            ShouldNotHaveAnySkippedCategories(response);
+            // TODO: must implement skipped messages
+            //ShouldNotHaveAnySkippedCategories(response);
         }
     }
 }

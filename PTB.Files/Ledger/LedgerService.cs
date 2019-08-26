@@ -1,9 +1,9 @@
-﻿using PTB.Files.FolderAccess;
-using PTB.Core.Base;
+﻿using PTB.Core.Base;
 using PTB.Core.Exceptions;
 using PTB.Core.Files;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
+using PTB.Files.FolderAccess;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +33,10 @@ namespace PTB.Files.Ledger
                         if (response.Success)
                         {
                             writer.WriteLine(response.Result);
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"Import failed with the following message: {response.Message}");
                         }
                     }
                 }
@@ -74,16 +78,9 @@ namespace PTB.Files.Ledger
                 {
                     string line = _encoding.GetString(buffer);
 
-                    // the byte order mark (byteID 239) is added by some utf-8 compatible text editors. Can remove using Vim by :set nobomb; wq
-                    if (HasByteOrderMark(buffer))
+                    if (IsFirstLine(bytesRead, buffer.Length))
                     {
-                        throw new ParseException("The default ledger has a byte order mark added by a utf-8 compatible editor. Please remove from the text file to continue.");
-                    }
-
-                    // editing text files on a Unix-based can convert the line endings. Fix by running the unixtodos command
-                    if (HasUnixNewLine(buffer))
-                    {
-                        throw new ParseException("The default ledger has Unix new lines instead of Windows new lines. Please convert to windows new lines to continue");
+                        ValidateBuffer(buffer, file.FileName);
                     }
 
                     var parseResponse = _parser.ParseLine(line, bytesRead);
@@ -91,7 +88,8 @@ namespace PTB.Files.Ledger
                     if (!parseResponse.Success)
                     {
                         long lineNumber = GetLineNumber(stream.Position, _schema.LineSize);
-                        throw new ParseException($"Review the default ledger for data corruption at line {lineNumber}. Message is: {parseResponse.Message}");
+                        string message = $"Review file {file.FileName} for data corruption at line {lineNumber}. Message is: {parseResponse.Message}";
+                        throw new ParseException(message);
                     }
 
                     // skips ledgers that have been locked by user modification

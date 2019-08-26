@@ -11,15 +11,14 @@ namespace PTB.Core.Tests
     {
         public FolderSchema Schema;
         public PTBSettings Settings;
-
         public Mock<IPTBLogger> MockLogger;
 
 
         [TestInitialize]
         public void Initialize()
         {
-            Schema = GetDefaultSchema();
             Settings = GetDefaultSettings();
+            Schema = GetDefaultSchema();
             WithAMockLogger();
         }
 
@@ -29,14 +28,14 @@ namespace PTB.Core.Tests
             {
                 FileDelimiter = '_',
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1"
+                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean"
 
             };
         }
 
         public FolderSchema GetDefaultSchema()
         {
-            var text = System.IO.File.ReadAllText("./schema.json");
+            var text = System.IO.File.ReadAllText(System.IO.Path.Combine(Settings.HomeDirectory, "schema.json"));
             FolderSchema schema = JsonConvert.DeserializeObject<FolderSchema>(text);
             return schema;
         }

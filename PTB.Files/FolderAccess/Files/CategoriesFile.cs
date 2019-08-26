@@ -13,8 +13,8 @@ namespace PTB.Files.FolderAccess
 
         public CategoriesFile(char fileDelimiter, int lineSize, System.IO.FileInfo file): base(fileDelimiter, lineSize, file)
         {
-            string[] fileParts = file.Name.Split(fileDelimiter);
-            StartDate = Convert.ToDateTime(fileParts[1]);
+            string[] fileParts = GetFileNameParts(file.Name);
+            StartDate = ParseDate(fileParts[1]);
         }
     }
 }

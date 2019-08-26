@@ -5,14 +5,14 @@ using PTB.Files.FolderAccess;
 
 namespace PTB.Files.TitleRegex
 {
-    public class TitleRegexRepository : BaseFileService
+    public class TitleRegexService : BaseFileService
     {
-        public TitleRegexRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema) : base(logger, parser, schema)
+        public TitleRegexService(IPTBLogger logger, TitleRegexFileParser parser, FolderSchema schema) : base(logger, parser, schema)
         {
-            _logger.SetContext(nameof(TitleRegexRepository));
+            _logger.SetContext(nameof(TitleRegexService));
         }
 
-        public BaseReadResponse ReadAllTitleRegex(TitleRegexFile file)
+        public BaseReadResponse Read(TitleRegexFile file)
         {
             var response = BaseReadResponse.Default;
 

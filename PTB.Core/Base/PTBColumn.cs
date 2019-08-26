@@ -2,7 +2,17 @@
 {
     public class PTBColumn : ColumnSchema
     {
-        public PTBColumn() { }
+        private string _columnValue;
+
+        public string ColumnValue
+        {
+            get { return _columnValue; }
+            set { _columnValue = LengthExceedsSize(value) ? value.Trim().Substring(0, Size) : new string(' ', Size - value.Trim().Length) + value.Trim(); }
+        }
+
+        public PTBColumn()
+        {
+        }
 
         public PTBColumn(ColumnSchema schema)
         {
@@ -12,14 +22,6 @@
             base.Offset = schema.Offset;
         }
 
-        private string _columnValue;
-
         private bool LengthExceedsSize(string value) => value.Trim().Length > Size;
-
-        public string ColumnValue
-        {
-            get { return _columnValue; }
-            set { _columnValue = LengthExceedsSize(value) ? value.Trim().Substring(0, Size) : new string(' ', Size - value.Trim().Length) + value.Trim(); }
-        }
     }
 }

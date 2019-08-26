@@ -9,8 +9,9 @@ using System.Collections.Generic;
 using System.IO;
 using PTB.Files.Categories;
 using PTB.Core.Logging;
-using PTB.Core.FileAccess;
 using PTB.Core.Files;
+using PTB.Files.FolderAccess;
+using PTB.Core.Base;
 
 namespace PTB.Core.E2E
 {
@@ -19,24 +20,34 @@ namespace PTB.Core.E2E
     {
         public PTBSettings CleanSettings;
         public PTBSettings DirtySettings;
-        public PTBSchema Schema;
-        public PTBClient Client;
-        public PNCParser PNCParser;
-        public BaseFileParser Parser;
-        public BaseFileManager FileManager;
+        public FileSchema Schema;
         public PTBFileLogger Logger;
+        public PNCParser PNCParser;
+        public LedgerFileParser LedgerFileParser;
+        public CategoriesFileParser CategoriesFileParser;
+        public TitleRegexFileParser TitleRegexFileParser;
+        public FileFolderService FileFolderService;
+        public LedgerService LedgerService;
+        public CategoriesService CategoriesService;
+        public TitleRegexService TitleRegexService;
 
         public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
+        public FileFolders FileFolders;
 
         [TestInitialize] 
         public void GlobalInitialize()
         {
-            GetDefaultSchema();
             GetDefaultSettings();
             GetDirtySettings();
+            GetDefaultSchema();
+            WithALogger();
 
             // copies a fresh ledger each time since many e2e tests write to it
             CopyLedger();
+
+            // reads all files
+            WithAFileFolderService();
+            WithFileFolders();
         }
 
         #region Initialize
@@ -67,7 +78,7 @@ namespace PTB.Core.E2E
         public void GetDefaultSchema()
         {
             var text = File.ReadAllText($@".\schema.json");
-            PTBSchema schema = JsonConvert.DeserializeObject<PTBSchema>(text);
+            FileSchema schema = JsonConvert.DeserializeObject<FileSchema>(text);
             Schema = schema;
         }
 
@@ -78,14 +89,19 @@ namespace PTB.Core.E2E
             File.Copy(srcPath, destPath, overwrite: true);
         }
 
+        public void WithFileFolders()
+        {
+            FileFolders = FileFolderService.GetFileFolders();
+        }
+
         #endregion Initialize
 
         #region Arrange - With
 
-        public void WithAFileManager()
+        public void WithAFileFolderService()
         {
-            var fileManager = new BaseFileManager(CleanSettings, Schema);
-            FileManager = fileManager;
+            var fileFolderService = new FileFolderService(CleanSettings, Schema, Logger);
+            FileFolderService = fileFolderService;
         }
 
         public void WithALogger()
@@ -94,46 +110,82 @@ namespace PTB.Core.E2E
             Logger = logger;
         }
 
-        public void WithAFileClient()
-        {
-            WithALogger();
-            WithAFileManager();
-            var client = PTBClient.Instance;
-            client.Instantiate(FileManager, Logger);
-            Client = client;
-        }
-
         public void WithAPNCParser()
         {
-            var parser = new PNCParser();
+            var parser = new PNCParser(Schema.Ledger);
             PNCParser = parser;
         }
 
-        public void WithALedgerParser()
+        public void WithALedgerFileParser()
         {
-            var parser = new LedgerParser(Schema.Ledger);
-            LedgerParser = parser;
+            var parser = new LedgerFileParser(Schema.Ledger, Logger);
+            LedgerFileParser = parser;
+        }
+        public void WithACategoriesFileParser()
+        {
+            var parser = new CategoriesFileParser(Schema.Categories, Logger);
+            CategoriesFileParser = parser;
+        }
+
+        public void WithATitleRegexFileParser()
+        {
+            var parser = new TitleRegexFileParser(Schema.TitleRegex, Logger);
+            TitleRegexFileParser = parser;
+        }
+
+
+        public void WithALedgerService()
+        {
+            WithALedgerFileParser();
+            var service = new LedgerService(Logger, LedgerFileParser, Schema.Ledger);
+            LedgerService = service;
+        }
+
+        public void WithACategoriesService()
+        {
+            WithACategoriesFileParser();
+            var service = new CategoriesService(Logger, CategoriesFileParser, Schema.Categories);
+            CategoriesService = service;
+        }
+
+        public void WithATitleRegexService()
+        {
+            WithATitleRegexFileParser();
+            var service = new TitleRegexService(Logger, TitleRegexFileParser, Schema.TitleRegex);
+            TitleRegexService = service;
         }
 
         #endregion Arrange - With
 
         #region Act - When
 
+        public void WhenAllFileFoldersHaveBeenRetrieved()
+        {
+            var fileFolders = FileFolderService.GetFileFolders();
+            FileFolders = FileFolders;
+        }
+
         public void WhenACleanStatementIsImported()
         {
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Statements\datafile.csv");
-            Client.Ledger.ImportToDefaultLedger(path, PNCParser);
+            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
+
+            LedgerService.Import(defaultLedgerFile, path, PNCParser);
         }
 
         public void WhenALedgerIsCategorized()
         {
-            TitleRegexReadResponse response = Client.Regex.ReadAllTitleRegex();
-            Client.Ledger.CategorizeDefaultLedger(response.TitleRegices);
+            var defaultTitleRegexFile = FileFolders.TitleRegexFolder.GetDefaultFile();
+            BaseReadResponse response = TitleRegexService.Read(defaultTitleRegexFile);
+
+            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
+            LedgerService.Categorize(defaultLedgerFile, response.ReadResult);
         }
 
-        public LedgerUpdateResponse WhenALedgerIsUpdated(Ledger.Ledger ledgerToUpdate)
+        public BaseUpdateResponse WhenALedgerIsUpdated(int index, PTBRow ledgerToUpdate)
         {
-            var response = Client.Ledger.UpdateDefaultLedgerEntry(ledgerToUpdate);
+            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
+            var response = LedgerService.Update(defaultLedgerFile, index, ledgerToUpdate);
             return response;
         }
 
@@ -141,31 +193,33 @@ namespace PTB.Core.E2E
 
         #region Act - With
 
-        public Ledger.Ledger WithTheFirstParsedLedger()
+        public PTBRow WithTheFirstParsedLedger()
         {
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             string firstLine = ledgerEntries.Substring(0, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
-            StringToLedgerResponse response = LedgerParser.ParseLine(firstLine, 0);
-            return response.Result;
+            var response = LedgerFileParser.ParseLine(firstLine, 0);
+            return response.Row;
         }
 
-        public Ledger.Ledger WithTheFourthLedger()
+        public PTBRow WithTheFourthLedger()
         {
             var ledger = GetLedgerOnLine(4);
             return ledger;
         }
 
-        public List<Ledger.Ledger> WithAllLedgerEntries()
+        public List<PTBRow> WithAllLedgerEntries()
         {
-            var response = Client.Ledger.ReadDefaultLedgerEntries(0, 10000);
-            return response.Result;
+            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
+            var response = LedgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
+            return response.ReadResult;
         }
 
-        public List<Categories.Categories> WithAllCategories()
+        public List<PTBRow> WithAllCategories()
         {
-            var categories = Client.Categories.ReadAllDefaultCategories();
-            return categories.Categories;
+            var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
+            var categories = CategoriesService.Read(defaultCategoriesFile);
+            return categories.ReadResult;
         }
 
         #endregion Act - With
@@ -181,21 +235,21 @@ namespace PTB.Core.E2E
         }
 
         // first line: 2019/06/18,310.80,"Direct Deposit - Payroll","OPTIMUM JOY CLIN XXXXXXXXXXX39-0","000191699","CREDIT"
-        public void ShouldParseFirstEntry(Ledger.Ledger ledger)
+        public void ShouldParseFirstEntry(PTBRow ledger)
         {
-            Assert.AreEqual("2019-06-18", ledger.Date);
-            Assert.AreEqual("310.80", ledger.Amount.TrimStart());
-            Assert.AreEqual("", ledger.Subject.Trim());
-            Assert.AreEqual("directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", ledger.Title.TrimStart());
-            Assert.AreEqual('C', ledger.Type);
-            Assert.AreEqual('0', ledger.Locked);
-            Assert.AreEqual("", ledger.Subcategory.Trim());
+            Assert.AreEqual("2019-06-18", ledger["date"]);
+            Assert.AreEqual("310.80", ledger["amount"].TrimStart());
+            Assert.AreEqual("", ledger["subcategory"].Trim());
+            Assert.AreEqual("directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", ledger["title"].TrimStart());
+            Assert.AreEqual("C", ledger["type"]);
+            Assert.AreEqual("0", ledger["locked"]);
+            Assert.AreEqual("", ledger["subject"].Trim());
         }
 
         public void ShouldUpdateFourthEntryWithNewSubcategory(string subcategory)
         {
             var ledger = GetLedgerOnLine(4);
-            Assert.AreEqual(subcategory, ledger.Subcategory);
+            Assert.AreEqual(subcategory, ledger["subcategory"]);
         }
 
         public void ShouldGenerateABudgetOfTheRightSize(string[] lines)
@@ -210,21 +264,21 @@ namespace PTB.Core.E2E
             Assert.IsTrue(lines[1].Contains(firstSubcategory), $"First subcategory under {firstCategory} should contain the word {firstSubcategory} if the budget is sorted.");
         }
 
-        public void ShouldHaveCategorizedAtLeastOneLedger(List<Ledger.Ledger> ledgerEntries)
+        public void ShouldHaveCategorizedAtLeastOneLedger(List<PTBRow> ledgerEntries)
         {
-            var noSubcategoryLedgers = ledgerEntries.Where(l => l.Subcategory.Trim() == "");
-            var noSubjectLedgers = ledgerEntries.Where(l => l.Subject.Trim() == "");
+            var noSubcategoryLedgers = ledgerEntries.Where(l => l["subcategory"].Trim() == "");
+            var noSubjectLedgers = ledgerEntries.Where(l => l["subject"].Trim() == "");
             Assert.AreNotEqual(noSubcategoryLedgers.Count(), ledgerEntries.Count(), "There should not be the same number of ledgers without subcategories as total.");
             Assert.AreNotEqual(noSubjectLedgers.Count(), ledgerEntries.Count(), "There should not be the same number of ledgers without subjects as total.");
         }
 
-        public void ShouldNotCategorizeLockedLedger(List<Ledger.Ledger> ledgerEntries)
+        public void ShouldNotCategorizeLockedLedger(List<PTBRow> ledgerEntries)
         {
-            var lockedLedgerEntries = ledgerEntries.Where(l => l.Locked == '1');
+            var lockedLedgerEntries = ledgerEntries.Where(l => l["locked"] == "1");
 
             foreach (var ledgerEntry in lockedLedgerEntries)
             {
-                Assert.AreEqual("Custom", ledgerEntry.Subcategory.TrimStart());
+                Assert.AreEqual("Custom", ledgerEntry["subcategory"].TrimStart());
             }
         }
 
@@ -235,7 +289,7 @@ namespace PTB.Core.E2E
                 string messages = string.Join(System.Environment.NewLine, response.SkippedMessages);
                 Assert.Fail($"There were skipped categories. Messages: {messages}");
             }
-            Assert.AreEqual(39, response.Categories.Count());
+            Assert.AreEqual(39, response.ReadResult.Count());
 
         }
 
@@ -243,29 +297,22 @@ namespace PTB.Core.E2E
 
         #region Assert - With
 
-        public string[] WithBudgetLines()
-        {
-            string fileName = Client.Budget.GetBudgetName();
-            string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, $@"Budget\{fileName}{CleanSettings.FileExtension}");
-            string[] budgetLines = System.IO.File.ReadAllLines(path);
-            return budgetLines;
-        }
 
         #endregion Assert - With
 
         // should be the full length of the line plus ending (117) multiplied by the line number minus 1 b/c it starts a 1
         private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.LineSize + System.Environment.NewLine.Length) * (lineNumber - 1);
 
-        private Ledger.Ledger GetLedgerOnLine(int lineNumber)
+        private PTBRow GetLedgerOnLine(int lineNumber)
         {
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             int ledgerIndex = CalculateLedgerIndex(lineNumber);
             string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
-            StringToLedgerResponse response = LedgerParser.ParseLine(line, ledgerIndex);
+            var response = LedgerFileParser.ParseLine(line, ledgerIndex);
 
             Assert.IsTrue(response.Success, $"Failed to parse ledger with message {response.Message}");
-            return response.Result;
+            return response.Row;
         }
     }
 }

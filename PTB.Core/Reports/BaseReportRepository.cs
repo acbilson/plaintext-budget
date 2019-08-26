@@ -6,7 +6,7 @@ using System;
 
 namespace PTB.Core.Reports
 {
-    public class BaseReportRepository : IPTBRepository
+    public class BaseReportRepository : IPTBFileService
     {
         protected IPTBLogger _logger;
         protected BaseReportParser _parser;

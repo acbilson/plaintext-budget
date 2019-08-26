@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.Base;
 
 namespace PTB.Core.E2E
 {
@@ -10,8 +11,8 @@ namespace PTB.Core.E2E
         public void ImportsEntireStatement()
         {
             // Arrange
-            WithAFileClient();
             WithAPNCParser();
+            WithALedgerService();
 
             // Act
             WhenACleanStatementIsImported();
@@ -24,13 +25,12 @@ namespace PTB.Core.E2E
         public void ImportsParsableStatement()
         {
             // Arrange
-            WithAFileClient();
             WithAPNCParser();
-            WithALedgerParser();
+            WithALedgerService();
 
             // Act
             WhenACleanStatementIsImported();
-            Ledger.Ledger ledger = WithTheFirstParsedLedger();
+            PTBRow ledger = WithTheFirstParsedLedger();
 
             // Assert
             ShouldParseFirstEntry(ledger);

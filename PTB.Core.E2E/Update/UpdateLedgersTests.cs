@@ -11,18 +11,18 @@ namespace PTB.Core.E2E
         public void ShouldUpdateFourthLedgerEntry()
         {
             // Arrange
-            WithAFileClient();
-            WithALedgerParser();
+            WithALedgerFileParser();
+            WithALedgerService();
             var ledgerToUpdate = WithTheFourthLedger();
             string newSubcategory = "TestCategory";
-            ledgerToUpdate.Subcategory = new String(' ', Schema.Ledger.Columns.Subcategory.Size - newSubcategory.Length) + newSubcategory;
+            ledgerToUpdate["subcategory"] = new String(' ', Schema.Ledger["subcategory"].Size - newSubcategory.Length) + newSubcategory;
 
             // Act
-            var response = WhenALedgerIsUpdated(ledgerToUpdate);
+            var response = WhenALedgerIsUpdated(ledgerToUpdate.Index, ledgerToUpdate);
 
             // Assert
             Assert.IsTrue(response.Success);
-            ShouldUpdateFourthEntryWithNewSubcategory(ledgerToUpdate.Subcategory);
+            ShouldUpdateFourthEntryWithNewSubcategory(ledgerToUpdate["subcategory"]);
         }
     }
 }

@@ -8,15 +8,15 @@ namespace PTB.Core.Ledger.Tests
     [TestClass]
     public class LedgerParserTests : GlobalSetup
     {
-        [DataRow("2019-06-18 C       310.80                                                                 directdepositpayrolloptimumjoyclinxxxxxxxxxxx390 0", "2019-06-18", 'C', "310.80", "", "directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", "", '0')]
-        [DataRow("2019-06-18 D        11.80                                                                          5458debitcardpurchaseandysfrozencustard 0", "2019-06-18", 'D', "11.80", "", "5458debitcardpurchaseandysfrozencustard", "", '0')]
-        [DataRow("2019-06-18 D        15.29                                                                         5458debitcardpurchaseblazepizzachicagoev 0", "2019-06-18", 'D', "15.29", "", "5458debitcardpurchaseblazepizzachicagoev", "", '0')]
-        [DataRow("2019-06-18 D        69.95                                                                      webpmtsingleonlinepmtcomcastckf244838860pos 0", "2019-06-18", 'D', "69.95", "", "webpmtsingleonlinepmtcomcastckf244838860pos", "", '0')]
-        [DataRow("2019-06-18 D        73.67                                                                                  pospurchasetraderjoesevanstonil 0", "2019-06-18", 'D', "73.67", "", "pospurchasetraderjoesevanstonil", "", '0')]
-        [DataRow("2019-06-19 C        20.00                                                                    directdeposittransferarfobkckwebxfrxxxxxx9349 0", "2019-06-19", 'C', "20.00", "", "directdeposittransferarfobkckwebxfrxxxxxx9349", "", '0')]
-        [DataRow("2019-07-01 C        20.00                                                                    directdeposittransferarfobkckwebxfrxxxxxx9349 1", "2019-07-01", 'C', "20.00", "", "directdeposittransferarfobkckwebxfrxxxxxx9349", "", '1')]
+        [DataRow("2019-06-18 C       310.80                                                                 directdepositpayrolloptimumjoyclinxxxxxxxxxxx390 0", "2019-06-18", "C", "310.80", "", "directdepositpayrolloptimumjoyclinxxxxxxxxxxx390", "", "0")]
+        [DataRow("2019-06-18 D        11.80                                                                          5458debitcardpurchaseandysfrozencustard 0", "2019-06-18", "D", "11.80", "", "5458debitcardpurchaseandysfrozencustard", "", "0")]
+        [DataRow("2019-06-18 D        15.29                                                                         5458debitcardpurchaseblazepizzachicagoev 0", "2019-06-18", "D", "15.29", "", "5458debitcardpurchaseblazepizzachicagoev", "", "0")]
+        [DataRow("2019-06-18 D        69.95                                                                      webpmtsingleonlinepmtcomcastckf244838860pos 0", "2019-06-18", "D", "69.95", "", "webpmtsingleonlinepmtcomcastckf244838860pos", "", "0")]
+        [DataRow("2019-06-18 D        73.67                                                                                  pospurchasetraderjoesevanstonil 0", "2019-06-18", "D", "73.67", "", "pospurchasetraderjoesevanstonil", "", "0")]
+        [DataRow("2019-06-19 C        20.00                                                                    directdeposittransferarfobkckwebxfrxxxxxx9349 0", "2019-06-19", "C", "20.00", "", "directdeposittransferarfobkckwebxfrxxxxxx9349", "", "0")]
+        [DataRow("2019-07-01 C        20.00                                                                    directdeposittransferarfobkckwebxfrxxxxxx9349 1", "2019-07-01", "C", "20.00", "", "directdeposittransferarfobkckwebxfrxxxxxx9349", "", "1")]
         [TestMethod]
-        public void ParsesCleanLines(string line, string date, char type, string amount, string subcategory, string title, string subject, char locked)
+        public void ParsesCleanLines(string line, string date, string type, string amount, string subcategory, string title, string subject, string locked)
         {
             // Arrange
             var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
@@ -28,15 +28,14 @@ namespace PTB.Core.Ledger.Tests
 
             // Assert
             Assert.IsTrue(response.Success, $"Failed to parse ledger with message: {response.Message}");
-            /*
-            Assert.AreEqual(date, result.Date);
-            Assert.AreEqual(type, result.Type);
-            Assert.AreEqual(amount, result.Amount.TrimStart());
-            Assert.AreEqual(subcategory, result.Subcategory.TrimStart());
-            Assert.AreEqual(title, result.Title.TrimStart());
-            Assert.AreEqual(subject, result.Subject.TrimStart());
-            Assert.AreEqual(locked, result.Locked);
-            */
+
+            Assert.AreEqual(date, row["date"]);
+            Assert.AreEqual(type, row["type"]);
+            Assert.AreEqual(amount, row["amount"].TrimStart());
+            Assert.AreEqual(subcategory, row["subcategory"].TrimStart());
+            Assert.AreEqual(title, row["title"].TrimStart());
+            Assert.AreEqual(subject, row["subject"].TrimStart());
+            Assert.AreEqual(locked, row["locked"]);
         }
 
         [TestMethod]

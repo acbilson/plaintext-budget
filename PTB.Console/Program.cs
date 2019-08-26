@@ -37,11 +37,11 @@ namespace PTB.Console
                 .AddSingleton<PTBSettings>(settings)
                 .AddSingleton<LedgerSchema>(schema.Ledger)
                 .AddSingleton<LedgerFileParser>()
-                .AddScoped<FileFolderManager>()
+                .AddScoped<FileFolderService>()
                 .AddScoped<LedgerService>()
             .BuildServiceProvider();
 
-            var fileFolderManager = serviceProvider.GetService<FileFolderManager>();
+            var fileFolderManager = serviceProvider.GetService<FileFolderService>();
             var ledgerRepository = serviceProvider.GetService<LedgerService>();
 
             var fileFolders = fileFolderManager.GetFileFolders();

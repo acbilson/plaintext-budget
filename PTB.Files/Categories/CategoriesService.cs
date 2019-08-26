@@ -1,19 +1,18 @@
 ﻿using PTB.Core.Base;
-using PTB.Core.FolderAccess;
 using PTB.Core.Files;
 using PTB.Core.Logging;
 using PTB.Files.FolderAccess;
 
 namespace PTB.Files.Categories
 {
-    public class CategoriesRepository : BaseFileService
+    public class CategoriesService : BaseFileService
     {
-        public CategoriesRepository(IPTBLogger logger, BaseFileParser parser, FolderSchema schema) : base(logger, parser, schema)
+        public CategoriesService(IPTBLogger logger, CategoriesFileParser parser, FolderSchema schema) : base(logger, parser, schema)
         {
-            _logger.SetContext(nameof(CategoriesRepository));
+            _logger.SetContext(nameof(CategoriesService));
         }
 
-        public BaseReadResponse ReadAllDefaultCategories(CategoriesFile file)
+        public BaseReadResponse Read(CategoriesFile file)
         {
             var response = BaseReadResponse.Default;
 

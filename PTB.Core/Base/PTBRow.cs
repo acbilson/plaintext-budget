@@ -7,6 +7,7 @@ namespace PTB.Core.Base
 {
     public class PTBRow
     {
+        public int Index { get; set; }
         public List<PTBColumn> Columns { get; set; }
 
         public PTBRow()
