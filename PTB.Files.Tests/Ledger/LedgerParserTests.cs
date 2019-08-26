@@ -19,7 +19,7 @@ namespace PTB.Core.Ledger.Tests
         public void ParsesCleanLines(string line, string date, char type, string amount, string subcategory, string title, string subject, char locked)
         {
             // Arrange
-            var parser = new BaseFileParser(Schema);
+            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
 
             // Act
             line += System.Environment.NewLine;
@@ -44,7 +44,7 @@ namespace PTB.Core.Ledger.Tests
         {
             // Arrange
             string line = "2019-07-01 C        20.00                           directdeposittransferarfobkckwebxfrxxxxxx9349       000191709 1";
-            var parser = new BaseFileParser(Schema);
+            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
 
             // Act
             StringToRowResponse response = parser.ParseLine(line, 0);
@@ -59,7 +59,7 @@ namespace PTB.Core.Ledger.Tests
         {
             // Arrange
             string line = "2019-07-01 C       20.00                           directdeposittransferarfobkckwebxfrxxxxxx9349       000191709 1" + System.Environment.NewLine;
-            var parser = new BaseFileParser(Schema);
+            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
 
             // Act
             StringToRowResponse response = parser.ParseLine(line, 0);

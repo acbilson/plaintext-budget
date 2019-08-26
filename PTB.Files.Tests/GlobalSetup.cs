@@ -2,22 +2,24 @@
 using PTB.Core.Base;
 using Newtonsoft.Json;
 using PTB.Files.Ledger;
+using Moq;
+using PTB.Core.Logging;
 
 namespace PTB.Core.Tests
 {
     [TestClass]
     public class GlobalSetup
     {
-        public LedgerSchema LedgerSchema;
-        public FolderSchema Schema;
+        public FileSchema Schema;
         public PTBSettings Settings;
+        public Mock<IPTBLogger> MockLogger;
 
         [TestInitialize]
         public void Initialize()
         {
-            Schema = GetDefaultSchema();
-            LedgerSchema = GetLedgerSchema();
             Settings = GetDefaultSettings();
+            Schema = GetDefaultSchema();
+            WithAMockLogger();
         }
 
         public PTBSettings GetDefaultSettings()
@@ -26,21 +28,21 @@ namespace PTB.Core.Tests
             {
                 FileDelimiter = '_',
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1"
+                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean"
 
             };
         }
 
-        public LedgerSchema GetLedgerSchema()
+        public FileSchema GetDefaultSchema()
         {
-            return new LedgerSchema();
-        }
-
-        public FolderSchema GetDefaultSchema()
-        {
-            var text = System.IO.File.ReadAllText("./schema.json");
-            FolderSchema schema = JsonConvert.DeserializeObject<FolderSchema>(text);
+            var text = System.IO.File.ReadAllText(System.IO.Path.Combine(Settings.HomeDirectory, "schema.json"));
+            FileSchema schema = JsonConvert.DeserializeObject<FileSchema>(text);
             return schema;
         }
+        public void WithAMockLogger()
+        {
+            MockLogger = new Mock<IPTBLogger>();
+        }
+
     }
 }
