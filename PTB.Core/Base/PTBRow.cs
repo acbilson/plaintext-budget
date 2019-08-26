@@ -18,13 +18,25 @@ namespace PTB.Core.Base
 
         private bool MissingColumn(string name) => !Columns.Exists(column => NameEquals(column.ColumnName, name));
 
-        public string GetValueByName(string name)
+        public string this[string columnName]
+        {
+            get
+            {
+                return GetValueByName(columnName);
+            }
+            set
+            {
+                SetValueByName(columnName, value);
+            }
+        }
+
+        private string GetValueByName(string name)
         {
             if (MissingColumn(name)) { throw new ParseException($"Row contains no column with name: {name}"); }
             return Columns.First(column => NameEquals(column.ColumnName, name)).ColumnValue;
         }
 
-        public void SetValueByName(string name, string value)
+        private void SetValueByName(string name, string value)
         {
             if (MissingColumn(name)) { throw new ParseException($"Row contains no column with name: {name}"); }
             Columns.ForEach(column =>

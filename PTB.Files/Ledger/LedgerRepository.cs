@@ -60,7 +60,7 @@ namespace PTB.Files.Ledger
             return row.Columns.First(column => column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase))?.ColumnValue;
         }
 
-        public bool IsLedgerLocked(PTBRow row) => row.GetValueByName("locked") == "1";
+        public bool IsLedgerLocked(PTBRow row) => row["locked"] == "1";
 
         public void Categorize(LedgerFile file, List<PTBRow> titleRegices)
         {
@@ -102,15 +102,15 @@ namespace PTB.Files.Ledger
 
                     foreach (var titleRegex in titleRegices)
                     {
-                        string match = GetRegexMatch(titleRegex.GetValueByName("regex"));
+                        string match = GetRegexMatch(titleRegex["regex"]);
 
-                        string title = parseResponse.Row.GetValueByName("title");
+                        string title = parseResponse.Row["title"];
                         bool isMatch = Regex.IsMatch(title, match, RegexOptions.IgnoreCase);
 
                         if (isMatch)
                         {
-                            parseResponse.Row.SetValueByName("subcategory", titleRegex.GetValueByName("subcategory"));
-                            parseResponse.Row.SetValueByName("subject", titleRegex.GetValueByName("subcategory"));
+                            parseResponse.Row["subcategory"] = titleRegex["subcategory"];
+                            parseResponse.Row["subject"] = titleRegex["subcategory"];
                             var newParseResponse = _parser.ParseRow(parseResponse.Row);
                             newParseResponse.Line += Environment.NewLine;
                             byte[] newBuffer = _encoding.GetBytes(newParseResponse.Line);

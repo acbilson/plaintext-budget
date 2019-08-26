@@ -49,7 +49,7 @@ namespace PTB.Core.Base.Tests
             var row = GetDefaultRow();
 
             // Act
-            var actual = row.GetValueByName(name);
+            var actual = row[name];
 
             // Assert
             Assert.AreEqual(expected, actual.TrimStart());
@@ -61,8 +61,8 @@ namespace PTB.Core.Base.Tests
             var row = GetDefaultRow();
 
             // Act - Assert
-            Assert.ThrowsException<ParseException>(() => row.GetValueByName("missing"));
-            Assert.ThrowsException<ParseException>(() => row.SetValueByName("missing", ""));
+            Assert.ThrowsException<ParseException>(() => row["missing"]);
+            Assert.ThrowsException<ParseException>(() => row["missing"] = "");
         }
 
         [DataRow("amount", "99.99")]
@@ -74,7 +74,7 @@ namespace PTB.Core.Base.Tests
             var row = GetDefaultRow();
 
             // Act
-            row.SetValueByName(name, value);
+            row[name] = value;
 
             // Assert
             row.Columns.Exists(column => column.ColumnValue.TrimStart() == value);

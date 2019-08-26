@@ -20,7 +20,7 @@ namespace PTB.Console
         {
 
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
-            string baseDir = Path.Combine(home, @"Working\Bench\PTB_Home");
+            string baseDir = Path.Combine(home, @"Archive\2019\BudgetProject\PTB_Home");
 
             var settingsText = File.ReadAllText(Path.Combine(baseDir, "settings.json"));
             var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
@@ -30,23 +30,22 @@ namespace PTB.Console
 
             var logger = new PTBFileLogger(settings.LoggingLevel, baseDir);
 
-            // manages all files that are not report files
-            //var fileFolderManager = new FileFolderManager(settings, schema, logger);
-
+            // Uses same DI framework as Web for consistency
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<IPTBLogger>(logger)
                 .AddSingleton<FileSchema>(schema)
-                .AddSingleton<LedgerSchema>(schema.Ledger)
                 .AddSingleton<PTBSettings>(settings)
-                .AddSingleton<FileFolderManager>()
+                .AddSingleton<LedgerSchema>(schema.Ledger)
                 .AddSingleton<LedgerFileParser>()
-                .AddSingleton<LedgerService>()
+                .AddScoped<FileFolderManager>()
+                .AddScoped<LedgerService>()
             .BuildServiceProvider();
 
             var fileFolderManager = serviceProvider.GetService<FileFolderManager>();
+            var ledgerRepository = serviceProvider.GetService<LedgerService>();
+
             var fileFolders = fileFolderManager.GetFileFolders();
             var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
-            var ledgerRepository = serviceProvider.GetService<LedgerService>();
             var ledgers = ledgerRepository.Read(defaultLedgerFile, 0, 10);
         }
         /*
