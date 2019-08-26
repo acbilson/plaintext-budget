@@ -20,10 +20,25 @@ export class LedgerTableComponent implements OnInit {
 
   ngOnInit() {
     // gets all the available ledger files
-    this.getFileFolders().then(files => this.fileFolders = files);
+    this.getFileFolders()
+    .then(files => this.fileFolders = files)
+    .then((fileFolders: IFileFolders) => {
+      const defaultShortName = this.getDefaultShortName(fileFolders);
+      this.readLedgers(defaultShortName, 0, 25).then(ledgers => this.ledgers = ledgers);
+    }
+    );
 
     // reads the first twentyfive ledger entries
-    this.readLedgers(0, 25).then(ledgers => this.ledgers = ledgers);
+    
+  }
+
+  private getDefaultShortName(fileFolders: IFileFolders): string {
+
+    let defaultFileName = fileFolders.ledgerFolder.defaultFileName;
+    //let name = fileFolders.ledgerFolder.files.find(l => l.fileName == defaultFileName).shortName;
+
+    // TODO: implement short name retrieval;
+    return "checking";
   }
 
   private getLedgerByIndex(index: string): ILedger {
@@ -93,12 +108,12 @@ export class LedgerTableComponent implements OnInit {
     }
   }
 
-  async readLedgers(startIndex: number, count: number): Promise<ILedger[]> {
+  async readLedgers(fileName: string, startIndex: number, count: number): Promise<ILedger[]> {
 
     let ledgers = [];
 
     try {
-      ledgers = await this.ptbService.readLedgers(startIndex, count);
+      ledgers = await this.ptbService.readLedgers(fileName, startIndex, count);
       this.ptbService.log(1, 'ledger-table', `read ${ledgers.length} ledgers`);
     } catch (error) {
       console.log(`failed to retrieve ledgers with message: ${error.message}`);

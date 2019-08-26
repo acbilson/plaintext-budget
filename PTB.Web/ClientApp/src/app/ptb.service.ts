@@ -25,9 +25,9 @@ export class PtbService {
     return this.http.put<ILedger>(uri, ledger, {headers: new HttpHeaders().set('Content-Type', 'application/json')}).toPromise();
     }
 
-    readLedgers(index: number, count: number): Promise<ILedger[]> {
+    readLedgers(fileName: string, index: number, count: number): Promise<ILedger[]> {
 
-      const uri = `http://localhost:5000/api/Ledger/Read?startIndex=${index}&count=${count}`;
+      const uri = `http://localhost:5000/api/Ledger/Read?fileName=${fileName}&startIndex=${index}&count=${count}`;
       console.log(uri);
       return this.http.get<IRow[]>(uri)
       .pipe(

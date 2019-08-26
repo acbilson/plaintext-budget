@@ -18,5 +18,6 @@ export interface IPTBFile {
     "directoryName": string,
     "fileName": string,
     "fullPath": string,
-    "lineCount": number
+    "lineCount": number,
+    "shortName": string
   }
