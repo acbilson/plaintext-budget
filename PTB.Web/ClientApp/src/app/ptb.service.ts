@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ILedger, ILedgerColumn } from './ledger/ledger';
+import { ILedger, ILedgerColumn, IRow } from './ledger/ledger';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
 import { IPTBFile, IFileFolders } from './ledger/ptbfile';
@@ -29,9 +29,9 @@ export class PtbService {
 
       const uri = `http://localhost:5000/api/Ledger/Read?startIndex=${index}&count=${count}`;
       console.log(uri);
-      return this.http.get<ILedger[]>(uri)
+      return this.http.get<IRow[]>(uri)
       .pipe(
-        map((ledgers: ILedger[]) => {
+        map((ledgers: IRow[]) => {
 
           return this.rowToLedger(ledgers);
         })
@@ -42,7 +42,15 @@ export class PtbService {
     getFileFolders(): Promise<IFileFolders> {
       const uri = 'http://localhost:5000/api/Folder/GetFileFolders';
       console.log(uri);
-      return this.http.get<IFileFolders>(uri).toPromise();
+      return this.http.get<IFileFolders>(uri)
+      .pipe(
+        tap((fileFolders: IFileFolders) {
+          console.log(fileFolders);
+        }
+
+        )
+      )
+      .toPromise();
     }
 
     log(level: number, context: string, message: string): void {
@@ -52,19 +60,26 @@ export class PtbService {
       this.http.post(uri, logMessage, {headers: new HttpHeaders().set('Content-Type', 'application/json')}).toPromise();
     }
 
-    rowToLedger(rows: ILedger[]): ILedger[] {
+    rowToLedger(rows: IRow[]): ILedger[] {
 
+      var ledgers: ILedger[] = [];
+      
       rows.forEach((row) => {
-          row.date = this.getValueByName(row.columns, 'date');
-          row.amount = this.getValueByName(row.columns, 'amount');
-          row.type = this.getValueByName(row.columns, 'type');
-          row.subcategory = this.getValueByName(row.columns, 'subcategory');
-          row.title = this.getValueByName(row.columns, 'title');
-          row.subject = this.getValueByName(row.columns, 'subject');
-          row.locked = this.getValueByName(row.columns, 'locked');
+        const ledger: ILedger = {
+          "index": row.index,
+          "date": this.getValueByName(row.columns, 'date'),
+          "amount": this.getValueByName(row.columns, 'amount'),
+          "type": this.getValueByName(row.columns, 'type'),
+          "subcategory": this.getValueByName(row.columns, 'subcategory'),
+          "title": this.getValueByName(row.columns, 'title'),
+          "subject": this.getValueByName(row.columns, 'subject'),
+          "locked": this.getValueByName(row.columns, 'locked')
+        };
+
+        ledgers.push(ledger);
         })
 
-        return rows;
+        return ledgers;
   }
 
   getValueByName(columns: ILedgerColumn[], name: string): string {

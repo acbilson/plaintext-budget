@@ -1,20 +1,23 @@
 export interface ILedger {
-    "index": number,
-    "date": string,
-    "type": string,
-    "amount": string,
-    "subcategory": string,
-    "title": string,
-    "subject": string,
-    "locked": string,
-    "columns": ILedgerColumn[]
-  }
+  "index": number,
+  "date": string,
+  "type": string,
+  "amount": string,
+  "subcategory": string,
+  "title": string,
+  "subject": string,
+  "locked": string,
+}
 
-  export interface ILedgerColumn {
+export interface IRow {
+  "index": number,
+  "columns": IColumn[]
+}
 
-    "columnValue": string,
-    "columnName": string,
-    "index": number,
-    "size": number,
-    "offset": number
-  }
+export interface IColumn {
+  "columnValue": string,
+  "columnName": string,
+  "index": number,
+  "size": number,
+  "offset": number
+}
