@@ -20,7 +20,6 @@ namespace PTB.Web
     public class Startup
     {
         private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-        private readonly string HomeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
 
         public Startup(IConfiguration configuration)
         {

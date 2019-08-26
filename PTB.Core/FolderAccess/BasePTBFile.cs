@@ -5,6 +5,9 @@ namespace PTB.Core.FolderAccess
 {
     public class BasePTBFile
     {
+        public string ShortName { get; protected set; }
+        public DateTime? StartDate { get; protected set; }
+        public DateTime? EndDate { get; protected set; }
         public string DirectoryName { get; private set; }
         public string FileName { get; private set; }
         public string FullPath { get; private set; }

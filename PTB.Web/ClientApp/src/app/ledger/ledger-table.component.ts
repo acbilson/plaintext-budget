@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ILedger } from './ledger';
-import { IPTBFile } from './ptbfile';
+import { IPTBFile, IFileFolders } from './ptbfile';
 import { PtbService } from '../ptb.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -11,24 +11,23 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LedgerTableComponent implements OnInit {
   public ledgers: ILedger[];
-  public ledgerFiles: IPTBFile[];
+  public fileFolders: IFileFolders;
 
   constructor(private ptbService: PtbService) {
     this.ptbService = ptbService;
     this.ledgers = [];
-    this.ledgerFiles = [];
   }
 
   ngOnInit() {
     // gets all the available ledger files
-    this.getLedgerFiles().then(files => this.ledgerFiles = files);
+    this.getFileFolders().then(files => this.fileFolders = files);
 
     // reads the first twentyfive ledger entries
     this.readLedgers(0, 25).then(ledgers => this.ledgers = ledgers);
   }
 
   private getLedgerByIndex(index: string): ILedger {
-    return this.ledgers.find(ledger => parseInt(ledger.index) == parseInt(index));
+    return this.ledgers.find(ledger => ledger.index == parseInt(index));
   }
 
   async updateLedgerSubcategory(index: string, subcategory: string): Promise<ILedger> {
@@ -36,8 +35,8 @@ export class LedgerTableComponent implements OnInit {
 
     try {
       let ledger = this.getLedgerByIndex(index);
-      ledger.subcategory = subcategory;
-      ledger.locked = '1';
+      ledger.columns["subcategory"] = subcategory;
+      ledger.columns["locked"] = '1';
 
       updatedLedger = await this.ptbService.updateLedger(ledger);
     }
@@ -54,8 +53,8 @@ export class LedgerTableComponent implements OnInit {
 
     try {
       var ledger = this.getLedgerByIndex(index);
-      ledger.subject = subject;
-      ledger.locked = '1';
+      ledger["subject"] = subject;
+      ledger["locked"] = '1';
 
       updatedLedger = await this.ptbService.updateLedger(ledger);
     }
@@ -78,7 +77,7 @@ export class LedgerTableComponent implements OnInit {
     if (position >= bottom ) {
 
       // index of the last leger entry in the row
-      const lastIndex = parseInt(this.ledgers[this.ledgers.length - 1].index);
+      const lastIndex = this.ledgers[this.ledgers.length - 1].index;
 
       // adds ledger size plus carriage return to skip returning the last row again (need to retrieve schema via API)
       const finalIndex = lastIndex + 142;
@@ -108,11 +107,11 @@ export class LedgerTableComponent implements OnInit {
     return ledgers;
   }
 
-  async getLedgerFiles(): Promise<IPTBFile[]> {
-    let files = [];
+  async getFileFolders(): Promise<IFileFolders> {
+    let files: IFileFolders;
 
     try {
-      files = await this.ptbService.getLedgerFiles();
+      files = await this.ptbService.getFileFolders();
     }
     catch (error) {
       console.log(`failed to retrieve ledger files with message: ${error.message}`);

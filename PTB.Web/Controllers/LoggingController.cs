@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PTB.Core;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using PTB.Core.Logging;
 
 namespace PTB.Web.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class LoggingController : ControllerBase

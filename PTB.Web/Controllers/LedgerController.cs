@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using PTB.Core;
 using PTB.Core.Base;
 using PTB.Core.Exceptions;
 using PTB.Core.Logging;
 using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
 using PTB.Files.TitleRegex;
-using System;
 using System.Collections.Generic;
 
 namespace PTB.Web.Controllers
@@ -70,14 +68,14 @@ namespace PTB.Web.Controllers
 
         private void LogError(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FolderController).Name);
-            _logger.Log(logMessage);
-        }
-        private void Log(string message)
-        {
-            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FolderController).Name);
+            var logMessage = new LogMessage(LoggingLevel.Error, message, nameof(LedgerController));
             _logger.Log(logMessage);
         }
 
+        private void Log(string message)
+        {
+            var logMessage = new LogMessage(LoggingLevel.Debug, message, nameof(LedgerController));
+            _logger.Log(logMessage);
+        }
     }
 }

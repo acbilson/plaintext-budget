@@ -17,6 +17,7 @@ import { DebitPipe } from './custom-pipes/debit.pipe';
 
 // services
 import { PtbService } from './ptb.service';
+import { IncomingTransformModule } from './incoming-transform';
 
 @NgModule({
   declarations: [

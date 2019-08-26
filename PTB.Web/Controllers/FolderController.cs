@@ -1,17 +1,12 @@
-﻿using Newtonsoft.Json;
-using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using PTB.Core;
 using PTB.Core.Logging;
-using System;
-using System.Collections.Generic;
-using PTB.Core.FolderAccess;
-using PTB.Files.Ledger;
 using PTB.Files.FolderAccess;
-using PTB.Core.Base;
+using System;
 
 namespace PTB.Web.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class FolderController : ControllerBase
@@ -25,17 +20,33 @@ namespace PTB.Web.Controllers
             _fileFolderService = fileFolderService;
         }
 
-        // GET: api/File/GetFileFolders
+        // GET: api/Folder/GetFileFolders
         [HttpGet("[action]")]
         public FileFolders GetFileFolders()
         {
-            var folders = _fileFolderService.GetFileFolders();
+            FileFolders folders = new FileFolders();
+
+            try
+            {
+                folders = _fileFolderService.GetFileFolders();
+            }
+            catch (Exception ex)
+            {
+                LogError(ex.Message);
+            }
+
             return folders;
         }
 
         private void Log(string message)
         {
             var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FolderController).Name);
+            _logger.Log(logMessage);
+        }
+
+        private void LogError(string message)
+        {
+            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FolderController).Name);
             _logger.Log(logMessage);
         }
     }

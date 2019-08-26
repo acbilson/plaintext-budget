@@ -5,8 +5,6 @@ namespace PTB.Files.FolderAccess
 {
     public class CategoriesFile : BasePTBFile
     {
-        public DateTime StartDate { get; private set; }
-
         public CategoriesFile()
         {
         }
