@@ -1,8 +1,5 @@
 ﻿using PTB.Core.FolderAccess;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace PTB.Files.FolderAccess
 {
@@ -14,10 +11,9 @@ namespace PTB.Files.FolderAccess
 
         public LedgerFile()
         {
-
         }
 
-        public LedgerFile(char fileDelimiter, int lineSize, System.IO.FileInfo file): base(fileDelimiter, lineSize, file)
+        public LedgerFile(char fileDelimiter, int lineSize, System.IO.FileInfo file) : base(fileDelimiter, lineSize, file)
         {
             string[] fileParts = GetFileNameParts(file.Name);
             LedgerName = fileParts[1];

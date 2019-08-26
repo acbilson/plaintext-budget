@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PTB.Core;
+using PTB.Core.Base;
 using PTB.Core.Exceptions;
-using PTB.Core.Ledger;
 using PTB.Core.Logging;
+using PTB.Files.FolderAccess;
+using PTB.Files.Ledger;
+using PTB.Files.TitleRegex;
 using System;
 using System.Collections.Generic;
 
@@ -14,41 +17,49 @@ namespace PTB.Web.Controllers
     [ApiController]
     public class LedgerController : ControllerBase
     {
-        private PTBFileLogger _logger;
-        private BaseFileManager _fileManager;
+        private IPTBLogger _logger;
+        private FileFolderService _fileFolderService;
+        private LedgerService _ledgerService;
+        private TitleRegexService _titleRegexService;
 
-        public LedgerController(PTBFileLogger logger, BaseFileManager fileManager)
+        public LedgerController(FileFolderService fileFolderService, LedgerService ledgerService, TitleRegexService titleRegexService, IPTBLogger logger)
         {
+            _fileFolderService = fileFolderService;
+            _ledgerService = ledgerService;
+            _titleRegexService = titleRegexService;
             _logger = logger;
-            _fileManager = fileManager;
         }
 
-        private PTBClient InstantiatePTBClient()
-        {
-            var client = PTBClient.Instance;
-            client.Instantiate(_fileManager, _logger);
-            return client;
-        }
-        // GET: api/ReadLedgers?startIndex=0&count=10
+        // GET: api/Ledger/Read?startIndex=0&count=10
         [HttpGet("[action]")]
-        public List<Ledger> ReadLedgers(int startIndex, int count)
+        public List<PTBRow> Read(int startIndex, int count)
         {
-            var client = InstantiatePTBClient();
-            var response = client.Ledger.ReadDefaultLedgerEntries(startIndex, count);
-            Log($"Read {response.Result.Count} ledger entries from the default ledger");
-            return response.Result;
-        }
-
-        // GET: api/UpdateLedger
-        [HttpPut("[action]")]
-        public Ledger UpdateLedger([FromBody] Ledger ledger)
-        {
-            var client = InstantiatePTBClient();
-            var response = client.Ledger.UpdateDefaultLedgerEntry(ledger);
+            var fileFolders = _fileFolderService.GetFileFolders();
+            var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
+            var response = _ledgerService.Read(defaultLedgerFile, startIndex, count);
 
             if (!response.Success)
             {
-                string message = $"Failed to update ledger with index: {ledger.Index}";
+                string message = $"Failed to read ledger entries from ledger {defaultLedgerFile.FileName}. Message was: {response.Message}";
+                LogError(message);
+                throw new WebException(message);
+            }
+
+            Log($"Read {response.ReadResult.Count} ledger entries from the ledger {defaultLedgerFile.FileName}");
+            return response.ReadResult;
+        }
+
+        // GET: api/Ledger/Update
+        [HttpPut("[action]")]
+        public PTBRow Update([FromBody] PTBRow ledger)
+        {
+            var fileFolders = _fileFolderService.GetFileFolders();
+            var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
+            var response = _ledgerService.Update(defaultLedgerFile, ledger.Index, ledger);
+
+            if (!response.Success)
+            {
+                string message = $"Failed to update ledger {defaultLedgerFile.FileName} at index: {ledger.Index}. Message was {response.Message}";
                 LogError(message);
                 throw new WebException(message);
             }

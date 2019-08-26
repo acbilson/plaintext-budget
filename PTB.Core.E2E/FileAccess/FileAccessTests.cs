@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.FolderAccess;
 using PTB.Files.FolderAccess;
 
 namespace PTB.Core.E2E

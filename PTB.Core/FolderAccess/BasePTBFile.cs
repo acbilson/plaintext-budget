@@ -12,8 +12,9 @@ namespace PTB.Core.FolderAccess
 
         protected char _delimiter;
 
-        public BasePTBFile() { }
-
+        public BasePTBFile()
+        {
+        }
 
         public BasePTBFile(char fileDelimiter, int lineSize, System.IO.FileInfo file)
         {

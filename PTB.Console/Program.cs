@@ -1,16 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PTB.Core;
-using PTB.Core.Base;
-using PTB.Core.Logging;
-using PTB.Core.Statements;
-using PTB.Files.FolderAccess;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Newtonsoft.Json;
+using PTB.Core;
+using PTB.Core.Logging;
+using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
-using PTB.Core.Files;
+using System;
+using System.IO;
 
 namespace PTB.Console
 {
@@ -18,7 +13,6 @@ namespace PTB.Console
     {
         private static void Main(string[] args)
         {
-
             string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
             string baseDir = Path.Combine(home, @"Archive\2019\BudgetProject\PTB_Home");
 
@@ -48,6 +42,7 @@ namespace PTB.Console
             var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
             var ledgers = ledgerRepository.Read(defaultLedgerFile, 0, 10);
         }
+
         /*
         private static PTBClient InitiateClient()
         {

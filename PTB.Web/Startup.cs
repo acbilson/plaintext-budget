@@ -3,15 +3,24 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using PTB.Core;
 using PTB.Core.Logging;
+using PTB.Core.Statements;
+using PTB.Files.Categories;
+using PTB.Files.FolderAccess;
+using PTB.Files.Ledger;
+using PTB.Files.Statements;
+using PTB.Files.TitleRegex;
+using System;
+using System.IO;
 
 namespace PTB.Web
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-        readonly string HomeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private readonly string HomeDirectory = @"C:\Users\abilson\OneDrive - SPR Consulting\Archive\2019\BudgetProject\PTB_Home";
 
         public Startup(IConfiguration configuration)
         {
@@ -20,16 +29,46 @@ namespace PTB.Web
 
         public IConfiguration Configuration { get; }
 
+        private void LoadServiceConfiguration(IServiceCollection services)
+        {
+            string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
+            string baseDir = Path.Combine(home, @"Archive\2019\BudgetProject\PTB_Home");
+
+            var settingsText = File.ReadAllText(Path.Combine(baseDir, "settings.json"));
+            var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
+
+            var schemaText = File.ReadAllText(Path.Combine(baseDir, "schema.json"));
+            var schema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
+
+            var logger = new PTBFileLogger(settings.LoggingLevel, baseDir);
+
+            services.AddSingleton<IPTBLogger>(logger)
+
+            .AddSingleton<PTBSettings>(settings)
+
+            .AddSingleton<FileSchema>(schema)
+            .AddSingleton<LedgerSchema>(schema.Ledger)
+            .AddSingleton<CategoriesSchema>(schema.Categories)
+            .AddSingleton<TitleRegexSchema>(schema.TitleRegex)
+
+            .AddSingleton<IStatementParser, PNCParser>()
+            .AddSingleton<LedgerFileParser>()
+            .AddSingleton<CategoriesFileParser>()
+            .AddSingleton<TitleRegexFileParser>()
+
+            .AddScoped<FileFolderService>()
+
+            .AddScoped<LedgerService>()
+            .AddScoped<CategoriesService>()
+            .AddScoped<TitleRegexService>();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            LoadServiceConfiguration(services);
 
-            // Adds singletons
-            var logger = new PTBFileLogger(LoggingLevel.Debug, HomeDirectory);
-            //var fileManager = new BaseFileManager(HomeDirectory);
-            services.AddSingleton(logger);
-            //services.AddSingleton(fileManager);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

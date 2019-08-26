@@ -12,27 +12,24 @@ using PTB.Core.Base;
 
 namespace PTB.Web.Controllers
 {
-    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class FolderController : ControllerBase
     {
         private IPTBLogger _logger;
-        private PTBSettings _settings;
-        private PTBSchema _schema;
+        private FileFolderService _fileFolderService;
 
-        public FolderController(PTBSettings settings, PTBSchema schema, IPTBLogger logger)
+        public FolderController(FileFolderService fileFolderService, IPTBLogger logger)
         {
             _logger = logger;
+            _fileFolderService = fileFolderService;
         }
 
         // GET: api/File/GetFileFolders
         [HttpGet("[action]")]
         public FileFolders GetFileFolders()
         {
-            var client = new PTBClient(" ");
-            var folderMgr = new FileFolderManager(_settings, _schema.Ledger, _logger);
-            var folders = folderMgr.GetFileFolders();
+            var folders = _fileFolderService.GetFileFolders();
             return folders;
         }
 

@@ -1,16 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using PTB.Core.Statements;
-using System.Collections.Generic;
-using System.IO;
-using PTB.Core.E2E;
 using PTB.Core.Base;
-using PTB.Files.Ledger;
+using PTB.Core.E2E;
 using PTB.Files.Categories;
+using PTB.Files.Ledger;
 using PTB.Files.TitleRegex;
+using System.Collections.Generic;
 
 namespace PTB.Core.PTBSystem
 {

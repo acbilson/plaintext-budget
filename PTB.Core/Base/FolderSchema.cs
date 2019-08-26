@@ -14,7 +14,6 @@ namespace PTB.Core.Base
         public int LineSize { get; set; }
         public List<ColumnSchema> Columns { get; set; }
 
-
         private bool NameEquals(string columnName, string value) => columnName.Equals(value, StringComparison.OrdinalIgnoreCase);
 
         private bool MissingColumn(string name) => !Columns.Exists(column => NameEquals(column.ColumnName, name));
@@ -32,6 +31,5 @@ namespace PTB.Core.Base
                 return GetColumnByName(columnName);
             }
         }
-
     }
 }

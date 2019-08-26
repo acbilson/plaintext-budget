@@ -1,19 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using PTB.Core.Base;
+using PTB.Core.Logging;
+using PTB.Core.Statements;
+using PTB.Files.Categories;
+using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
 using PTB.Files.Statements;
 using PTB.Files.TitleRegex;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using PTB.Files.Categories;
-using PTB.Core.Logging;
-using PTB.Core.Files;
-using PTB.Files.FolderAccess;
-using PTB.Core.Base;
-using PTB.Core.Statements;
+using System.Linq;
 
 namespace PTB.Core.E2E
 {
@@ -29,7 +28,7 @@ namespace PTB.Core.E2E
         public FileFolders FileFolders;
         public ServiceProvider Provider;
 
-        [TestInitialize] 
+        [TestInitialize]
         public void GlobalInitialize()
         {
             GetDefaultSettings();
@@ -58,6 +57,7 @@ namespace PTB.Core.E2E
             };
             CleanSettings = settings;
         }
+
         public void GetDirtySettings()
         {
             var settings = new PTBSettings
@@ -118,7 +118,7 @@ namespace PTB.Core.E2E
                 .AddScoped<TitleRegexService>()
             .BuildServiceProvider();
 
-           Provider = serviceProvider;
+            Provider = serviceProvider;
         }
 
         public void WithALogger()
@@ -237,6 +237,7 @@ namespace PTB.Core.E2E
         {
             Assert.AreEqual(63, lines.Length);
         }
+
         public void ShouldGenerateASortedBudget(string[] lines)
         {
             string firstCategory = "Charity";
@@ -271,15 +272,9 @@ namespace PTB.Core.E2E
                 Assert.Fail($"There were skipped categories. Messages: {messages}");
             }
             Assert.AreEqual(39, response.ReadResult.Count());
-
         }
 
         #endregion Assert - Should
-
-        #region Assert - With
-
-
-        #endregion Assert - With
 
         // should be the full length of the line plus ending (117) multiplied by the line number minus 1 b/c it starts a 1
         private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.LineSize + System.Environment.NewLine.Length) * (lineNumber - 1);
