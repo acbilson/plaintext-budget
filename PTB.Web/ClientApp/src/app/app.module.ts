@@ -36,8 +36,7 @@ import { LoggingService } from './services/logging.service';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-    /*  { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent }, */
+      { path: 'ledger/:name', component: LedgerTableComponent },
       { path: 'ledger', component: LedgerTableComponent },
     ])
   ],

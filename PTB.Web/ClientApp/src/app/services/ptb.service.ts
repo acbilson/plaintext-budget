@@ -25,14 +25,14 @@ export class PtbService {
      }
 
    updateLedger(ledger: ILedgerEntry): Promise<IRow> {
-    const url = new URL('api/Ledger/Update', this.baseUrl);
+    const url = new URL('api/Ledger/Update', this.baseUrl.href);
     const row = this.transform.ledgerToRow(ledger);
     console.log(row);
     return this.http.put<IRow>(url.href, row, this.httpOptions).toPromise();
     }
 
     readLedgers(fileName: string, index: number, count: number): Promise<ILedgerEntry[]> {
-      const url = new URL(`api/Ledger/Read?fileName=${fileName}&startIndex=${index}&count=${count}`, this.baseUrl);
+      const url = new URL(`api/Ledger/Read?fileName=${fileName}&startIndex=${index}&count=${count}`, this.baseUrl.href);
       return this.http.get<IRow[]>(url.href)
       .pipe(
         map((ledgers: IRow[]) => {
@@ -42,7 +42,7 @@ export class PtbService {
     }
 
     getFileFolders(): Promise<IFileFolders> {
-      const url = new URL('api/Folder/GetFileFolders', this.baseUrl);
+      const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
       return this.http.get<IFileFolders>(url.href).toPromise();
     }
 }

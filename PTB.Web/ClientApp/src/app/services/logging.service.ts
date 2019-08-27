@@ -32,7 +32,7 @@ export class LoggingService {
             message: message
         };
 
-        const url = new URL('api/Logging/log', this.baseUrl);
+        const url = new URL('api/Logging/log', this.baseUrl.href);
             try {
                 var response = await this.http.post(url.href, logMessage, this.httpOptions).toPromise();
             } catch (error) {
