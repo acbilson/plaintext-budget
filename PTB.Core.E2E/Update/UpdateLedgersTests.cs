@@ -12,7 +12,7 @@ namespace PTB.Core.E2E
             // Arrange
             var ledgerToUpdate = WithTheFourthLedger();
             string newSubcategory = "TestCategory";
-            ledgerToUpdate["subcategory"] = new String(' ', Schema.Ledger["subcategory"].Size - newSubcategory.Length) + newSubcategory;
+            ledgerToUpdate["subcategory"] = newSubcategory;
 
             // Act
             var response = WhenALedgerIsUpdated(ledgerToUpdate.Index, ledgerToUpdate);
@@ -21,5 +21,22 @@ namespace PTB.Core.E2E
             Assert.IsTrue(response.Success);
             ShouldUpdateFourthEntryWithNewSubcategory(ledgerToUpdate["subcategory"]);
         }
+
+        [TestMethod]
+        public void ShouldNotUpdateUneditableColumn()
+        {
+            // Arrange
+            var ledgerToUpdate = WithTheFourthLedger();
+            string newAmount = "999.99";
+            ledgerToUpdate["amount"] = newAmount;
+
+            // Act
+            var response = WhenALedgerIsUpdated(ledgerToUpdate.Index, ledgerToUpdate);
+
+            // Assert
+            Assert.IsTrue(response.Success);
+            ShouldNotUpdateFourthEntryWithNewAmount(ledgerToUpdate["amount"]);
+        }
+
     }
 }

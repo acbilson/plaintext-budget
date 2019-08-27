@@ -46,6 +46,8 @@ namespace PTB.Web.Controllers
             }
 
             Log($"Read {response.ReadResult.Count} ledger entries from ledger {ledgerFile.ShortName}");
+            int randomIndex = new Random().Next(0, response.ReadResult.Count - 1);
+            Log($"Sample ledger: {response.ReadResult[randomIndex]}");
             return response.ReadResult;
         }
 

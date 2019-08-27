@@ -27,6 +27,8 @@ export class PtbTransformService {
   
           ledgers.push(ledger);
           })
+
+          console.log(ledgers[0]);
   
           return ledgers;
     }
@@ -40,7 +42,8 @@ export class PtbTransformService {
           value: column.columnValue,
           index: column.index,
           offset: column.offset,
-          size: column.size
+          size: column.size,
+          editable: column.editable
         };
     }
 
@@ -68,7 +71,8 @@ export class PtbTransformService {
         columnValue: column.value,
         index: column.index,
         offset: column.offset,
-        size: column.size
+        size: column.size,
+        editable: column.editable
       };
       return newColumn;
     }

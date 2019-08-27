@@ -21,6 +21,7 @@
             base.ColumnName = schema.ColumnName;
             base.Index = schema.Index;
             base.Offset = schema.Offset;
+            base.Editable = schema.Editable;
         }
 
         private bool LengthExceedsSize(string value) => value.Trim().Length > Size;
@@ -28,13 +29,13 @@
         public override string ToString()
         {
             var builder = new System.Text.StringBuilder();
-            builder.Append("( ColumnName: ");
+            builder.Append("( Name: ");
             builder.Append(ColumnName);
             builder.Append(", ");
-            builder.Append("ColumnValue: ");
-            builder.Append(ColumnValue);
+            builder.Append("Value: ");
+            builder.Append(ColumnValue.TrimStart());
             builder.Append(", ");
-            builder.AppendLine($"I:{Index} O:{Offset}, S:{Size} )");
+            builder.AppendLine($"I:{Index} O:{Offset}, S:{Size}, Edit:{Editable} )");
             return builder.ToString();
         }
     }

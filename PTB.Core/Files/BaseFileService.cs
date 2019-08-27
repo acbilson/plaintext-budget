@@ -159,11 +159,47 @@ namespace PTB.Core.Files
                 return response;
             }
 
-            using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.Write))
+            using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.ReadWrite))
             {
-                byte[] buffer = _encoding.GetBytes(parseResponse.Line);
+                byte[] buffer = GetBuffer();
                 SetBufferStartIndex(stream, index);
-                stream.Write(buffer, 0, buffer.Length);
+
+                // gets existing ledger prior to update
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string line = _encoding.GetString(buffer);
+                ValidateBuffer(buffer, file.FileName);
+                var stringToRowResponse = _parser.ParseLine(line, index);
+
+                if (!stringToRowResponse.Success)
+                {
+                    string message = $"Unable to retrieve ledger at ${index}. Message was {response.Message}";
+                    _logger.LogError(message);
+                    throw new ParseException(message);
+                }
+
+                // generates new row where only the editable columns are taken
+                List<PTBColumn> uneditableColumns = stringToRowResponse.Row.Columns.Where(column => column.Editable == false).ToList();
+                List<PTBColumn> editableColumns = row.Columns.Where(column => column.Editable == true).ToList();
+                uneditableColumns.AddRange(editableColumns);
+                PTBRow rowToUpdate = new PTBRow
+                {
+                    Index = index,
+                    Columns = uneditableColumns
+                };
+
+                // Writes the new row with only editable columns changed to the file
+                var rowToStringResponse = _parser.ParseRow(rowToUpdate);
+
+                if (!rowToStringResponse.Success)
+                {
+                    string message = $"Unable to reconvert ledger for update. Message was {response.Message}";
+                    _logger.LogError(message);
+                    throw new ParseException(message);
+                }
+
+                byte[] bufferToUpdate = _encoding.GetBytes(rowToStringResponse.Line + Environment.NewLine);
+                SetBufferStartIndex(stream, index);
+                stream.Write(bufferToUpdate, 0, buffer.Length);
                 stream.Flush();
             }
 

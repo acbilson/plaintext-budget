@@ -5,71 +5,94 @@
     "FileMask": "ledger_.*_\\d{2}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}",
     "Folder": "Ledgers",
     "LineSize": 140,
-    "Columns": {
-      "Date": {
+    "Columns": [
+      {
+        "ColumnName": "Date",
         "Index": 1,
         "Size": 10,
-        "Offset": 0
+        "Offset": 0,
+        "Editable": false
       },
-      "Type": {
+      {
+        "ColumnName": "Type",
         "Index": 2,
         "Size": 1,
-        "Offset": 10
+        "Offset": 10,
+        "Editable": false
       },
-      "Amount": {
+      {
+        "ColumnName": "Amount",
         "Index": 3,
         "Size": 12,
-        "Offset": 11
+        "Offset": 11,
+        "Editable": false
       },
-      "Subcategory": {
+      {
+        "ColumnName": "Subcategory",
         "Index": 4,
         "Size": 30,
-        "Offset": 23
+        "Offset": 23,
+        "Editable": true
       },
-      "Subject": {
+      {
+        "ColumnName": "Subject",
         "Index": 5,
         "Size": 30,
-        "Offset": 53
+        "Offset": 53,
+        "Editable": true
       },
-      "Title": {
+      {
+        "ColumnName": "Title",
         "Index": 6,
         "Size": 50,
-        "Offset": 83
+        "Offset": 83,
+        "Editable": false
       },
-      "Locked": {
+      {
+        "ColumnName": "Locked",
         "Index": 7,
         "Size": 1,
-        "Offset": 133
+        "Offset": 133,
+        "Editable": false
       }
-    }
+    ]
   },
   "TitleRegex": {
-    "DefaultFileName": "title-regex",
-    "Delimiter": " ",
+    "FileMask": "title-regex",
     "Folder": "Regex",
+    "Delimiter": " ",
+    "DefaultFileName": "title-regex",
     "LineSize": 84,
-    "Columns": {
-      "Priority": {
+    "Columns": [
+      {
+        "ColumnName": "Priority",
         "Index": 1,
         "Size": 1,
-        "Offset": 0
+        "Offset": 0,
+        "Editable": false
       },
-      "Subcategory": {
+      {
+        "ColumnName": "Subcategory",
         "Index": 2,
         "Size": 30,
-        "Offset": 1
+        "Offset": 1,
+        "Editable": false
       },
-      "Regex": {
+      {
+        "ColumnName": "Regex",
         "Index": 3,
         "Size": 20,
-        "Offset": 31
+        "Offset": 31,
+        "Editable": false
       },
-      "Subject": {
+      {
+        "ColumnName": "Subject",
         "Index": 4,
         "Size": 30,
-        "Offset": 51
+        "Offset": 51,
+        "Editable": false
       }
-    }
+    ]
   },
   "Categories": {
     "DefaultFileName": "categories_19-01-01",
@@ -77,24 +100,21 @@
     "FileMask": "categories_\\d{2}-\\d{2}-\\d{2}",
     "Folder": "Categories",
     "LineSize": 61,
-    "Columns": {
-      "Category": {
+    "Columns": [
+      {
+        "ColumnName": "Category",
         "Index": 1,
         "Size": 30,
-        "Offset": 0
+        "Offset": 0,
+        "Editable": false
       },
-      "Subcategory": {
+      {
+        "ColumnName": "Subcategory",
         "Index": 2,
         "Size": 30,
-        "Offset": 30
+        "Offset": 30,
+        "Editable": false
       }
-    }
-  },
-  "Budget": {
-    "CategorySeparator": "-",
-    "DefaultFileName": "budget-19-01-01",
-    "Delimiter": " ",
-    "Folder": "Budget",
-    "LineSize": 43
+    ]
   }
 }

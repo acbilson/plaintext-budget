@@ -232,6 +232,12 @@ namespace PTB.Core.E2E
             var ledger = GetLedgerOnLine(4);
             Assert.AreEqual(subcategory, ledger["subcategory"]);
         }
+        public void ShouldNotUpdateFourthEntryWithNewAmount(string amount)
+        {
+            var ledger = GetLedgerOnLine(4);
+            Assert.AreNotEqual(amount, ledger["amount"]);
+        }
+
 
         public void ShouldGenerateABudgetOfTheRightSize(string[] lines)
         {

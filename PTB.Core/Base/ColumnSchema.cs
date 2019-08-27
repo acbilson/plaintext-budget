@@ -6,5 +6,6 @@
         public int Index { get; set; }
         public int Size { get; set; }
         public int Offset { get; set; }
+        public bool Editable { get; set; }
     }
 }

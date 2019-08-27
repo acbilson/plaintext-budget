@@ -14,7 +14,8 @@ export interface ILedgerColumn {
   "value": string,
   "index": number,
   "size": number,
-  "offset": number
+  "offset": number,
+  "editable": boolean
 }
 
 export interface IRow {
@@ -27,5 +28,6 @@ export interface IColumn {
   "columnName": string,
   "index": number,
   "size": number,
-  "offset": number
+  "offset": number,
+  "editable": boolean
 }
