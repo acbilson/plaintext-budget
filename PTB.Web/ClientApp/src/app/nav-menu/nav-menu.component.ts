@@ -11,7 +11,8 @@ import { IFileFolders, IPTBFile } from '../ledger/ptbfile';
 export class NavMenuComponent implements OnInit {
   isExpanded = false;
   public fileFolders: IFileFolders;
-  public defaultLedger: IPTBFile;
+  public defaultLedgerName: string;
+  public ledgerLinks: object[];
 
   constructor(private ptbService: PtbService, private logger: LoggingService) {
     this.ptbService = ptbService;
@@ -24,9 +25,21 @@ export class NavMenuComponent implements OnInit {
     this.ptbService.getFileFolders()
     .then(fileFolders => {
       this.fileFolders = fileFolders;
-      this.defaultLedger = fileFolders.ledgerFolder.files.find(file => file.fileName == fileFolders.ledgerFolder.defaultFileName + '.txt');
+      this.defaultLedgerName = fileFolders.ledgerFolder.files.find(file => file.fileName == fileFolders.ledgerFolder.defaultFileName + '.txt').shortName;
+
+      let links = [];
+      this.fileFolders.ledgerFolder.files.forEach(ledgerFile => {
+        links.push({
+          'path': '/ledger',
+          'name': ledgerFile.shortName,
+          'text': ledgerFile.shortName
+        });
+      });
+
+      this.ledgerLinks = links;
+
       console.log(fileFolders);
-    });
+    }).catch(error => console.log(error));
 
   }
 

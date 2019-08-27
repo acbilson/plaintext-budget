@@ -17,11 +17,17 @@
                         <span class='glyphicon glyphicon-home'></span> Home
                     </a>
                 </li>
-                <li [routerLinkActive]='["link-active"]'>
-                    <a [routerLink]='["/ledger", defaultLedger.shortName]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-list-alt'></span> Ledger
-                    </a>
+                <li>
+                        <a [routerLink]='["/ledger", defaultLedgerName]' (click)='collapse()'>
+                            <span class='glyphicon glyphicon-list-alt'></span> Ledger
+                        </a>
+                    </li>
+
+                <li *ngFor="let link of ledgerLinks" class="subnav"  [routerLinkActive]='["link-active"]'  [routerLinkActiveOptions]='{ exact: true }'>
+                        <a [routerLink]='[link.path, link.name]'>{{ link.text }}</a>
                 </li>
+
+                
             </ul>
         </div>
     </div>
