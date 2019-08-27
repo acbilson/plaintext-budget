@@ -59,11 +59,6 @@ namespace PTB.Files.Ledger
 
         public string GetRegexMatch(string regex) => String.Concat(".*", regex.TrimStart(), "*");
 
-        public string GetColumnValueByName(string name, PTBRow row)
-        {
-            return row.Columns.First(column => column.ColumnName.Equals(name, StringComparison.OrdinalIgnoreCase))?.ColumnValue;
-        }
-
         public bool IsLedgerLocked(PTBRow row) => row["locked"] == "1";
 
         public void Categorize(LedgerFile file, List<PTBRow> titleRegices)

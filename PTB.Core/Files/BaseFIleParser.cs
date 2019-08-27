@@ -32,7 +32,9 @@ namespace PTB.Core.Files
             var response = RowToStringResponse.Default;
 
             var builder = new StringBuilder();
-            var columnValues = row.Columns.Select(column => column.ColumnValue);
+            var columnValues = row.Columns
+                .OrderBy(column => column.Index)
+                .Select(column => column.ColumnValue);
             builder.AppendJoin(_schema.Delimiter, columnValues);
 
             response.Line = builder.ToString();

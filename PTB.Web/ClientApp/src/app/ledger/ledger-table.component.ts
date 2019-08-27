@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { ILedgerEntry } from './ledger';
+import { ILedgerEntry, IRow } from './ledger';
 import { IPTBFile, IFileFolders } from './ptbfile';
 import { PtbService } from '../services/ptb.service';
 import { LoggingService } from '../services/logging.service';
@@ -53,15 +53,14 @@ export class LedgerTableComponent implements OnInit {
     return this.ledgers.find(ledger => ledger.index == parseInt(index));
   }
 
-  async updateLedgerSubcategory(index: string, subcategory: string): Promise<ILedgerEntry> {
-    let updatedLedger: ILedgerEntry;
+  async updateLedgerSubcategory(index: string, subcategory: string): Promise<IRow> {
+    let updatedLedger: IRow;
 
     try {
       let ledger = this.getLedgerByIndex(index);
       ledger.subcategory.value = subcategory;
       ledger.locked.value = '1';
 
-      console.log(ledger);
       updatedLedger = await this.ptbService.updateLedger(ledger);
     }
     catch (error) {
@@ -72,16 +71,14 @@ export class LedgerTableComponent implements OnInit {
     return updatedLedger;
   }
 
-  async updateLedgerSubject(index: string, subject: string): Promise<ILedgerEntry> {
-
-    let updatedLedger : ILedgerEntry;
+  async updateLedgerSubject(index: string, subject: string): Promise<IRow> {
+    let updatedLedger : IRow;
 
     try {
       var ledger = this.getLedgerByIndex(index);
       ledger.subject.value = subject;
       ledger.locked.value = '1';
 
-      console.log(ledger);
       updatedLedger = await this.ptbService.updateLedger(ledger);
     }
     catch (error) {

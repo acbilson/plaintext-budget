@@ -3,6 +3,7 @@ using PTB.Core.Exceptions;
 using PTB.Core.FolderAccess;
 using PTB.Core.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,6 +40,32 @@ namespace PTB.Core.Files
                 _logger.LogError(message);
                 throw new ParseException(message);
             }
+        }
+
+        protected void ValidateUpdateRow(PTBRow row, string fileName)
+        {
+            if (!IndexStartsAtCorrectByte(row.Index))
+            {
+                string message = $"The start index {row.Index} to update file {fileName} does not match the index of any line. It should be divisible by {_schema.LineSize}";
+                _logger.LogError(message);
+                throw new FileException(message);
+            }
+
+            if (!EveryValueMatchesColumnSize(row.Columns))
+            {
+                var mismatchedColumns = row.Columns
+                    .Where(column => column.ColumnValue.Length != column.Size)
+                    .Select(column => $"({column.ColumnName}, {column.ColumnValue})");
+                string columnsString = string.Join(Environment.NewLine, mismatchedColumns);
+                string message = $"The row at index {row.Index} has the following column size mismatches: {Environment.NewLine}{columnsString}";
+                _logger.LogError(message);
+                throw new FileException(message);
+            }
+        }
+
+        protected bool EveryValueMatchesColumnSize(List<PTBColumn> columns)
+        {
+            return columns.TrueForAll(column => column.ColumnValue.Length == column.Size);
         }
 
         protected bool IsFirstLine(int bytesRead, int bufferLength) => bytesRead == bufferLength;
@@ -121,13 +148,8 @@ namespace PTB.Core.Files
         {
             var response = BaseUpdateResponse.Default;
 
-            if (!IndexStartsAtCorrectByte(index))
-            {
-                string message = $"The start index {index} to update file {file.FileName} does not match the index of any line. It should be divisible by {_schema.LineSize}";
-                _logger.LogError(message);
-                throw new FileException(message);
-            }
-
+            ValidateUpdateRow(row, file.FileName);
+            
             var parseResponse = _parser.ParseRow(row);
 
             if (!parseResponse.Success)

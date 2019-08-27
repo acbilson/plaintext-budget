@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace PTB.Core.Base
 {
@@ -47,6 +48,20 @@ namespace PTB.Core.Base
                     column.ColumnValue = value;
                 }
             });
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            builder.Append("Index: ");
+            builder.AppendLine(Index.ToString());
+            builder.AppendLine("Columns: [");
+            foreach (var column in Columns)
+            {
+                builder.Append(column.ToString());
+            }
+            builder.AppendLine("]");
+            return builder.ToString();
         }
     }
 }

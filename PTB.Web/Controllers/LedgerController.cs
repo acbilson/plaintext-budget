@@ -64,7 +64,7 @@ namespace PTB.Web.Controllers
                 throw new WebException(message);
             }
 
-            Log($"Updated ledger [index:{ledger.Index},subject:{ledger["subject"]},subcategory:{ledger["subcategory"]}]");
+            Log($"Updated ledger: {Environment.NewLine} {ledger.ToString()}");
             return ledger;
         }
 

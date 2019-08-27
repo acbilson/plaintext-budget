@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
 import { IPTBFile, IFileFolders } from '../ledger/ptbfile';
 import { Observable } from 'rxjs/Observable';
-import { PTBTransformService } from './ptb-transform.service';
+import { PtbTransformService } from './ptb-transform.service';
 
 
 @Injectable()
@@ -13,7 +13,7 @@ export class PtbService {
   httpOptions: object;
   baseUrl: URL;
 
-  constructor(private http: HttpClient, private transform: PTBTransformService) {
+  constructor(private http: HttpClient, private transform: PtbTransformService) {
     this.http = http;
     this.transform = transform;
     this.baseUrl = new URL('http://localhost:5000');
@@ -24,9 +24,11 @@ export class PtbService {
       }) };
      }
 
-   updateLedger(ledger: ILedgerEntry): Promise<ILedgerEntry> {
+   updateLedger(ledger: ILedgerEntry): Promise<IRow> {
     const url = new URL('api/Ledger/Update', this.baseUrl);
-    return this.http.put<ILedgerEntry>(url.href, ledger, this.httpOptions).toPromise();
+    const row = this.transform.ledgerToRow(ledger);
+    console.log(row);
+    return this.http.put<IRow>(url.href, row, this.httpOptions).toPromise();
     }
 
     readLedgers(fileName: string, index: number, count: number): Promise<ILedgerEntry[]> {
@@ -34,7 +36,7 @@ export class PtbService {
       return this.http.get<IRow[]>(url.href)
       .pipe(
         map((ledgers: IRow[]) => {
-          return this.transform.rowToLedger(ledgers);
+          return this.transform.rowsToLedgerEntries(ledgers);
         })
       ).toPromise();
     }

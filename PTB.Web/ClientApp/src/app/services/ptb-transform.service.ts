@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
 import { ILedgerEntry, IColumn, IRow, ILedgerColumn } from '../ledger/ledger';
+import { repeatWhen } from 'rxjs/operators';
 
 @Injectable()
-export class PTBTransformService {
+export class PtbTransformService {
 
   constructor() {
     
   }
 
-    rowToLedger(rows: IRow[]): ILedgerEntry[] {
+    rowsToLedgerEntries(rows: IRow[]): ILedgerEntry[] {
 
         var ledgers: ILedgerEntry[] = [];
         
         rows.forEach((row) => {
           const ledger: ILedgerEntry = {
             "index": row.index,
-            "date": this.getColumnByName(row.columns, 'date'),
-            "amount": this.getColumnByName(row.columns, 'amount'),
-            "type": this.getColumnByName(row.columns, 'type'),
-            "subcategory": this.getColumnByName(row.columns, 'subcategory'),
-            "title": this.getColumnByName(row.columns, 'title'),
-            "subject": this.getColumnByName(row.columns, 'subject'),
-            "locked": this.getColumnByName(row.columns, 'locked')
+            "date": this.getLedgerColumnByName(row.columns, 'date'),
+            "amount": this.getLedgerColumnByName(row.columns, 'amount'),
+            "type": this.getLedgerColumnByName(row.columns, 'type'),
+            "subcategory": this.getLedgerColumnByName(row.columns, 'subcategory'),
+            "title": this.getLedgerColumnByName(row.columns, 'title'),
+            "subject": this.getLedgerColumnByName(row.columns, 'subject'),
+            "locked": this.getLedgerColumnByName(row.columns, 'locked')
           };
   
           ledgers.push(ledger);
@@ -30,7 +31,7 @@ export class PTBTransformService {
           return ledgers;
     }
   
-    getColumnByName(columns: IColumn[], name: string): ILedgerColumn {
+    getLedgerColumnByName(columns: IColumn[], name: string): ILedgerColumn {
   
         let column = columns.find(col => col.columnName.toLowerCase() == name);
 
@@ -41,5 +42,34 @@ export class PTBTransformService {
           offset: column.offset,
           size: column.size
         };
+    }
+
+    ledgerToRow(ledger: ILedgerEntry): IRow {
+
+      let row: IRow = {
+        index: ledger.index,
+        columns: [
+          this.getColumn(ledger.date),
+          this.getColumn(ledger.amount),
+          this.getColumn(ledger.type),
+          this.getColumn(ledger.subcategory),
+          this.getColumn(ledger.subject),
+          this.getColumn(ledger.locked),
+          this.getColumn(ledger.title)
+        ]
+      }
+        return row;
+      }
+
+    getColumn(column: ILedgerColumn): IColumn {
+      let newColumn: IColumn =
+      {
+        columnName: column.name,
+        columnValue: column.value,
+        index: column.index,
+        offset: column.offset,
+        size: column.size
+      };
+      return newColumn;
     }
 }
