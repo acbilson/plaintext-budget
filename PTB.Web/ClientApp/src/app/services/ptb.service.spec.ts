@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { PtbService } from './ptb.service';
-import { ILedger } from './ledger/ledger';
-import { IPTBFile } from './ledger/ptbfile';
+import { ILedgerEntry } from '../ledger/ledger';
+import { IPTBFile } from '../ledger/ptbfile';
 
 describe('PtbService', () => {
   let service: PtbService;
@@ -25,7 +25,7 @@ describe('PtbService', () => {
 
   describe('ReadLedgers', () => {
 
-    const testLedgers: ILedger[] = [
+    const testLedgers: ILedgerEntry[] = [
       { index: '0',
         date: '19-01-01',
         type: 'D',
@@ -69,7 +69,7 @@ describe('PtbService', () => {
 
   describe('UpdateLedger', () => {
 
-    const testLedgerToUpdate: ILedger = {
+    const testLedgerToUpdate: ILedgerEntry = {
       index: '0',
         date: '19-01-01',
         type: 'D',
@@ -107,7 +107,7 @@ describe('PtbService', () => {
     it('returns a Promise<IPTBFile[]>', () => {
 
       // Act
-      service.getLedgerFiles().then((result) => {
+      service.getFolderFiles().then((result) => {
 
         // Assert - result
         expect(result.length).toBe(testLedgerFiles.length);

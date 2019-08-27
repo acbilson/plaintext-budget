@@ -13,21 +13,21 @@
     <tbody>
         <tr *ngFor="let ledger of ledgers" scope="row">
             <!-- <td class="ledger-index"><label>{{ledger.index | prependZeros }}</label></td> -->
-            <td class="ledger-date"><label>{{ledger.date | trim }}</label></td>
+            <td class="ledger-date"><label>{{ledger.date.value | trim }}</label></td>
             <td class="ledger-amount">
                 <div *ngIf="ledger.type == 'D'; then ledgerTypeThen else ledgerTypeElse"></div>
-                <ng-template #ledgerTypeThen><label class="ledger-amount-debit">{{ ledger.amount | trim | debit }}</label></ng-template>
-                <ng-template #ledgerTypeElse><label class="ledger-amount-credit">{{ ledger.amount | trim }}</label></ng-template>
+                <ng-template #ledgerTypeThen><label class="ledger-amount-debit">{{ ledger.amount.value | trim | debit }}</label></ng-template>
+                <ng-template #ledgerTypeElse><label class="ledger-amount-credit">{{ ledger.amount.value | trim }}</label></ng-template>
             </td>
             <td class="ledger-subcategory">
-                <input class="ledger-subcategory-input" [value]="ledger.subcategory | trim" (change)="updateLedgerSubcategory(ledger.index, $event.target.value)" name="subcategory" type="text" />
+                <input class="ledger-subcategory-input" [value]="ledger.subcategory.value | trim" (change)="updateLedgerSubcategory(ledger.index, $event.target.value)" name="subcategory" type="text" />
             </td>
             <td class="ledger-title">
-                <div *ngIf="ledger.subject.trim() == ''; then ledgerTitleThen else ledgerTitleElse"></div>
-                <ng-template #ledgerTitleThen><input class="ledger-title-input" [value]="ledger.title | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
-                <ng-template #ledgerTitleElse><input class="ledger-title-input" [value]="ledger.subject | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
+                <div *ngIf="ledger.subject.value.trim() == ''; then ledgerTitleThen else ledgerTitleElse"></div>
+                <ng-template #ledgerTitleThen><input class="ledger-title-input" [value]="ledger.title.value | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
+                <ng-template #ledgerTitleElse><input class="ledger-title-input" [value]="ledger.subject.value | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
             </td>
-            <!-- <td class="ledger-locked"><label>{{ ledger.locked | trim }}</label></td> -->
+            <!-- <td class="ledger-locked"><label>{{ ledger.locked.value | trim }}</label></td> -->
         </tr>
     </tbody>
 </table>

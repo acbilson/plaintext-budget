@@ -15,17 +15,17 @@ namespace PTB.Core.Logging
             System.IO.File.Delete(_loggingFile.FullName);
         }
 
+        private long GetTimestamp() => (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+
+        private string GetLoggingString(LogMessage msg)
+        {
+            string lvl = msg.Level.ToString();
+            return $"{msg.Timestamp}-{lvl}-{msg.Context}: {msg.Message}";
+        }
+
         public void Log(LogMessage logMessage)
         {
-            string message = "";
-            switch (logMessage.Level)
-            {
-                case LoggingLevel.Info: { message = $"INFO-{logMessage.Context} - {logMessage.Message}"; break; }
-                case LoggingLevel.Debug: { message = $"DBUG-{logMessage.Context} - {logMessage.Message}"; break; }
-                case LoggingLevel.Warning: { message = $"WARN-{logMessage.Context} - {logMessage.Message}"; break; }
-                case LoggingLevel.Error: { message = $"ERR-{logMessage.Context} - {logMessage.Message}"; break; }
-            }
-
+            string message = GetLoggingString(logMessage);
             this.Log(message);
         }
 
@@ -51,7 +51,8 @@ namespace PTB.Core.Logging
         {
             if (_level <= LoggingLevel.Info)
             {
-                Log($"INFO-{_context}: {message}");
+                var logMessage = new LogMessage(LoggingLevel.Info, message, _context, GetTimestamp().ToString());
+                Log(logMessage);
             }
         }
 
@@ -59,7 +60,8 @@ namespace PTB.Core.Logging
         {
             if (_level <= LoggingLevel.Debug)
             {
-                Log($"DBUG-{_context}: {message}");
+                var logMessage = new LogMessage(LoggingLevel.Debug, message, _context, GetTimestamp().ToString());
+                Log(logMessage);
             }
         }
 
@@ -67,7 +69,8 @@ namespace PTB.Core.Logging
         {
             if (_level <= LoggingLevel.Warning)
             {
-                Log($"WARN-{_context}: {message}");
+                var logMessage = new LogMessage(LoggingLevel.Warning, message, _context, GetTimestamp().ToString());
+                Log(logMessage);
             }
         }
 
@@ -75,7 +78,8 @@ namespace PTB.Core.Logging
         {
             if (_level <= LoggingLevel.Error)
             {
-                Log($"ERR-{_context}: {message}");
+                var logMessage = new LogMessage(LoggingLevel.Error, message, _context, GetTimestamp().ToString());
+                Log(logMessage);
             }
         }
 
@@ -83,7 +87,8 @@ namespace PTB.Core.Logging
         {
             if (_level <= LoggingLevel.Error)
             {
-                Log($"ERR-{_context}: Message: {exception.ToString()}");
+                var logMessage = new LogMessage(LoggingLevel.Error, exception.ToString(), _context, GetTimestamp().ToString());
+                Log(logMessage);
             }
         }
     }

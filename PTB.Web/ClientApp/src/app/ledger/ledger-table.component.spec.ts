@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LedgerTableComponent } from './ledger-table.component';
 import { Pipe, PipeTransform, Injectable } from '@angular/core';
-import { ILedger } from './ledger';
+import { ILedgerEntry } from './ledger';
 import { IPTBFile } from './ptbfile';
 import { FormsModule } from '@angular/forms';
 import { PtbService } from '../ptb.service';
@@ -33,9 +33,9 @@ class MyTrimPipeMock implements PipeTransform {
 @Injectable()
 class MockPtbService {
 
-  public ledgers: ILedger[];
+  public ledgers: ILedgerEntry[];
   public ledgerFiles: IPTBFile[];
-  public updatedLedger: ILedger;
+  public updatedLedger: ILedgerEntry;
 
   constructor() {
 
@@ -68,7 +68,7 @@ class MockPtbService {
       this.updatedLedger = this.ledgers[0];
   }
   
-  readLedgers(index: number, count: number) : Promise<ILedger[]> {
+  readLedgers(index: number, count: number) : Promise<ILedgerEntry[]> {
     return Promise.resolve(this.ledgers);
   }
 
@@ -76,7 +76,7 @@ class MockPtbService {
     return Promise.resolve(this.ledgerFiles);
   }
 
-  updateLedger(ledger: ILedger) : Promise<ILedger> {
+  updateLedger(ledger: ILedgerEntry) : Promise<ILedgerEntry> {
     return Promise.resolve(this.updatedLedger);
   }
 }

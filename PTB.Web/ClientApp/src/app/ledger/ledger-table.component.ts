@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { ILedger } from './ledger';
+import { ILedgerEntry } from './ledger';
 import { IPTBFile, IFileFolders } from './ptbfile';
-import { PtbService } from '../ptb.service';
+import { PtbService } from '../services/ptb.service';
+import { LoggingService } from '../services/logging.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoggingLevel } from '../services/logging-level';
 
 @Component({
   selector: 'app-ledger-table',
@@ -10,73 +12,83 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./ledger-table.component.css']
 })
 export class LedgerTableComponent implements OnInit {
-  public ledgers: ILedger[];
+  public ledgers: ILedgerEntry[];
   public fileFolders: IFileFolders;
+  private context: string;
+  private logger: LoggingService;
 
-  constructor(private ptbService: PtbService) {
+  constructor(private ptbService: PtbService, private loggingService: LoggingService) {
     this.ptbService = ptbService;
+    this.logger = loggingService;
     this.ledgers = [];
+    this.context = 'ledger-table';
+  }
+
+  log(message: string): void {
+    this.logger.log(this.context, message);
   }
 
   ngOnInit() {
     // gets all the available ledger files
     this.getFileFolders()
-    .then(files => this.fileFolders = files)
+    .then( (fileFolders: IFileFolders) => { 
+      this.fileFolders = fileFolders;
+      return fileFolders;
+     })
     .then((fileFolders: IFileFolders) => {
       const defaultShortName = this.getDefaultShortName(fileFolders);
       this.readLedgers(defaultShortName, 0, 25).then(ledgers => this.ledgers = ledgers);
     }
     );
-
-    // reads the first twentyfive ledger entries
-    
   }
 
   private getDefaultShortName(fileFolders: IFileFolders): string {
 
     let defaultFileName = fileFolders.ledgerFolder.defaultFileName;
-    //let name = fileFolders.ledgerFolder.files.find(l => l.fileName == defaultFileName).shortName;
-
-    // TODO: implement short name retrieval;
-    return "checking";
+    let name = fileFolders.ledgerFolder.files.find(l => l.fileName == (defaultFileName + '.txt')).shortName;
+    return name;
   }
 
-  private getLedgerByIndex(index: string): ILedger {
+  private getLedgerByIndex(index: string): ILedgerEntry {
     return this.ledgers.find(ledger => ledger.index == parseInt(index));
   }
 
-  async updateLedgerSubcategory(index: string, subcategory: string): Promise<ILedger> {
-    let updatedLedger: ILedger;
+  async updateLedgerSubcategory(index: string, subcategory: string): Promise<ILedgerEntry> {
+    let updatedLedger: ILedgerEntry;
 
     try {
       let ledger = this.getLedgerByIndex(index);
-      ledger.columns["subcategory"] = subcategory;
-      ledger.columns["locked"] = '1';
+      ledger.subcategory.value = subcategory;
+      ledger.locked.value = '1';
 
+      console.log(ledger);
       updatedLedger = await this.ptbService.updateLedger(ledger);
     }
     catch (error) {
       console.log(error);
     }
 
+    this.log(`updated ledger ${index} with subcategory ${subcategory}`);
     return updatedLedger;
   }
 
-  async updateLedgerSubject(index: string, subject: string): Promise<ILedger> {
+  async updateLedgerSubject(index: string, subject: string): Promise<ILedgerEntry> {
 
-    let updatedLedger : ILedger;
+    let updatedLedger : ILedgerEntry;
 
     try {
       var ledger = this.getLedgerByIndex(index);
-      ledger["subject"] = subject;
-      ledger["locked"] = '1';
+      ledger.subject.value = subject;
+      ledger.locked.value = '1';
 
+      console.log(ledger);
       updatedLedger = await this.ptbService.updateLedger(ledger);
     }
     catch (error) {
       console.log(error);
     }
 
+    this.log(`updated ledger ${index} with subject ${subject}`);
     return updatedLedger;
   }
 
@@ -98,27 +110,27 @@ export class LedgerTableComponent implements OnInit {
       const finalIndex = lastIndex + 142;
       const ledgerCount = 10;
 
-      this.readLedgers(finalIndex, ledgerCount)
+      const defaultShortName = this.getDefaultShortName(this.fileFolders);
+
+      this.readLedgers(defaultShortName, finalIndex, ledgerCount)
       .then(ledgers => {
-        //console.log(`number of ledgers before read: ${this.ledgers.length}`);
         this.ledgers = this.ledgers.concat(ledgers);
-        //console.log(`number of ledgers after read: ${this.ledgers.length}. Should be ${ledgers.length} + ${this.ledgers.length}`);
       })
       .catch(error => console.log(`failed to retrieve next ${ledgerCount} ledgers with message: ${error.message}`));
     }
   }
 
-  async readLedgers(fileName: string, startIndex: number, count: number): Promise<ILedger[]> {
+  async readLedgers(fileName: string, startIndex: number, count: number): Promise<ILedgerEntry[]> {
 
     let ledgers = [];
 
     try {
       ledgers = await this.ptbService.readLedgers(fileName, startIndex, count);
-      this.ptbService.log(1, 'ledger-table', `read ${ledgers.length} ledgers`);
     } catch (error) {
       console.log(`failed to retrieve ledgers with message: ${error.message}`);
     }
 
+    this.log(`read ${count} ledgers from ${fileName} starting at index ${startIndex}`);
     return ledgers;
   }
 
@@ -132,6 +144,7 @@ export class LedgerTableComponent implements OnInit {
       console.log(`failed to retrieve ledger files with message: ${error.message}`);
     }
 
+    this.log(`read all file folders`);
     return files;
   }
 }

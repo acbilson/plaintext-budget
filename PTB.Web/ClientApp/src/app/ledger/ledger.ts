@@ -1,12 +1,20 @@
-export interface ILedger {
+export interface ILedgerEntry {
   "index": number,
-  "date": string,
-  "type": string,
-  "amount": string,
-  "subcategory": string,
-  "title": string,
-  "subject": string,
-  "locked": string,
+  "date": ILedgerColumn,
+  "type": ILedgerColumn,
+  "amount": ILedgerColumn,
+  "subcategory": ILedgerColumn,
+  "title": ILedgerColumn,
+  "subject": ILedgerColumn,
+  "locked": ILedgerColumn,
+}
+
+export interface ILedgerColumn {
+  "name": string,
+  "value": string,
+  "index": number,
+  "size": number,
+  "offset": number
 }
 
 export interface IRow {

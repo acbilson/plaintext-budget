@@ -16,8 +16,9 @@ import { TrimPipe } from './custom-pipes/trim.pipe';
 import { DebitPipe } from './custom-pipes/debit.pipe';
 
 // services
-import { PtbService } from './ptb.service';
-import { IncomingTransformModule } from './incoming-transform';
+import { PtbService } from './services/ptb.service';
+import { PTBTransformService } from './services/ptb-transform.service';
+import { LoggingService } from './services/logging.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { IncomingTransformModule } from './incoming-transform';
       { path: 'ledger', component: LedgerTableComponent },
     ])
   ],
-  providers: [PtbService],
+  providers: [PTBTransformService, LoggingService, PtbService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

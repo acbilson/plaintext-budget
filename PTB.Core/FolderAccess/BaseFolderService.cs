@@ -70,10 +70,6 @@ namespace PTB.Core.FolderAccess
                     var file = GetFile<T>(fileName);
                     files.Add(file);
                 }
-                else
-                {
-                    _logger.LogInfo($"Skipped file {fileName} because it didn't match the file mask");
-                }
             }
 
             var folder = new PTBFolder<T>

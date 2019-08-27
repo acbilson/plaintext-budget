@@ -6,7 +6,9 @@ using PTB.Core.Logging;
 using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
 using PTB.Files.TitleRegex;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PTB.Web.Controllers
 {
@@ -28,22 +30,22 @@ namespace PTB.Web.Controllers
             _logger = logger;
         }
 
-        // GET: api/Ledger/Read?startIndex=0&count=10
+        // GET: api/Ledger/Read?fileName=checking&startIndex=0&count=10
         [HttpGet("[action]")]
-        public List<PTBRow> Read(int startIndex, int count)
+        public List<PTBRow> Read(string fileName, int startIndex, int count)
         {
             var fileFolders = _fileFolderService.GetFileFolders();
-            var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
-            var response = _ledgerService.Read(defaultLedgerFile, startIndex, count);
+            var ledgerFile = fileFolders.LedgerFolder.Files.First(file => file.ShortName == fileName);
+            var response = _ledgerService.Read(ledgerFile, startIndex, count);
 
             if (!response.Success)
             {
-                string message = $"Failed to read ledger entries from ledger {defaultLedgerFile.FileName}. Message was: {response.Message}";
+                string message = $"Failed to read ledger entries from ledger {ledgerFile.ShortName}. Message was: {response.Message}";
                 LogError(message);
                 throw new WebException(message);
             }
 
-            Log($"Read {response.ReadResult.Count} ledger entries from the ledger {defaultLedgerFile.FileName}");
+            Log($"Read {response.ReadResult.Count} ledger entries from ledger {ledgerFile.ShortName}");
             return response.ReadResult;
         }
 
@@ -57,24 +59,26 @@ namespace PTB.Web.Controllers
 
             if (!response.Success)
             {
-                string message = $"Failed to update ledger {defaultLedgerFile.FileName} at index: {ledger.Index}. Message was {response.Message}";
+                string message = $"Failed to update ledger {defaultLedgerFile.ShortName} at index: {ledger.Index}. Message was {response.Message}";
                 LogError(message);
                 throw new WebException(message);
             }
 
-            Log($"Updated ledger with index: {ledger.Index}");
+            Log($"Updated ledger [index:{ledger.Index},subject:{ledger["subject"]},subcategory:{ledger["subcategory"]}]");
             return ledger;
         }
 
         private void LogError(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Error, message, nameof(LedgerController));
+            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            var logMessage = new LogMessage(LoggingLevel.Error, message, nameof(LedgerController), now.ToString());
             _logger.Log(logMessage);
         }
 
         private void Log(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Debug, message, nameof(LedgerController));
+            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            var logMessage = new LogMessage(LoggingLevel.Debug, message, nameof(LedgerController), now.ToString());
             _logger.Log(logMessage);
         }
     }

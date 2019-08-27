@@ -40,13 +40,16 @@ namespace PTB.Web.Controllers
 
         private void Log(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FolderController).Name);
+            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FolderController).Name, now.ToString());
             _logger.Log(logMessage);
         }
 
         private void LogError(string message)
         {
-            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FolderController).Name);
+
+            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FolderController).Name, now.ToString());
             _logger.Log(logMessage);
         }
     }
