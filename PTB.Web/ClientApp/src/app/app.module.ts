@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { LedgerTableComponent } from './ledger/ledger-table.component';
+import { LedgerTableComponent } from './ledger/ledger-table/ledger-table.component';
 
 // pipes
 import { PrependZerosPipe } from './custom-pipes/prepend-zeros.pipe';
@@ -19,16 +19,18 @@ import { DebitPipe } from './custom-pipes/debit.pipe';
 import { PtbService } from './services/ptb.service';
 import { PtbTransformService } from './services/ptb-transform.service';
 import { LoggingService } from './services/logging.service';
+import { LedgerPageComponent } from './ledger/ledger-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    LedgerPageComponent,
     LedgerTableComponent,
     PrependZerosPipe,
     TrimPipe,
-    DebitPipe
+    DebitPipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,8 +38,8 @@ import { LoggingService } from './services/logging.service';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'ledger/:name', component: LedgerTableComponent },
-      { path: 'ledger', component: LedgerTableComponent },
+      { path: 'ledger/:name', component: LedgerPageComponent },
+      { path: 'ledger', component: LedgerPageComponent },
     ])
   ],
   providers: [PtbTransformService, LoggingService, PtbService],

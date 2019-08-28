@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LedgerTableComponent } from './ledger-table.component';
 import { Pipe, PipeTransform, Injectable } from '@angular/core';
-import { ILedgerEntry } from './ledger';
-import { IPTBFile } from './ptbfile';
+import { ILedgerEntry } from '../ledger';
+import { IPTBFile } from '../ptbfile';
 import { FormsModule } from '@angular/forms';
 import { PtbService } from '../ptb.service';
 

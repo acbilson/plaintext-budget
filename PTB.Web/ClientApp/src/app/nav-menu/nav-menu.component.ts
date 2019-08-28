@@ -37,8 +37,6 @@ export class NavMenuComponent implements OnInit {
       });
 
       this.ledgerLinks = links;
-
-      console.log(fileFolders);
     }).catch(error => console.log(error));
 
   }

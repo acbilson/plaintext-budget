@@ -25,9 +25,7 @@
 
                 <li *ngFor="let link of ledgerLinks" class="subnav"  [routerLinkActive]='["link-active"]'  [routerLinkActiveOptions]='{ exact: true }'>
                         <a [routerLink]='[link.path, link.name]'>{{ link.text }}</a>
-                </li>
-
-                
+                </li>                
             </ul>
         </div>
     </div>

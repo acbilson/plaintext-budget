@@ -1,10 +1,11 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { ILedgerEntry, IRow } from './ledger';
-import { IPTBFile, IFileFolders } from './ptbfile';
-import { PtbService } from '../services/ptb.service';
-import { LoggingService } from '../services/logging.service';
+import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { ILedgerEntry, IRow } from '../ledger';
+import { IPTBFile, IFileFolders } from '../ptbfile';
+import { PtbService } from '../../services/ptb.service';
+import { LoggingService } from '../../services/logging.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { LoggingLevel } from '../services/logging-level';
+import { LoggingLevel } from '../../services/logging-level';
+import { LedgerPageComponent } from '../ledger-page.component';
 
 @Component({
   selector: 'app-ledger-table',
@@ -12,8 +13,9 @@ import { LoggingLevel } from '../services/logging-level';
   styleUrls: ['./ledger-table.component.css']
 })
 export class LedgerTableComponent implements OnInit {
+
+  @Input() fileFolders: IFileFolders;
   public ledgers: ILedgerEntry[];
-  public fileFolders: IFileFolders;
   private context: string;
   private logger: LoggingService;
 
@@ -30,16 +32,8 @@ export class LedgerTableComponent implements OnInit {
 
   ngOnInit() {
     // gets all the available ledger files
-    this.getFileFolders()
-    .then( (fileFolders: IFileFolders) => { 
-      this.fileFolders = fileFolders;
-      return fileFolders;
-     })
-    .then((fileFolders: IFileFolders) => {
-      const defaultShortName = this.getDefaultShortName(fileFolders);
+      const defaultShortName = this.getDefaultShortName(this.fileFolders);
       this.readLedgers(defaultShortName, 0, 25).then(ledgers => this.ledgers = ledgers);
-    }
-    );
   }
 
   private getDefaultShortName(fileFolders: IFileFolders): string {
@@ -129,20 +123,6 @@ export class LedgerTableComponent implements OnInit {
 
     this.log(`read ${count} ledgers from ${fileName} starting at index ${startIndex}`);
     return ledgers;
-  }
-
-  async getFileFolders(): Promise<IFileFolders> {
-    let files: IFileFolders;
-
-    try {
-      files = await this.ptbService.getFileFolders();
-    }
-    catch (error) {
-      console.log(`failed to retrieve ledger files with message: ${error.message}`);
-    }
-
-    this.log(`read all file folders`);
-    return files;
   }
 }
 

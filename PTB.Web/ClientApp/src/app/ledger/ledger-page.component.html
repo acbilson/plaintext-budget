@@ -1,0 +1,3 @@
+<div *ngIf="fileFolders"> <!-- waits until async files are retrieved to render child components -->
+  <app-ledger-table [fileFolders]="fileFolders"></app-ledger-table>
+</div>
