@@ -14,9 +14,10 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 
 // services
-import { PtbService } from './services/ptb.service';
-import { PtbTransformService } from './services/ptb-transform.service';
-import { LoggingService } from './services/logging.service';
+import { LedgerService } from './services/ledger/ledger.service';
+import { TransformService } from './services/transform/transform.service';
+import { LoggingService } from './services/logging/logging.service';
+import { FileService } from './services/file/file.service';
 
 // master routes
 const routePaths: Route[] = [
@@ -44,9 +45,10 @@ const routePaths: Route[] = [
     RouterModule.forRoot(routePaths)
   ],
   providers: [
-    PtbTransformService,
+    TransformService,
     LoggingService,
-    PtbService
+    LedgerService,
+    FileService,
   ],
   bootstrap: [AppComponent]
 })

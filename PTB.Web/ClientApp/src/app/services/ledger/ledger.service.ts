@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
-import { ILedgerEntry, IColumn, IRow } from '../ledger/interfaces/ledger';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap, map } from 'rxjs/operators';
-import { IPTBFile, IFileFolders } from '../ledger/interfaces/ptbfile';
-import { Observable } from 'rxjs/Observable';
-import { PtbTransformService } from './ptb-transform.service';
-
+import { map } from 'rxjs/operators';
+import { ILedgerEntry} from '../../ledger/interfaces/ledger-entry';
+import { IRow } from '../../ledger/interfaces/row';
+import { IColumn } from '../../ledger/interfaces/column';
+import {TransformService} from '../transform/transform.service';
 
 @Injectable()
-export class PtbService {
+export class LedgerService {
 
   httpOptions: object;
   baseUrl: URL;
 
-  constructor(private http: HttpClient, private transform: PtbTransformService) {
+  constructor(private http: HttpClient, private transform: TransformService) {
     this.http = http;
     this.transform = transform;
     this.baseUrl = new URL('http://localhost:5000');
-    this.httpOptions = { 
+    this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -39,10 +38,5 @@ export class PtbService {
           return this.transform.rowsToLedgerEntries(ledgers);
         })
       ).toPromise();
-    }
-
-    getFileFolders(): Promise<IFileFolders> {
-      const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
-      return this.http.get<IFileFolders>(url.href).toPromise();
     }
 }

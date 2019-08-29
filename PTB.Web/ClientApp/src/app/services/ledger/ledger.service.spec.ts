@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { PtbService } from './ptb.service';
-import { ILedgerEntry } from '../ledger/interfaces/ledger';
-import { IPTBFile } from '../ledger/interfaces/ptbfile';
+import { PtbService } from './ledger.service';
+import { ILedgerEntry } from '../../ledger/interfaces/ledger-entry';
+import { IPTBFile } from '../../shared/interfaces/ptbfile';
 
 describe('PtbService', () => {
   let service: PtbService;

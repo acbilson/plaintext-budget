@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PtbService } from '../services/ptb.service';
-import { LoggingService } from '../services/logging.service';
-import { IFileFolders, IPTBFile } from '../ledger/interfaces/ptbfile';
+import { FileService } from '../services/file/file.service';
+import { LoggingService } from '../services/logging/logging.service';
+import { IPTBFile } from '../shared/interfaces/ptbfile';
+import { IFileFolders } from '../shared/interfaces/file-folders';
 import { INavLink } from './nav-link';
 
 @Component({
@@ -15,11 +16,15 @@ export class NavMenuComponent implements OnInit {
   public defaultLedgerName: string;
   public ledgerLinks: INavLink[];
 
-  constructor(private ptbService: PtbService, private logger: LoggingService) {
-    this.ptbService = ptbService;
+  private context: string;
+
+  constructor(private fileService: FileService, private logger: LoggingService) {
+    this.fileService = fileService;
     this.logger = logger;
     this.fileFolders = null;
     this.ledgerLinks = [];
+
+    this.context = 'nav-menu';
   }
 
   ngOnInit() {
@@ -28,14 +33,13 @@ export class NavMenuComponent implements OnInit {
     .then(fileFolders => {
       this.getDefaultName(fileFolders);
       this.generateNavLinks(fileFolders.ledgerFolder.files);
-      return fileFolders;
     })
-    .catch(error => console.log(error));
+    .catch(error => this.logger.logError(this.context, error));
   }
 
   getFileFolders(): Promise<IFileFolders> {
 
-    return this.ptbService.getFileFolders()
+    return this.fileService.getFileFolders()
     .then(fileFolders => this.fileFolders = fileFolders);
   }
 
@@ -43,16 +47,22 @@ export class NavMenuComponent implements OnInit {
 
       this.defaultLedgerName = fileFolders.ledgerFolder.files.find(
         file => file.fileName === fileFolders.ledgerFolder.defaultFileName + '.txt').shortName;
+
+        this.logger.logInfo(this.context, `set default ledger to ${this.defaultLedgerName}`);
   }
 
   generateNavLinks(files: IPTBFile[]): void {
 
+      this.logger.logInfo(this.context, `creating ${files.length} links`);
+
       files.forEach(ledgerFile => {
-        this.ledgerLinks.push({
+        const navLink: INavLink = {
           'path': '/ledger',
           'name': ledgerFile.shortName,
           'text': ledgerFile.shortName
-        });
+        };
+        this.ledgerLinks.push(navLink);
+        this.logger.logDebug(this.context, `NavLink={path:${navLink.path},name:${navLink.name},text:${navLink.text}}`);
       });
   }
 

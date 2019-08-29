@@ -13,6 +13,7 @@ import { DebitPipe } from '../custom-pipes/debit.pipe';
 
 const routePaths: Route[] = [
       { path: 'ledger/:name', component: LedgerPageComponent },
+      { path: 'ledger', component: LedgerPageComponent },
 ];
 
 @NgModule({
