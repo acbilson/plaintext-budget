@@ -1,21 +1,21 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { LedgerService } from './ledger.service';
+import { PtbService } from './ptb.service';
 import { ILedgerEntry } from '../../ledger/interfaces/ledger-entry';
 import { IPTBFile } from '../../shared/interfaces/ptbfile';
 
 describe('PtbService', () => {
-  let service: LedgerService;
+  let service: PtbService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [],
       imports: [HttpClientTestingModule],
-      providers: [LedgerService]
+      providers: [PtbService]
     });
 
-    service = TestBed.get(LedgerService);
+    service = TestBed.get(PtbService);
     httpMock = TestBed.get(HttpTestingController);
   });
 

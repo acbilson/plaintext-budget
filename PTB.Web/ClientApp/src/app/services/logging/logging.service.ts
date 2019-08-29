@@ -65,6 +65,7 @@ export class LoggingService {
     try {
       const response = await this.http.post(url.href, logMessage, this.httpOptions).toPromise();
     } catch (error) {
+      console.log(`logger errored in context: ${context} with message: ${message}`);
       console.log(error);
     }
   }

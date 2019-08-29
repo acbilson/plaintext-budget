@@ -11,9 +11,13 @@ import { PrependZerosPipe } from '../custom-pipes/prepend-zeros.pipe';
 import { TrimPipe } from '../custom-pipes/trim.pipe';
 import { DebitPipe } from '../custom-pipes/debit.pipe';
 
+// services
+import { LedgerService } from '../services/ledger/ledger.service';
+import { TransformService } from '../services/transform/transform.service';
+
 const routePaths: Route[] = [
-      { path: 'ledger/:name', component: LedgerPageComponent },
-      { path: 'ledger', component: LedgerPageComponent },
+  { path: 'ledger/:name', component: LedgerPageComponent },
+  { path: 'ledger', component: LedgerPageComponent },
 ];
 
 @NgModule({
@@ -32,6 +36,10 @@ const routePaths: Route[] = [
     CommonModule,
     RouterModule.forChild(routePaths)
   ],
+  providers: [
+    TransformService,
+    LedgerService,
+  ]
 })
 
 export class LedgerModule { }

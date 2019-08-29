@@ -4,6 +4,7 @@ import { LoggingService } from '../services/logging/logging.service';
 import { IPTBFile } from '../shared/interfaces/ptbfile';
 import { IFileFolders } from '../shared/interfaces/file-folders';
 import { INavLink } from './nav-link';
+import { IFileSchema } from '../shared/interfaces/file-schema';
 
 @Component({
   selector: 'app-nav-menu',
@@ -13,37 +14,76 @@ import { INavLink } from './nav-link';
 export class NavMenuComponent implements OnInit {
   isExpanded = false;
   public fileFolders: IFileFolders;
+  public fileSchema: IFileSchema;
+
+  // ledgers
   public defaultLedgerName: string;
   public ledgerLinks: INavLink[];
 
+  // budget
+  public defaultBudgetName: string;
+
+  // logging
   private context: string;
 
   constructor(private fileService: FileService, private logger: LoggingService) {
     this.fileService = fileService;
     this.logger = logger;
     this.fileFolders = null;
+    this.fileSchema = null;
     this.ledgerLinks = [];
+    this.defaultBudgetName = 'budget';
 
     this.context = 'nav-menu';
   }
 
   ngOnInit() {
 
+    this.getFileSchema().then(schema => this.fileSchema = schema);
     this.getFileFolders()
       .then(fileFolders => {
-        this.getDefaultName(fileFolders);
+        this.getDefaultLedgerName(fileFolders);
+        this.getDefaultBudgetName(fileFolders);
         this.generateNavLinks(fileFolders.ledgerFolder.files);
-      })
-      .catch(error => this.logger.logError(this.context, error));
+      }).catch(error => this.logger.logError(this.context, error));
   }
 
-  getFileFolders(): Promise<IFileFolders> {
+  async getFileSchema(): Promise<IFileSchema> {
 
-    return this.fileService.getFileFolders()
-      .then(fileFolders => this.fileFolders = fileFolders);
+    let fileSchema: IFileSchema;
+
+    try {
+      fileSchema = await this.fileService.getFileSchema();
+    } catch (error) {
+      this.logger.logError(this.context, error);
+    }
+
+    return fileSchema;
   }
 
-  getDefaultName(fileFolders: IFileFolders): void {
+  async getFileFolders(): Promise<IFileFolders> {
+
+    let fileFolders: IFileFolders;
+    try {
+      fileFolders = await this.fileService.getFileFolders();
+    } catch (error) {
+      this.logger.logError(this.context, error);
+    }
+
+    return fileFolders;
+  }
+
+  getDefaultBudgetName(fileFolders: IFileFolders): void {
+
+    // this.defaultBudgetName = fileFolders.budgetFolder.files.find(
+    //   file => file.fileName === fileFolders.budgetFolder.defaultFileName + '.txt').shortName;
+    this.defaultBudgetName = '19-01-01:31';
+
+    this.logger.logInfo(this.context, `set default budget to ${this.defaultBudgetName}`);
+  }
+
+
+  getDefaultLedgerName(fileFolders: IFileFolders): void {
 
     this.defaultLedgerName = fileFolders.ledgerFolder.files.find(
       file => file.fileName === fileFolders.ledgerFolder.defaultFileName + '.txt').shortName;

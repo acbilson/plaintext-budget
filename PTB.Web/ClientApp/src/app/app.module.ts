@@ -18,6 +18,7 @@ import { LedgerService } from './services/ledger/ledger.service';
 import { TransformService } from './services/transform/transform.service';
 import { LoggingService } from './services/logging/logging.service';
 import { FileService } from './services/file/file.service';
+import { BudgetFormComponent } from './budget-form/budget-form.component';
 
 // master routes
 const routePaths: Route[] = [
@@ -32,6 +33,7 @@ const routePaths: Route[] = [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    BudgetFormComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

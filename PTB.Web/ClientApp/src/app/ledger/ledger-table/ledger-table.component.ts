@@ -4,6 +4,9 @@ import { ILedgerEntry } from '../interfaces/ledger-entry';
 import { IRow } from '../interfaces/row';
 import { LedgerService } from '../../services/ledger/ledger.service';
 import { LoggingService } from '../../services/logging/logging.service';
+import { FileService } from '../../services/file/file.service';
+import { IFolderSchema } from '../../shared/interfaces/folder-schema';
+import { IFileSchema } from '../../shared/interfaces/file-schema';
 
 @Component({
   selector: 'app-ledger-table',
@@ -14,16 +17,19 @@ export class LedgerTableComponent implements OnInit {
 
   public ledgerName: string;
   public ledgers: ILedgerEntry[];
+  public ledgerSchema: IFolderSchema;
 
   // logging
   private context: string;
 
   constructor(
     private ledgerService: LedgerService,
+    private fileService: FileService,
     private logger: LoggingService,
     private route: ActivatedRoute,
   ) {
     this.ledgerService = ledgerService;
+    this.fileService = fileService;
     this.route = route;
 
     this.ledgerName = null;
@@ -33,7 +39,21 @@ export class LedgerTableComponent implements OnInit {
 
   ngOnInit() {
     this.ledgerName = this.route.snapshot.paramMap.get('name');
+    this.getFileSchema().then(schema => this.ledgerSchema = schema.ledger);
     this.readLedgers(this.ledgerName, 0, 25).then(ledgers => this.ledgers = ledgers);
+  }
+
+  async getFileSchema(): Promise<IFileSchema> {
+
+    let schema: IFileSchema;
+
+    try {
+    schema = await this.fileService.getFileSchema();
+    } catch (error) {
+      this.logger.logError(this.context, error);
+    }
+
+    return schema;
   }
 
   private getLedgerByIndex(index: string): ILedgerEntry {
@@ -88,15 +108,17 @@ export class LedgerTableComponent implements OnInit {
       // index of the last leger entry in the row
       const lastIndex = this.ledgers[this.ledgers.length - 1].index;
 
-      // adds ledger size plus carriage return to skip returning the last row again (need to retrieve schema via API)
-      const finalIndex = lastIndex + 142;
+      // adds ledger size plus carriage return to skip returning the last row again
+      const finalIndex = lastIndex + this.ledgerSchema.lineSize + 2;
       const ledgerCount = 10;
 
       this.readLedgers(this.ledgerName, finalIndex, ledgerCount)
         .then(ledgers => {
           this.ledgers = this.ledgers.concat(ledgers);
         })
-        .catch(error => this.logger.logError(this.context, `failed to retrieve next ${ledgerCount} ledgers with message: ${error.message}`));
+        .catch(error => {
+          this.logger.logError(this.context, `failed to retrieve next ${ledgerCount} ledgers with message: ${error.message}`);
+        });
     }
   }
 
