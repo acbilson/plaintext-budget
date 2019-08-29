@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IFileFolders } from './ptbfile';
-import { PtbService } from '../services/ptb.service';
-import { LoggingService } from '../services/logging.service';
-import { LedgerTableComponent } from './ledger-table/ledger-table.component';
+import { IFileFolders } from '../interfaces/ptbfile';
+import { PtbService } from '../../services/ptb.service';
+import { LoggingService } from '../../services/logging.service';
+import { LedgerTableComponent } from '../ledger-table/ledger-table.component';
 
 @Component({
   selector: 'app-ledger-page',
@@ -27,7 +27,7 @@ export class LedgerPageComponent implements OnInit {
   ngOnInit() {
 
     this.getFileFolders()
-    .then( (fileFolders: IFileFolders) => { 
+    .then( (fileFolders: IFileFolders) => {
       this.fileFolders = fileFolders;
       console.log('retrieved file folders in ledger-page');
       return fileFolders;
@@ -39,8 +39,7 @@ export class LedgerPageComponent implements OnInit {
 
     try {
       files = await this.ptbService.getFileFolders();
-    }
-    catch (error) {
+    } catch (error) {
       console.log(`failed to retrieve ledger files with message: ${error.message}`);
     }
 

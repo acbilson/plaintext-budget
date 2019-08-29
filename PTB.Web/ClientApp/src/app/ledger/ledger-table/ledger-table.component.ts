@@ -1,11 +1,9 @@
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { ILedgerEntry, IRow } from '../ledger';
-import { IPTBFile, IFileFolders } from '../ptbfile';
+import { ILedgerEntry, IRow } from '../interfaces/ledger';
+import { IFileFolders } from '../interfaces/ptbfile';
 import { PtbService } from '../../services/ptb.service';
 import { LoggingService } from '../../services/logging.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { LoggingLevel } from '../../services/logging-level';
-import { LedgerPageComponent } from '../ledger-page.component';
 
 @Component({
   selector: 'app-ledger-table',
@@ -14,14 +12,22 @@ import { LedgerPageComponent } from '../ledger-page.component';
 })
 export class LedgerTableComponent implements OnInit {
 
-  @Input() fileFolders: IFileFolders;
+  public ledgerName: string;
   public ledgers: ILedgerEntry[];
   private context: string;
   private logger: LoggingService;
 
-  constructor(private ptbService: PtbService, private loggingService: LoggingService) {
+  constructor(
+    private ptbService: PtbService,
+    private loggingService: LoggingService,
+    private route: ActivatedRoute,
+    private router: Router
+    ) {
     this.ptbService = ptbService;
     this.logger = loggingService;
+    this.route = route;
+    this.router = router;
+
     this.ledgers = [];
     this.context = 'ledger-table';
   }
@@ -30,34 +36,35 @@ export class LedgerTableComponent implements OnInit {
     this.logger.log(this.context, message);
   }
 
+
+
+
   ngOnInit() {
-    // gets all the available ledger files
-      const defaultShortName = this.getDefaultShortName(this.fileFolders);
+      const defaultShortName = this.route.snapshot.paramMap.get('name');
       this.readLedgers(defaultShortName, 0, 25).then(ledgers => this.ledgers = ledgers);
   }
 
   private getDefaultShortName(fileFolders: IFileFolders): string {
 
-    let defaultFileName = fileFolders.ledgerFolder.defaultFileName;
-    let name = fileFolders.ledgerFolder.files.find(l => l.fileName == (defaultFileName + '.txt')).shortName;
+    const defaultFileName = fileFolders.ledgerFolder.defaultFileName;
+    const name = fileFolders.ledgerFolder.files.find(l => l.fileName === (defaultFileName + '.txt')).shortName;
     return name;
   }
 
   private getLedgerByIndex(index: string): ILedgerEntry {
-    return this.ledgers.find(ledger => ledger.index == parseInt(index));
+    return this.ledgers.find(ledger => ledger.index === parseInt(index, 10));
   }
 
   async updateLedgerSubcategory(index: string, subcategory: string): Promise<IRow> {
     let updatedLedger: IRow;
 
     try {
-      let ledger = this.getLedgerByIndex(index);
+      const ledger = this.getLedgerByIndex(index);
       ledger.subcategory.value = subcategory;
       ledger.locked.value = '1';
 
       updatedLedger = await this.ptbService.updateLedger(ledger);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
 
@@ -66,16 +73,15 @@ export class LedgerTableComponent implements OnInit {
   }
 
   async updateLedgerSubject(index: string, subject: string): Promise<IRow> {
-    let updatedLedger : IRow;
+    let updatedLedger: IRow;
 
     try {
-      var ledger = this.getLedgerByIndex(index);
+      const ledger = this.getLedgerByIndex(index);
       ledger.subject.value = subject;
       ledger.locked.value = '1';
 
       updatedLedger = await this.ptbService.updateLedger(ledger);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
 
@@ -90,7 +96,7 @@ export class LedgerTableComponent implements OnInit {
     const extraPixels = 10;
     const position = window.innerHeight + window.pageYOffset;
     const bottom = document.documentElement.offsetHeight - extraPixels;
-    //console.log('pos is '+position+' and bottom is '+bottom);
+    // console.log('pos is '+position+' and bottom is '+bottom);
 
     if (position >= bottom ) {
 

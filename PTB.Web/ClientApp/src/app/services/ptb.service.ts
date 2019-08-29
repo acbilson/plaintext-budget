@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ILedgerEntry, IColumn, IRow } from '../ledger/ledger';
+import { ILedgerEntry, IColumn, IRow } from '../ledger/interfaces/ledger';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
-import { IPTBFile, IFileFolders } from '../ledger/ptbfile';
+import { IPTBFile, IFileFolders } from '../ledger/interfaces/ptbfile';
 import { Observable } from 'rxjs/Observable';
 import { PtbTransformService } from './ptb-transform.service';
 

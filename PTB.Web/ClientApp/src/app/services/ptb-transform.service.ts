@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ILedgerEntry, IColumn, IRow, ILedgerColumn } from '../ledger/ledger';
+import { ILedgerEntry, IColumn, IRow, ILedgerColumn } from '../ledger/interfaces/ledger';
 import { repeatWhen } from 'rxjs/operators';
 
 @Injectable()
