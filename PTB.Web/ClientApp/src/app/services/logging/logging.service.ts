@@ -22,17 +22,44 @@ export class LoggingService {
     this.level = LoggingLevel.Info;
   }
 
-  private async log(context: string, message: string) {
+  private getLevelName(level: LoggingLevel): string {
+    let levelName = null;
+    switch (level) {
+      case LoggingLevel.Info:
+        levelName = 'Info';
+      break;
+
+      case LoggingLevel.Debug:
+        levelName = 'DBug';
+      break;
+
+      case LoggingLevel.Warning:
+        levelName = 'Warn';
+      break;
+
+      case LoggingLevel.Error:
+        levelName = 'Erro';
+      break;
+
+      default:
+      break;
+    }
+
+    return levelName;
+  }
+
+  private async log(level: LoggingLevel, context: string, message: string) {
     const now = new Date().getTime();
 
     const logMessage: LogMessage = {
       timestamp: now.toString(),
-      level: this.level,
+      level: level,
       context: context,
       message: message
     };
 
-    console.log(`${this.level}-${context}: ${message}`);
+    const levelName = this.getLevelName(level);
+    console.log(`${levelName}-${context}: ${message}`);
 
     const url = new URL('api/Logging/log', this.baseUrl.href);
     try {
@@ -45,28 +72,28 @@ export class LoggingService {
   async logInfo(context: string, message: string) {
 
     if (this.level <= LoggingLevel.Info) {
-      this.log(context, message);
+      this.log(LoggingLevel.Info, context, message);
     }
   }
 
   async logDebug(context: string, message: string) {
 
     if (this.level <= LoggingLevel.Debug) {
-      this.log(context, message);
+      this.log(LoggingLevel.Debug, context, message);
     }
   }
 
   async logWarning(context: string, message: string) {
 
     if (this.level <= LoggingLevel.Warning) {
-      this.log(context, message);
+      this.log(LoggingLevel.Warning, context, message);
     }
   }
 
   async logError(context: string, message: string) {
 
     if (this.level <= LoggingLevel.Error) {
-      this.log(context, message);
+      this.log(LoggingLevel.Error, context, message);
     }
   }
 
