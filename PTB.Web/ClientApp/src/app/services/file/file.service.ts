@@ -13,7 +13,7 @@ export class FileService {
 
   httpOptions: object;
   baseUrl: URL;
-  private fileSchema: IFileSchema;
+  public fileSchema: IFileSchema;
   private context: string;
 
   constructor(private http: HttpClient, private transform: TransformService, private logger: LoggingService) {
@@ -37,13 +37,13 @@ export class FileService {
 
   async getFileSchema(): Promise<IFileSchema> {
 
-    // only retrieves file schema once
+    // only retrieves file schema once -- not true, but it's supposed to
+    console.log(this.fileSchema);
     if (this.fileSchema === undefined) {
       const url = new URL('api/Folder/GetFileSchema', this.baseUrl.href);
       try {
         this.fileSchema = await this.http.get<IFileSchema>(url.href).toPromise();
         this.logger.logInfo(this.context, 'retrieves file schema from server');
-        console.log(this.fileSchema);
         return this.fileSchema;
       } catch (error) {
         this.logger.logError(this.context, error);

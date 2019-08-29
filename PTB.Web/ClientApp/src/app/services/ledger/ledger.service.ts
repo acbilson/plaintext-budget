@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ILedgerEntry } from '../../ledger/interfaces/ledger-entry';
 import { IRow } from '../../ledger/interfaces/row';
-import { IColumn } from '../../ledger/interfaces/column';
+import { IColumnSchema } from '../../shared/interfaces/column-schema';
 import { TransformService } from '../transform/transform.service';
 
 @Injectable()

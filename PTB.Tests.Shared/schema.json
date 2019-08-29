@@ -53,7 +53,7 @@
         "Index": 7,
         "Size": 1,
         "Offset": 133,
-        "Editable": false
+        "Editable": true
       }
     ]
   },
@@ -113,6 +113,37 @@
         "Index": 2,
         "Size": 30,
         "Offset": 30,
+        "Editable": false
+      }
+    ]
+  },
+  "Budget": {
+    "DefaultFileName": "budget_19-01-01_to_31",
+    "Delimiter": " ",
+    "CategorySeparator": "-",
+    "FileMask": "budget_\\d{2}-\\d{2}-\\d{2}_to_\\d{2}",
+    "Folder": "Budgets",
+    "LineSize": 44,
+    "Columns": [
+      {
+        "ColumnName": "Category",
+        "Index": 0,
+        "Size": 30,
+        "Offset": 0,
+        "Editable": false
+      },
+      {
+        "ColumnName": "Amount",
+        "Index": 1,
+        "Size": 12,
+        "Offset": 0,
+        "Editable": false
+      },
+      {
+        "ColumnName": "Subcategory",
+        "Index": 2,
+        "Size": 30,
+        "Offset": 12,
         "Editable": false
       }
     ]

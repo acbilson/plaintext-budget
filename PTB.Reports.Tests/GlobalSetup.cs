@@ -1,17 +1,16 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.Base;
 using Newtonsoft.Json;
-using PTB.Files.Ledger;
 using Moq;
 using PTB.Core.Logging;
-using PTB.Files;
+using PTB.Report;
+using PTB.Core;
 
-namespace PTB.Core.Tests
+namespace PTB.Reports.Tests
 {
     [TestClass]
     public class GlobalSetup
     {
-        public FileSchema Schema;
+        public ReportSchema Schema;
         public PTBSettings Settings;
         public Mock<IPTBLogger> MockLogger;
 
@@ -30,14 +29,13 @@ namespace PTB.Core.Tests
                 FileDelimiter = '_',
                 FileExtension = ".txt",
                 HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean"
-
             };
         }
 
-        public FileSchema GetDefaultSchema()
+        public ReportSchema GetDefaultSchema()
         {
             var text = System.IO.File.ReadAllText(System.IO.Path.Combine(Settings.HomeDirectory, "schema.json"));
-            FileSchema schema = JsonConvert.DeserializeObject<FileSchema>(text);
+            ReportSchema schema = JsonConvert.DeserializeObject<ReportSchema>(text);
             return schema;
         }
         public void WithAMockLogger()

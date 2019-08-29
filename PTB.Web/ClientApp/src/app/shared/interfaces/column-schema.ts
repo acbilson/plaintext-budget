@@ -1,4 +1,4 @@
-export interface IColumn {
+export interface IColumnSchema {
   'columnValue': string;
   'columnName': string;
   'index': number;

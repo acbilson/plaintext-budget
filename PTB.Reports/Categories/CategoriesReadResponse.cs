@@ -1,7 +1,7 @@
 ﻿using PTB.Core.Base;
 using System.Collections.Generic;
 
-namespace PTB.Files.Categories
+namespace PTB.Categories.Categories
 {
     public class CategoriesReadResponse : BaseReadResponse
     {

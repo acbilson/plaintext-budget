@@ -1,6 +1,6 @@
 ﻿using PTB.Core.Base;
 
-namespace PTB.Files.Categories
+namespace PTB.Reports.Categories
 {
     public class CategoriesSchema : FolderSchema
     {

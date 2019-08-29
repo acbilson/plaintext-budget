@@ -1,7 +1,7 @@
 ﻿using PTB.Core.Files;
 using PTB.Core.Logging;
 
-namespace PTB.Files.Categories
+namespace PTB.Reports.Categories
 {
     public class CategoriesFileParser : BaseFileParser
     {

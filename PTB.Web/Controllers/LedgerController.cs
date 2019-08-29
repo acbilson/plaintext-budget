@@ -34,7 +34,7 @@ namespace PTB.Web.Controllers
         [HttpGet("[action]")]
         public List<PTBRow> Read(string fileName, int startIndex, int count)
         {
-            var fileFolders = _fileFolderService.GetFileFolders();
+            var fileFolders = _fileFolderService.GetFolders();
             var ledgerFile = fileFolders.LedgerFolder.Files.First(file => file.ShortName == fileName);
             var response = _ledgerService.Read(ledgerFile, startIndex, count);
 
@@ -55,7 +55,7 @@ namespace PTB.Web.Controllers
         [HttpPut("[action]")]
         public PTBRow Update([FromBody] PTBRow ledger)
         {
-            var fileFolders = _fileFolderService.GetFileFolders();
+            var fileFolders = _fileFolderService.GetFolders();
             var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
             var response = _ledgerService.Update(defaultLedgerFile, ledger.Index, ledger);
 

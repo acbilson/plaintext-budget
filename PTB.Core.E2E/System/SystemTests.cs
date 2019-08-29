@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.Base;
 using PTB.Core.E2E;
-using PTB.Files.Categories;
 using PTB.Files.Ledger;
 using PTB.Files.TitleRegex;
 using System.Collections.Generic;
@@ -17,7 +16,6 @@ namespace PTB.Core.PTBSystem
         {
             // Arrange
             var ledgerService = Provider.GetService<LedgerService>();
-            var categoriesService = Provider.GetService<CategoriesService>();
             var titleRegexService = Provider.GetService<TitleRegexService>();
 
             // Act - Import
@@ -35,10 +33,10 @@ namespace PTB.Core.PTBSystem
             ShouldHaveCategorizedAtLeastOneLedger(ledgerEntries);
 
             // Act - Read
-            var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
-            var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
-            var categoriesResponse = categoriesService.Read(defaultCategoriesFile, 0, defaultCategoriesFile.LineCount);
-            var ledgerResponse = ledgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
+            //var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
+            //var defaultLedgerFile = FileFolders.LedgerFolder.GetDefaultFile();
+            //var categoriesResponse = categoriesService.Read(defaultCategoriesFile, 0, defaultCategoriesFile.LineCount);
+            //var ledgerResponse = ledgerService.Read(defaultLedgerFile, 0, defaultLedgerFile.LineCount);
 
             // Assert - Read
             //ShouldNotHaveAnySkippedCategories(categoriesResponse);

@@ -1,9 +1,8 @@
-﻿namespace PTB.Core
+﻿namespace PTB.Files
 {
     public class FileSchema
     {
-        public PTB.Files.Ledger.LedgerSchema Ledger;
-        public PTB.Files.TitleRegex.TitleRegexSchema TitleRegex;
-        public PTB.Files.Categories.CategoriesSchema Categories;
+        public Ledger.LedgerSchema Ledger;
+        public TitleRegex.TitleRegexSchema TitleRegex;
     }
 }

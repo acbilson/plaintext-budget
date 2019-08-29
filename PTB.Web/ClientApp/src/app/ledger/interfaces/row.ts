@@ -1,6 +1,6 @@
-import { IColumn } from './column';
+import { IColumnSchema } from '../../shared/interfaces/column-schema';
 
 export interface IRow {
   'index': number;
-  'columns': IColumn[];
+  'columns': IColumnSchema[];
 }

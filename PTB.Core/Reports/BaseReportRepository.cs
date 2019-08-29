@@ -6,13 +6,13 @@ using System;
 
 namespace PTB.Core.Reports
 {
-    public class BaseReportRepository : IPTBFileService
+    public class BaseReportService : IPTBFileService
     {
         protected IPTBLogger _logger;
         protected BaseReportParser _parser;
         protected FolderSchema _schema;
 
-        public BaseReportRepository(IPTBLogger logger, BaseReportParser parser, FolderSchema schema)
+        public BaseReportService(IPTBLogger logger, BaseReportParser parser, FolderSchema schema)
         {
             _logger = logger;
             _schema = schema;

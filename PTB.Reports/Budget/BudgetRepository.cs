@@ -1,59 +1,51 @@
 ﻿using PTB.Core.Base;
-using PTB.Core.Files;
 using PTB.Core.Logging;
 using PTB.Core.Reports;
+using PTB.Reports.FolderAccess;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace PTB.Reports.Budget
 {
-    public class BudgetRepository : BaseReportRepository
+    public class BudgetService : BaseReportService
     {
-        public BudgetRepository(IPTBLogger logger, BaseReportParser parser, FolderSchema schema) : base(logger, parser, schema)
+        public BudgetService(IPTBLogger logger, BaseReportParser parser, BudgetSchema schema) : base(logger, parser, schema)
         {
-            _logger.SetContext(nameof(BudgetRepository));
-        }
-
-        /*
-
-        public string GetBudgetName()
-        {
-            int year = DateTime.Now.Year;
-            int month = DateTime.Now.Month;
-            string startDate = new DateTime(year, month, 1).ToString("yy-MM-dd");
-            string endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).ToString("yy-MM-dd");
-            return $"budget{_settings.FileDelimiter}{startDate}{_settings.FileDelimiter}{endDate}";
+            _logger.SetContext(nameof(BudgetService));
         }
 
         public string GetCategoryString(string category)
         {
-            string separator = new String(_schema.Budget.CategorySeparator, _schema.Ledger.Columns.Amount.Size);
-            return string.Concat(separator, _schema.Categories.Delimiter, category);
+            var schema = (BudgetSchema)_schema;
+            string separator = new String(schema.CategorySeparator, _schema["amount"].Size);
+            return string.Concat(separator, _schema.Delimiter, category);
         }
 
-        public string GetEmptyAmount()  {
+        public string GetEmptyAmount()
+        {
             string appendedZeros = "0.00 ";
-            string emptyAmount = new String(' ', _schema.Ledger.Columns.Amount.Size - appendedZeros.Length);
+            string emptyAmount = new String(' ', _schema["amount"].Size - appendedZeros.Length);
             return emptyAmount + appendedZeros;
         }
-        public string GetSubcategoryString(string subcategory) => string.Concat(GetEmptyAmount(), _schema.Categories.Delimiter, subcategory);
 
-        public void CreateBudget(List<Categories.Categories> categories)
+        public string GetSubcategoryString(string subcategory) => string.Concat(GetEmptyAmount(), _schema.Delimiter, subcategory);
+
+        public void Create(CategoriesFile file, List<PTBRow> categories)
         {
-            string budgetName = GetBudgetName();
-            string path = Path.Combine(_settings.HomeDirectory, _schema.Budget.Folder, budgetName + _settings.FileExtension);
-
-            // creates the Budget directory if this is the first time creating a budget
-            Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
-
+            // consider adding to CategoriesService. Needs tests
             var groupedCategories = categories.GroupBy(
-                group => group.Category.TrimStart(),
-                group => group.Subcategory.TrimStart(),
-                (trimmedKey, group) => new {
+                group => group["category"].TrimStart(),
+                group => group["subcategory"].TrimStart(),
+                (trimmedKey, group) => new
+                {
                     Category = trimmedKey,
                     Subcategories = group.OrderBy(innerGroup => innerGroup.TrimStart())
                 })
                 .OrderBy(group => group.Category);
 
-            using (var writer = new StreamWriter(path, append: false))
+            using (var writer = new StreamWriter(file.FullPath, append: false))
             {
                 foreach (var group in groupedCategories)
                 {
@@ -69,6 +61,5 @@ namespace PTB.Reports.Budget
                 }
             }
         }
-        */
     }
 }

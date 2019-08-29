@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using PTB.Core;
 using PTB.Core.Logging;
+using PTB.Files;
 using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
 using System;
@@ -38,7 +39,7 @@ namespace PTB.Console
             var fileFolderManager = serviceProvider.GetService<FileFolderService>();
             var ledgerRepository = serviceProvider.GetService<LedgerService>();
 
-            var fileFolders = fileFolderManager.GetFileFolders();
+            var fileFolders = fileFolderManager.GetFolders();
             var defaultLedgerFile = fileFolders.LedgerFolder.GetDefaultFile();
             var ledgers = ledgerRepository.Read(defaultLedgerFile, 0, 10);
         }

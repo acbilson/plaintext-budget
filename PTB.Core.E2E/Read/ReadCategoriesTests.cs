@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Files.Categories;
+using PTB.Reports.Categories;
+using PTB.Reports.FolderAccess;
 
 namespace PTB.Core.E2E
 {
@@ -12,7 +13,7 @@ namespace PTB.Core.E2E
         {
             // Arrange
             var categoriesService = Provider.GetService<CategoriesService>();
-            var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
+            var defaultCategoriesFile = ReportFolders.CategoriesFolder.GetDefaultFile();
 
             // Act
             var response = categoriesService.Read(defaultCategoriesFile, 0, defaultCategoriesFile.LineCount);

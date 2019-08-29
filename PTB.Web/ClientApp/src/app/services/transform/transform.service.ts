@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ILedgerEntry } from '../../ledger/interfaces/ledger-entry';
 import { ILedgerColumn } from '../../ledger/interfaces/ledger-column';
-import { IColumn } from '../../ledger/interfaces/column';
+import { IColumnSchema } from '../../shared/interfaces/column-schema';
 import { IRow } from '../../ledger/interfaces/row';
 import { LoggingService } from '../logging/logging.service';
 
@@ -39,7 +39,7 @@ export class TransformService {
     return ledgers;
   }
 
-  getLedgerColumnByName(columns: IColumn[], name: string): ILedgerColumn {
+  getLedgerColumnByName(columns: IColumnSchema[], name: string): ILedgerColumn {
 
     const column = columns.find(col => col.columnName.toLowerCase() === name);
 
@@ -72,8 +72,8 @@ export class TransformService {
     return row;
   }
 
-  getColumn(column: ILedgerColumn): IColumn {
-    const newColumn: IColumn = {
+  getColumn(column: ILedgerColumn): IColumnSchema {
+    const newColumn: IColumnSchema = {
       columnName: column.name,
       columnValue: column.value,
       index: column.index,

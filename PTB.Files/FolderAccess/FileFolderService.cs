@@ -16,14 +16,12 @@ namespace PTB.Files.FolderAccess
             _logger = logger;
         }
 
-        public FileFolders GetFileFolders()
+        public FileFolders GetFolders()
         {
             var fileDirectory = new FileFolders();
             var ledgerFolderMgr = new LedgerFolderService(_settings, _schema.Ledger, _logger);
-            var categoriesFolderMgr = new CategoriesFolderService(_settings, _schema.Categories, _logger);
             var titleRegexFolderMgr = new TitleRegexFolderService(_settings, _schema.TitleRegex, _logger);
             fileDirectory.LedgerFolder = ledgerFolderMgr.GetFolder();
-            fileDirectory.CategoriesFolder = categoriesFolderMgr.GetFolder();
             fileDirectory.TitleRegexFolder = titleRegexFolderMgr.GetFolder();
             return fileDirectory;
         }

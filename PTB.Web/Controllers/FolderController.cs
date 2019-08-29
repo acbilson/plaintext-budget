@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PTB.Core;
 using PTB.Core.Logging;
+using PTB.Files;
 using PTB.Files.FolderAccess;
 using System;
 using System.IO;
@@ -31,7 +32,7 @@ namespace PTB.Web.Controllers
 
             try
             {
-                folders = _fileFolderService.GetFileFolders();
+                folders = _fileFolderService.GetFolders();
             }
             catch (Exception ex)
             {

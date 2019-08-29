@@ -1,7 +1,7 @@
 ﻿using PTB.Core.FolderAccess;
 using System;
 
-namespace PTB.Files.FolderAccess
+namespace PTB.Reports.FolderAccess
 {
     public class CategoriesFile : BasePTBFile
     {

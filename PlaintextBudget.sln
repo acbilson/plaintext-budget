@@ -21,13 +21,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Web", "PTB.Web\PTB.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Tests.Shared", "PTB.Tests.Shared\PTB.Tests.Shared.csproj", "{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Files", "PTB.Files\PTB.Files.csproj", "{CBB60DDE-EADB-484F-9656-C9E3C1F2F667}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Files", "PTB.Files\PTB.Files.csproj", "{CBB60DDE-EADB-484F-9656-C9E3C1F2F667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Reports", "PTB.Reports\PTB.Reports.csproj", "{B56AD56B-5430-4E35-B796-DD41556464F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Reports", "PTB.Reports\PTB.Reports.csproj", "{B56AD56B-5430-4E35-B796-DD41556464F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Files.Tests", "PTB.Files.Tests\PTB.Files.Tests.csproj", "{7548DB3D-1EBC-42A1-93A1-E384884C3736}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Files.Tests", "PTB.Files.Tests\PTB.Files.Tests.csproj", "{7548DB3D-1EBC-42A1-93A1-E384884C3736}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTB.Reports.Tests", "PTB.Reports.Tests\PTB.Reports.Tests.csproj", "{37A63CB8-F578-4FD8-91A4-B4F2F6DD53E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTB.Reports.Tests", "PTB.Reports.Tests\PTB.Reports.Tests.csproj", "{37A63CB8-F578-4FD8-91A4-B4F2F6DD53E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A5BF236-B5E2-4856-87D4-F0EB3EC72B02} = {3A5BF236-B5E2-4856-87D4-F0EB3EC72B02}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

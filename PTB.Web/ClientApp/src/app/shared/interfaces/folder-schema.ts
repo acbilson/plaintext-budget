@@ -1,4 +1,4 @@
-import { IColumn } from '../../ledger/interfaces/column';
+import { IColumnSchema } from './column-schema';
 
 export interface IFolderSchema {
     'fileMask': string;
@@ -6,5 +6,5 @@ export interface IFolderSchema {
     'delimiter': string;
     'defaultFileName': string;
     'lineSize': number;
-    'columns': IColumn[];
+    'columns': IColumnSchema[];
 }

@@ -7,11 +7,13 @@ using Newtonsoft.Json;
 using PTB.Core;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
-using PTB.Files.Categories;
+using PTB.Files;
 using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
 using PTB.Files.Statements;
 using PTB.Files.TitleRegex;
+using PTB.Report;
+using PTB.Reports.Categories;
 using System;
 using System.IO;
 
@@ -37,7 +39,8 @@ namespace PTB.Web
             var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
 
             var schemaText = File.ReadAllText(Path.Combine(baseDir, "schema.json"));
-            var schema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
+            var fileSchema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
+            var reportSchema = JsonConvert.DeserializeObject<ReportSchema>(schemaText);
 
             var logger = new PTBFileLogger(settings.LoggingLevel, baseDir);
 
@@ -45,10 +48,11 @@ namespace PTB.Web
 
             .AddSingleton<PTBSettings>(settings)
 
-            .AddSingleton<FileSchema>(schema)
-            .AddSingleton<LedgerSchema>(schema.Ledger)
-            .AddSingleton<CategoriesSchema>(schema.Categories)
-            .AddSingleton<TitleRegexSchema>(schema.TitleRegex)
+            .AddSingleton<FileSchema>(fileSchema)
+            .AddSingleton<LedgerSchema>(fileSchema.Ledger)
+            .AddSingleton<TitleRegexSchema>(fileSchema.TitleRegex)
+
+            .AddSingleton<CategoriesSchema>(reportSchema.Categories)
 
             .AddSingleton<IStatementParser, PNCParser>()
             .AddSingleton<LedgerFileParser>()

@@ -1,14 +1,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using PTB.Categories.Categories;
 using PTB.Core.Base;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
-using PTB.Files.Categories;
+using PTB.Files;
 using PTB.Files.FolderAccess;
 using PTB.Files.Ledger;
 using PTB.Files.Statements;
 using PTB.Files.TitleRegex;
+using PTB.Report;
+using PTB.Reports.Budget;
+using PTB.Reports.Categories;
+using PTB.Reports.FolderAccess;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,11 +26,13 @@ namespace PTB.Core.E2E
     {
         public PTBSettings CleanSettings;
         public PTBSettings DirtySettings;
-        public FileSchema Schema;
+        public FileSchema FileSchema;
+        public ReportSchema ReportSchema;
         public PTBFileLogger Logger;
 
         public List<Tuple<string, string>> CopiedFiles = new List<Tuple<string, string>>();
         public FileFolders FileFolders;
+        public ReportFolders ReportFolders;
         public ServiceProvider Provider;
 
         [TestInitialize]
@@ -42,6 +49,7 @@ namespace PTB.Core.E2E
 
             // reads all files
             WithFileFolders();
+            WithReportFolders();
         }
 
         #region Initialize
@@ -73,22 +81,28 @@ namespace PTB.Core.E2E
         public void GetDefaultSchema()
         {
             var text = File.ReadAllText($@".\schema.json");
-            FileSchema schema = JsonConvert.DeserializeObject<FileSchema>(text);
-            Schema = schema;
+            FileSchema = JsonConvert.DeserializeObject<FileSchema>(text);
+            ReportSchema = JsonConvert.DeserializeObject<ReportSchema>(text);
         }
 
         public void CopyLedger()
         {
-            string srcPath = $@".\Clean\{Schema.Ledger.Folder}\ledger-base{CleanSettings.FileExtension}";
-            string destPath = Path.Combine(CleanSettings.HomeDirectory, Schema.Ledger.Folder, Schema.Ledger.DefaultFileName + CleanSettings.FileExtension);
+            string srcPath = $@".\Clean\{FileSchema.Ledger.Folder}\ledger-base{CleanSettings.FileExtension}";
+            string destPath = Path.Combine(CleanSettings.HomeDirectory, FileSchema.Ledger.Folder, FileSchema.Ledger.DefaultFileName + CleanSettings.FileExtension);
             File.Copy(srcPath, destPath, overwrite: true);
         }
 
         public void WithFileFolders()
         {
             var fileFolderService = Provider.GetService<FileFolderService>();
-            FileFolders = fileFolderService.GetFileFolders();
+            FileFolders = fileFolderService.GetFolders();
         }
+        public void WithReportFolders()
+        {
+            var reportFolderService = Provider.GetService<ReportFolderService>();
+            ReportFolders = reportFolderService.GetFolders();
+        }
+
 
         #endregion Initialize
 
@@ -101,10 +115,13 @@ namespace PTB.Core.E2E
 
                 .AddSingleton<PTBSettings>(CleanSettings)
 
-                .AddSingleton<FileSchema>(Schema)
-                .AddSingleton<LedgerSchema>(Schema.Ledger)
-                .AddSingleton<CategoriesSchema>(Schema.Categories)
-                .AddSingleton<TitleRegexSchema>(Schema.TitleRegex)
+                .AddSingleton<FileSchema>(FileSchema)
+                .AddSingleton<LedgerSchema>(FileSchema.Ledger)
+                .AddSingleton<TitleRegexSchema>(FileSchema.TitleRegex)
+
+                .AddSingleton<ReportSchema>(ReportSchema)
+                .AddSingleton<BudgetSchema>(ReportSchema.Budget)
+                .AddSingleton<CategoriesSchema>(ReportSchema.Categories)
 
                 .AddSingleton<IStatementParser, PNCParser>()
                 .AddSingleton<LedgerFileParser>()
@@ -112,6 +129,7 @@ namespace PTB.Core.E2E
                 .AddSingleton<TitleRegexFileParser>()
 
                 .AddScoped<FileFolderService>()
+                .AddScoped<ReportFolderService>()
 
                 .AddScoped<LedgerService>()
                 .AddScoped<CategoriesService>()
@@ -134,7 +152,7 @@ namespace PTB.Core.E2E
         public void WhenAllFileFoldersHaveBeenRetrieved()
         {
             var fileFolderService = Provider.GetService<FileFolderService>();
-            var fileFolders = fileFolderService.GetFileFolders();
+            var fileFolders = fileFolderService.GetFolders();
             FileFolders = fileFolders;
         }
 
@@ -176,7 +194,7 @@ namespace PTB.Core.E2E
             var ledgerFileParser = Provider.GetService<LedgerFileParser>();
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
-            string firstLine = ledgerEntries.Substring(0, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
+            string firstLine = ledgerEntries.Substring(0, FileSchema.Ledger.LineSize + System.Environment.NewLine.Length);
             var response = ledgerFileParser.ParseLine(firstLine, 0);
             return response.Row;
         }
@@ -197,7 +215,7 @@ namespace PTB.Core.E2E
 
         public List<PTBRow> WithAllCategories()
         {
-            var defaultCategoriesFile = FileFolders.CategoriesFolder.GetDefaultFile();
+            var defaultCategoriesFile = ReportFolders.CategoriesFolder.GetDefaultFile();
             var categoriesService = Provider.GetService<CategoriesService>();
             var categories = categoriesService.Read(defaultCategoriesFile);
             return categories.ReadResult;
@@ -232,12 +250,12 @@ namespace PTB.Core.E2E
             var ledger = GetLedgerOnLine(4);
             Assert.AreEqual(subcategory, ledger["subcategory"]);
         }
+
         public void ShouldNotUpdateFourthEntryWithNewAmount(string amount)
         {
             var ledger = GetLedgerOnLine(4);
             Assert.AreNotEqual(amount, ledger["amount"]);
         }
-
 
         public void ShouldGenerateABudgetOfTheRightSize(string[] lines)
         {
@@ -283,7 +301,7 @@ namespace PTB.Core.E2E
         #endregion Assert - Should
 
         // should be the full length of the line plus ending (117) multiplied by the line number minus 1 b/c it starts a 1
-        private int CalculateLedgerIndex(int lineNumber) => (Schema.Ledger.LineSize + System.Environment.NewLine.Length) * (lineNumber - 1);
+        private int CalculateLedgerIndex(int lineNumber) => (FileSchema.Ledger.LineSize + System.Environment.NewLine.Length) * (lineNumber - 1);
 
         private PTBRow GetLedgerOnLine(int lineNumber)
         {
@@ -291,7 +309,7 @@ namespace PTB.Core.E2E
             string path = System.IO.Path.Combine(CleanSettings.HomeDirectory, @"Ledgers\ledger_checking_19-01-01_19-12-31.txt");
             string ledgerEntries = System.IO.File.ReadAllText(path);
             int ledgerIndex = CalculateLedgerIndex(lineNumber);
-            string line = ledgerEntries.Substring(ledgerIndex, Schema.Ledger.LineSize + System.Environment.NewLine.Length);
+            string line = ledgerEntries.Substring(ledgerIndex, FileSchema.Ledger.LineSize + System.Environment.NewLine.Length);
             var response = ledgerFileParser.ParseLine(line, ledgerIndex);
 
             Assert.IsTrue(response.Success, $"Failed to parse ledger with message {response.Message}");

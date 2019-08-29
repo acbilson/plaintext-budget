@@ -1,9 +1,9 @@
 ﻿using PTB.Core.Base;
 using PTB.Core.Files;
 using PTB.Core.Logging;
-using PTB.Files.FolderAccess;
+using PTB.Reports.FolderAccess;
 
-namespace PTB.Files.Categories
+namespace PTB.Reports.Categories
 {
     public class CategoriesService : BaseFileService
     {
