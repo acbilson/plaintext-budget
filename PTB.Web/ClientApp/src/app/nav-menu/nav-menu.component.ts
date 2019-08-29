@@ -30,40 +30,40 @@ export class NavMenuComponent implements OnInit {
   ngOnInit() {
 
     this.getFileFolders()
-    .then(fileFolders => {
-      this.getDefaultName(fileFolders);
-      this.generateNavLinks(fileFolders.ledgerFolder.files);
-    })
-    .catch(error => this.logger.logError(this.context, error));
+      .then(fileFolders => {
+        this.getDefaultName(fileFolders);
+        this.generateNavLinks(fileFolders.ledgerFolder.files);
+      })
+      .catch(error => this.logger.logError(this.context, error));
   }
 
   getFileFolders(): Promise<IFileFolders> {
 
     return this.fileService.getFileFolders()
-    .then(fileFolders => this.fileFolders = fileFolders);
+      .then(fileFolders => this.fileFolders = fileFolders);
   }
 
   getDefaultName(fileFolders: IFileFolders): void {
 
-      this.defaultLedgerName = fileFolders.ledgerFolder.files.find(
-        file => file.fileName === fileFolders.ledgerFolder.defaultFileName + '.txt').shortName;
+    this.defaultLedgerName = fileFolders.ledgerFolder.files.find(
+      file => file.fileName === fileFolders.ledgerFolder.defaultFileName + '.txt').shortName;
 
-        this.logger.logInfo(this.context, `set default ledger to ${this.defaultLedgerName}`);
+    this.logger.logInfo(this.context, `set default ledger to ${this.defaultLedgerName}`);
   }
 
   generateNavLinks(files: IPTBFile[]): void {
 
-      this.logger.logInfo(this.context, `creating ${files.length} links`);
+    this.logger.logInfo(this.context, `creating ${files.length} links`);
 
-      files.forEach(ledgerFile => {
-        const navLink: INavLink = {
-          'path': '/ledger',
-          'name': ledgerFile.shortName,
-          'text': ledgerFile.shortName
-        };
-        this.ledgerLinks.push(navLink);
-        this.logger.logDebug(this.context, `NavLink={path:${navLink.path},name:${navLink.name},text:${navLink.text}}`);
-      });
+    files.forEach(ledgerFile => {
+      const navLink: INavLink = {
+        'path': '/ledger',
+        'name': ledgerFile.shortName,
+        'text': ledgerFile.shortName
+      };
+      this.ledgerLinks.push(navLink);
+      this.logger.logDebug(this.context, `NavLink={path:${navLink.path},name:${navLink.name},text:${navLink.text}}`);
+    });
   }
 
   collapse() {

@@ -22,7 +22,7 @@ export class LedgerTableComponent implements OnInit {
     private ledgerService: LedgerService,
     private logger: LoggingService,
     private route: ActivatedRoute,
-    ) {
+  ) {
     this.ledgerService = ledgerService;
     this.route = route;
 
@@ -32,8 +32,8 @@ export class LedgerTableComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.ledgerName = this.route.snapshot.paramMap.get('name');
-      this.readLedgers(this.ledgerName, 0, 25).then(ledgers => this.ledgers = ledgers);
+    this.ledgerName = this.route.snapshot.paramMap.get('name');
+    this.readLedgers(this.ledgerName, 0, 25).then(ledgers => this.ledgers = ledgers);
   }
 
   private getLedgerByIndex(index: string): ILedgerEntry {
@@ -50,7 +50,7 @@ export class LedgerTableComponent implements OnInit {
 
       updatedLedger = await this.ledgerService.updateLedger(ledger);
     } catch (error) {
-      console.log(error);
+      this.logger.logError(this.context, `failed to update ledger subcategory with message: ${error.message}`);
     }
 
     this.logger.logInfo(this.context, `updated ledger ${index} with subcategory ${subcategory}`);
@@ -67,7 +67,7 @@ export class LedgerTableComponent implements OnInit {
 
       updatedLedger = await this.ledgerService.updateLedger(ledger);
     } catch (error) {
-      this.logger.logError(this.context, error);
+      this.logger.logError(this.context, `failed to update ledger subject with message: ${error.message}`);
     }
 
     this.logger.logInfo(this.context, `updated ledger ${index} with subject ${subject}`);
@@ -83,7 +83,7 @@ export class LedgerTableComponent implements OnInit {
     const bottom = document.documentElement.offsetHeight - extraPixels;
     // console.log('pos is '+position+' and bottom is '+bottom);
 
-    if (position >= bottom ) {
+    if (position >= bottom) {
 
       // index of the last leger entry in the row
       const lastIndex = this.ledgers[this.ledgers.length - 1].index;
@@ -93,10 +93,10 @@ export class LedgerTableComponent implements OnInit {
       const ledgerCount = 10;
 
       this.readLedgers(this.ledgerName, finalIndex, ledgerCount)
-      .then(ledgers => {
-        this.ledgers = this.ledgers.concat(ledgers);
-      })
-      .catch(error => this.logger.logError(this.context, `failed to retrieve next ${ledgerCount} ledgers with message: ${error.message}`));
+        .then(ledgers => {
+          this.ledgers = this.ledgers.concat(ledgers);
+        })
+        .catch(error => this.logger.logError(this.context, `failed to retrieve next ${ledgerCount} ledgers with message: ${error.message}`));
     }
   }
 
@@ -109,7 +109,7 @@ export class LedgerTableComponent implements OnInit {
     try {
       ledgers = await this.ledgerService.readLedgers(fileName, startIndex, count);
     } catch (error) {
-      console.log(`failed to retrieve ledgers with message: ${error.message}`);
+      this.logger.logError(this.context, `failed to retrieve ledgers with message: ${error.message}`);
     }
 
     this.logger.logInfo(this.context, `read ${count} ledgers from ${fileName} starting at index ${startIndex}`);

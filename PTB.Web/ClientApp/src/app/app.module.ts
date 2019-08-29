@@ -21,8 +21,8 @@ import { FileService } from './services/file/file.service';
 
 // master routes
 const routePaths: Route[] = [
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: '**', component: HomeComponent },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({

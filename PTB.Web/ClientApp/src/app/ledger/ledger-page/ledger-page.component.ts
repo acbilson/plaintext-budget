@@ -15,7 +15,7 @@ export class LedgerPageComponent implements OnInit {
     this.ledgerService = ledgerService;
     this.logger = logger;
     this.context = 'ledger-page';
-   }
+  }
 
   ngOnInit() { }
 }

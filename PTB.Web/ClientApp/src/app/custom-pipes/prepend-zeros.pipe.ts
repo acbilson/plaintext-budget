@@ -8,12 +8,12 @@ import { Pipe, PipeTransform } from '@angular/core';
  *   {{ 123 | prependZeros:10 }}
  *   formats to: 0000000123
 */
-@Pipe({name: 'prependZeros'})
+@Pipe({ name: 'prependZeros' })
 export class PrependZerosPipe implements PipeTransform {
   transform(value: number, width?: number): string {
-    var prependCount = isNaN(width) ? 7 : width;
+    let prependCount = isNaN(width) ? 7 : width;
     prependCount -= value.toString().length;
-    var prepend = '0'.repeat(prependCount);
+    const prepend = '0'.repeat(prependCount);
     return (prepend + value);
   }
 }

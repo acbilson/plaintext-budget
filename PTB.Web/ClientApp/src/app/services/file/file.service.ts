@@ -20,11 +20,12 @@ export class FileService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
-      }) };
-     }
+      })
+    };
+  }
 
-    getFileFolders(): Promise<IFileFolders> {
-      const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
-      return this.http.get<IFileFolders>(url.href).toPromise();
-    }
+  getFileFolders(): Promise<IFileFolders> {
+    const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
+    return this.http.get<IFileFolders>(url.href).toPromise();
+  }
 }

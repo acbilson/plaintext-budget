@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
  *   {{ 123.12 | debit }}
  *   formats to: (123.12)
 */
-@Pipe({name: 'debit'})
+@Pipe({ name: 'debit' })
 export class DebitPipe implements PipeTransform {
   transform(value: string): string {
-    return "(" + value + ")";
+    return '(' + value + ')';
   }
 }
