@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using PTB.Core.Logging;
+using System.Linq;
 using System.Text;
 
 namespace PTB.Core.Base
@@ -6,10 +7,12 @@ namespace PTB.Core.Base
     public class BaseReportParser
     {
         private FolderSchema _schema;
+        private IPTBLogger _logger;
 
-        public BaseReportParser(FolderSchema schema)
+        public BaseReportParser(FolderSchema schema, IPTBLogger logger)
         {
             _schema = schema;
+            _logger = logger;
         }
 
         protected bool LineEndsWithWindowsNewLine(string line) => line.IndexOf(System.Environment.NewLine) == (line.Length - System.Environment.NewLine.Length);

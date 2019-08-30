@@ -1,6 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.E2E;
+using PTB.Reports.Budget;
+using PTB.Reports.FolderAccess;
 
-namespace PTB.Core.E2E
+namespace PTB.Reports.E2E
 {
     [TestClass]
     public class BudgetTests : GlobalSetup
@@ -9,15 +13,18 @@ namespace PTB.Core.E2E
         public void GeneratesBudget()
         {
             // Arrange
+            var budgetService = Provider.GetService<BudgetService>();
+            var budgetFolderService = Provider.GetService<BudgetFolderService>();
+            var budgetFile = budgetFolderService.CreateNewBudgetFile();
             var categories = WithAllCategories();
 
             // Act
-            //Client.Budget.CreateBudget(categories);
+            budgetService.Create(budgetFile, categories);
 
             // Assert
-            //string[] lines = WithBudgetLines();
-            //ShouldGenerateABudgetOfTheRightSize(lines);
-            //ShouldGenerateASortedBudget(lines);
+            string[] lines = WithAllBudgetLines(budgetFile.FullPath);
+            ShouldGenerateABudgetOfTheRightSize(lines);
+            ShouldGenerateASortedBudget(lines);
         }
     }
 }

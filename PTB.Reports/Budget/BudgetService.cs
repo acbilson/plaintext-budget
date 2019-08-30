@@ -11,7 +11,7 @@ namespace PTB.Reports.Budget
 {
     public class BudgetService : BaseReportService
     {
-        public BudgetService(IPTBLogger logger, BaseReportParser parser, BudgetSchema schema) : base(logger, parser, schema)
+        public BudgetService(IPTBLogger logger, BudgetFileParser parser, BudgetSchema schema) : base(logger, parser, schema)
         {
             _logger.SetContext(nameof(BudgetService));
         }
@@ -32,7 +32,7 @@ namespace PTB.Reports.Budget
 
         public string GetSubcategoryString(string subcategory) => string.Concat(GetEmptyAmount(), _schema.Delimiter, subcategory);
 
-        public void Create(CategoriesFile file, List<PTBRow> categories)
+        public void Create(BudgetFile file, List<PTBRow> categories)
         {
             // consider adding to CategoriesService. Needs tests
             var groupedCategories = categories.GroupBy(

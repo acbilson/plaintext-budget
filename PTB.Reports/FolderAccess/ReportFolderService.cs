@@ -19,11 +19,11 @@ namespace PTB.Reports.FolderAccess
 
         public ReportFolders GetFolders()
         {
-            var fileDirectory = new ReportFolders();
+            var reportDirectory = new ReportFolders();
             var categoriesFolderMgr = new CategoriesFolderService(_settings, _schema.Categories, _logger);
             var budgetFolderMgr = new BudgetFolderService(_settings, _schema.Budget, _logger);
-            fileDirectory.CategoriesFolder = categoriesFolderMgr.GetFolder();
-            return fileDirectory;
+            reportDirectory.CategoriesFolder = categoriesFolderMgr.GetFolder();
+            return reportDirectory;
         }
     }
 }

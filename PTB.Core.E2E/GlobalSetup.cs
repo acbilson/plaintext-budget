@@ -127,13 +127,16 @@ namespace PTB.Core.E2E
                 .AddSingleton<LedgerFileParser>()
                 .AddSingleton<CategoriesFileParser>()
                 .AddSingleton<TitleRegexFileParser>()
+                .AddSingleton<BudgetFileParser>()
 
                 .AddScoped<FileFolderService>()
                 .AddScoped<ReportFolderService>()
+                .AddScoped<BudgetFolderService>()
 
                 .AddScoped<LedgerService>()
                 .AddScoped<CategoriesService>()
                 .AddScoped<TitleRegexService>()
+                .AddScoped<BudgetService>()
             .BuildServiceProvider();
 
             Provider = serviceProvider;
@@ -219,6 +222,11 @@ namespace PTB.Core.E2E
             var categoriesService = Provider.GetService<CategoriesService>();
             var categories = categoriesService.Read(defaultCategoriesFile);
             return categories.ReadResult;
+        }
+
+        public string[] WithAllBudgetLines(string path)
+        {
+            return File.ReadAllLines(path);
         }
 
         #endregion Act - With
