@@ -13,9 +13,9 @@ namespace PTB.Reports.FolderAccess
         {
         }
 
-        public PTBFolder<CategoriesFile> GetFolder()
+        public PTBFolder<BudgetFile> GetFolder()
         {
-            return base.GetFolder<CategoriesFile>();
+            return base.GetFolder<BudgetFile>();
         }
 
         private string GetNewBudgetFileName()

@@ -23,6 +23,7 @@ namespace PTB.Reports.FolderAccess
             var categoriesFolderMgr = new CategoriesFolderService(_settings, _schema.Categories, _logger);
             var budgetFolderMgr = new BudgetFolderService(_settings, _schema.Budget, _logger);
             reportDirectory.CategoriesFolder = categoriesFolderMgr.GetFolder();
+            reportDirectory.BudgetFolder = budgetFolderMgr.GetFolder();
             return reportDirectory;
         }
     }

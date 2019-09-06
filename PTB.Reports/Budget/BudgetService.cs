@@ -16,21 +16,21 @@ namespace PTB.Reports.Budget
             _logger.SetContext(nameof(BudgetService));
         }
 
-        public string GetCategoryString(string category)
+        private string GetCategoryString(string category)
         {
             var schema = (BudgetSchema)_schema;
             string separator = new String(schema.CategorySeparator, _schema["amount"].Size);
             return string.Concat(separator, _schema.Delimiter, category);
         }
 
-        public string GetEmptyAmount()
+        private string GetEmptyAmount()
         {
             string appendedZeros = "0.00 ";
             string emptyAmount = new String(' ', _schema["amount"].Size - appendedZeros.Length);
             return emptyAmount + appendedZeros;
         }
 
-        public string GetSubcategoryString(string subcategory) => string.Concat(GetEmptyAmount(), _schema.Delimiter, subcategory);
+        private string GetSubcategoryString(string subcategory) => string.Concat(GetEmptyAmount(), _schema.Delimiter, subcategory);
 
         public void Create(BudgetFile file, List<PTBRow> categories)
         {
@@ -60,6 +60,13 @@ namespace PTB.Reports.Budget
                     writer.WriteLine(string.Empty);
                 }
             }
+        }
+
+        public BaseReadResponse Read(BudgetFile file, int index, int count)
+        {
+            var response = BaseReadResponse.Default;
+
+            return response;
         }
     }
 }

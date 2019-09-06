@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.E2E;
 using PTB.Reports.Budget;
 using PTB.Reports.FolderAccess;
+using System.Linq;
 
 namespace PTB.Reports.E2E
 {
@@ -10,7 +11,7 @@ namespace PTB.Reports.E2E
     public class BudgetTests : GlobalSetup
     {
         [TestMethod]
-        public void GeneratesBudget()
+        public void CreatesBudget()
         {
             // Arrange
             var budgetService = Provider.GetService<BudgetService>();
@@ -25,6 +26,20 @@ namespace PTB.Reports.E2E
             string[] lines = WithAllBudgetLines(budgetFile.FullPath);
             ShouldGenerateABudgetOfTheRightSize(lines);
             ShouldGenerateASortedBudget(lines);
+        }
+
+        [TestMethod]
+        public void ReadsBudget()
+        {
+            // Arrange
+            BudgetFile budgetFile = ReportFolders.BudgetFolder.Files.First(file => file.StartDate == new System.DateTime(2018, 4, 1));
+            var budgetService = Provider.GetService<BudgetService>();
+
+            // Act
+            var actual = budgetService.Read(budgetFile, 0, budgetFile.LineCount);
+
+            // Assert
+            Assert.IsTrue(actual.Success);
         }
     }
 }

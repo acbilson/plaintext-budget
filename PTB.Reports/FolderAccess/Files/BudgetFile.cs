@@ -6,6 +6,7 @@ namespace PTB.Reports.FolderAccess
 {
     public class BudgetFile : BasePTBFile
     {
+        public BudgetFile() { }
         public BudgetFile(char fileDelimiter, int lineSize, System.IO.FileInfo file) : base(fileDelimiter, lineSize, file)
         {
             string[] fileParts = GetFileNameParts(file.Name);
