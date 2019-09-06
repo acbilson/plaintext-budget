@@ -4,5 +4,14 @@
 			"path": "C:\\Users\\abilson\\SourceCode\\PlaintextBudget"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.exclude": {
+			"**/.vs": true,
+			"**/Resource": true,
+			"**/TestOutput": true,
+			"**/bin": true,
+			"**/obj": true,
+			"**/*csproj.user": true,
+		}
+	}
 }

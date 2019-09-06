@@ -15,6 +15,9 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent",
             }
         },
         {
@@ -51,17 +54,27 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "run",
+            "label": "run-server",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "run",
                 "--project",
                 "${workspaceFolder}\\PTB.Web\\PTB.Web.csproj",
-                //"/property:GenerateFullPaths=true",
-                //"/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "run-page",
+            "command": "powershell",
+            "type": "shell",
+            "args": [
+                "-noprofile",
+                "${workspaceFolder}\\run-page.ps1",
+                "-Path",
+                "${workspaceFolder}\\PTB.Web\\ClientApp",
+            ],
+            "problemMatcher": "$msCompile",
         }
     ]
 }
