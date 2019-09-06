@@ -30,7 +30,7 @@ namespace PTB.Core.FolderAccess.Tests
         }
 
         [DataRow(3659, 89)]
-        [DataRow(1024, 27)]
+        [DataRow(1028, 27)]
         [TestMethod]
         public void TrueWhenFileLengthIsIndivisible(long fileLength, int lineSize)
         {

@@ -123,7 +123,7 @@
     "CategorySeparator": "-",
     "FileMask": "budget_\\d{2}-\\d{2}-\\d{2}_to_\\d{2}",
     "Folder": "Budgets",
-    "LineSize": 44,
+    "LineSize": 43,
     "Columns": [
       {
         "ColumnName": "Category",

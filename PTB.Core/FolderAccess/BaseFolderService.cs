@@ -23,7 +23,9 @@ namespace PTB.Core.FolderAccess
 
         public bool IsMaskMatch(string fileName, string mask) => Regex.IsMatch(System.IO.Path.GetFileNameWithoutExtension(fileName), mask);
 
-        public bool FileSizeIsIndivisibleByLineLength(long fileLength, int lineSize) => fileLength % lineSize != 0;
+        // report files, because the final byte is whitespace, remove two bytes from the end of the file when counting the file byte size.
+        // because of this, I check for either option
+        public bool FileSizeIsIndivisibleByLineLength(long fileLength, int lineSize) => fileLength % lineSize != 0 && (fileLength + 2) % lineSize != 0;
 
         public bool FileIsEmpty(long fileLength) => fileLength == 0;
 
@@ -46,7 +48,7 @@ namespace PTB.Core.FolderAccess
             }
             else if (FileSizeIsIndivisibleByLineLength(fileInfo.Length, _schema.LineSize + Environment.NewLine.Length))
             {
-                string message = $"The file {fileName} has a byte length that is indivisible by the schema line size. This may indicate that the file has been corrupted";
+                string message = $"The file {fileName} has a byte length of {fileInfo.Length} that is indivisible by the schema line size of {_schema.LineSize + Environment.NewLine.Length}. This may indicate that the file has been corrupted";
                 _logger.LogError(message);
                 throw new FileException(message);
             }

@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="Clean\Budgets\budget_18-04-01_to_30.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Clean\Budgets\budget_19-01-01_to_31.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

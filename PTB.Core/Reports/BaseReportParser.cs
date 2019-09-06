@@ -1,4 +1,5 @@
 ﻿using PTB.Core.Logging;
+using PTB.Core.Reports;
 using System.Linq;
 using System.Text;
 
@@ -57,7 +58,7 @@ namespace PTB.Core.Base
 
             foreach (ColumnSchema columnSchema in _schema.Columns)
             {
-                var column = new PTBColumn(columnSchema);
+                var column = new PTBReportColumn(columnSchema);
                 column.ColumnValue = CalculateByteIndex(_schema.Delimiter.Length, line, column);
                 response.Row.Columns.Add(column);
             }

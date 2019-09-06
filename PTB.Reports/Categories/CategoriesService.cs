@@ -1,11 +1,12 @@
 ﻿using PTB.Core.Base;
 using PTB.Core.Files;
 using PTB.Core.Logging;
+using PTB.Core.Reports;
 using PTB.Reports.FolderAccess;
 
 namespace PTB.Reports.Categories
 {
-    public class CategoriesService : BaseFileService
+    public class CategoriesService : BaseReportService
     {
         public CategoriesService(IPTBLogger logger, CategoriesFileParser parser, CategoriesSchema schema) : base(logger, parser, schema)
         {

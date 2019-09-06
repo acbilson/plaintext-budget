@@ -267,7 +267,7 @@ namespace PTB.Core.E2E
 
         public void ShouldGenerateABudgetOfTheRightSize(string[] lines)
         {
-            Assert.AreEqual(63, lines.Length);
+            Assert.AreEqual(62, lines.Length);
         }
 
         public void ShouldGenerateASortedBudget(string[] lines)

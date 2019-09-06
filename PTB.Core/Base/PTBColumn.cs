@@ -4,12 +4,11 @@
     {
         private string _columnValue;
 
-        public string ColumnValue
+        public virtual string ColumnValue
         {
             get { return LengthExceedsSize(_columnValue) ? _columnValue.Trim().Substring(0, Size) : new string(' ', Size - _columnValue.Trim().Length) + _columnValue.Trim(); }
             set { _columnValue = value; }
         }
-
 
         public PTBColumn()
         {
@@ -24,7 +23,7 @@
             base.Editable = schema.Editable;
         }
 
-        private bool LengthExceedsSize(string value) => value.Trim().Length > Size;
+        public bool LengthExceedsSize(string value) => value.Trim().Length > Size;
 
         public override string ToString()
         {
