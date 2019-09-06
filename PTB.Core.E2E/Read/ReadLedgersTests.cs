@@ -5,6 +5,7 @@ using PTB.Files.Ledger;
 namespace PTB.Core.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class ReadLedgersTests : GlobalSetup
     {
         [TestMethod]

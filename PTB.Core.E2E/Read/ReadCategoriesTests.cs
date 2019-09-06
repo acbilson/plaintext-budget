@@ -6,6 +6,7 @@ using PTB.Reports.FolderAccess;
 namespace PTB.Core.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class ReadCategories : GlobalSetup
     {
         [TestMethod]

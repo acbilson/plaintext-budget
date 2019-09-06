@@ -8,6 +8,7 @@ using System.Linq;
 namespace PTB.Reports.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class BudgetTests : GlobalSetup
     {
         [TestMethod]

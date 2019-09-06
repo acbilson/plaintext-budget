@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace PTB.Core.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class CategorizeTests : GlobalSetup
     {
         [TestMethod]

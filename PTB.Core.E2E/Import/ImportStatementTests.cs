@@ -4,6 +4,7 @@ using PTB.Core.Base;
 namespace PTB.Core.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class ImportStatementTests : GlobalSetup
     {
         [TestMethod]

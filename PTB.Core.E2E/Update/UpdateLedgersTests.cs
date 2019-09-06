@@ -4,6 +4,7 @@ using System;
 namespace PTB.Core.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class UpdateLedgersTests : GlobalSetup
     {
         [TestMethod]

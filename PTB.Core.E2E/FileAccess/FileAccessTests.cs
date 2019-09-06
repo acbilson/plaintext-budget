@@ -5,9 +5,11 @@ using PTB.Files.FolderAccess;
 namespace PTB.Core.E2E
 {
     [TestClass]
+    [TestCategory("integration")]
     public class FileAccessTests : GlobalSetup
     {
-        [TestMethod, Description("Retrieves all ledger, categories, and title regex files")]
+        [TestMethod]
+        [Description("Retrieves all ledger, categories, and title regex files")]
         public void GetsAllFiles()
         {
             // Arrange

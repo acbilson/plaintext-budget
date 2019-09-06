@@ -9,6 +9,7 @@ using System.Collections.Generic;
 namespace PTB.Core.PTBSystem
 {
     [TestClass]
+    [TestCategory("integration")]
     public class SystemTests : GlobalSetup
     {
         [TestMethod]

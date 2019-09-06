@@ -29,6 +29,28 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "unit",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--filter",
+                "TestCategory!=integration"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "integration",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--filter",
+                "TestCategory=integration"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "run",
             "command": "dotnet",
             "type": "process",
