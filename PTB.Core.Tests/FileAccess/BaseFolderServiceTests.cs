@@ -28,35 +28,5 @@ namespace PTB.Core.FolderAccess.Tests
             // Assert
             Assert.AreEqual(expected, actual);
         }
-
-        [DataRow(3659, 89)]
-        [DataRow(1028, 27)]
-        [TestMethod]
-        public void TrueWhenFileLengthIsIndivisible(long fileLength, int lineSize)
-        {
-            // Arrange
-            var fileManager = new BaseFolderService(Settings, Schema, MockLogger.Object);
-
-            // Act
-            bool actual = fileManager.FileSizeIsIndivisibleByLineLength(fileLength, lineSize);
-
-            // Assert
-            Assert.IsTrue(actual);
-        }
-
-        [DataRow(1350, 27)]
-        [DataRow(950, 38)]
-        [TestMethod]
-        public void FalseWhenFileLengthIsDivisible(long fileLength, int lineSize)
-        {
-            // Arrange
-            var fileManager = new BaseFolderService(Settings, Schema, MockLogger.Object);
-
-            // Act
-            bool actual = fileManager.FileSizeIsIndivisibleByLineLength(fileLength, lineSize);
-
-            // Assert
-            Assert.IsFalse(actual);
-        }
     }
 }
