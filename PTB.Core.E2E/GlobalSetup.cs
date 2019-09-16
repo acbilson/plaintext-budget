@@ -80,14 +80,14 @@ namespace PTB.Core.E2E
 
         public void GetDefaultSchema()
         {
-            var text = File.ReadAllText($@".\schema.json");
+            var text = File.ReadAllText(Path.Combine(CleanSettings.HomeDirectory, "schema.json"));
             FileSchema = JsonConvert.DeserializeObject<FileSchema>(text);
             ReportSchema = JsonConvert.DeserializeObject<ReportSchema>(text);
         }
 
         public void CopyLedger()
         {
-            string srcPath = $@".\Clean\{FileSchema.Ledger.Folder}\ledger-base{CleanSettings.FileExtension}";
+            string srcPath = Path.Combine(CleanSettings.HomeDirectory, $@"{FileSchema.Ledger.Folder}\ledger-base{CleanSettings.FileExtension}");
             string destPath = Path.Combine(CleanSettings.HomeDirectory, FileSchema.Ledger.Folder, FileSchema.Ledger.DefaultFileName + CleanSettings.FileExtension);
             File.Copy(srcPath, destPath, overwrite: true);
         }
