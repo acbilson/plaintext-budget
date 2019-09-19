@@ -32,8 +32,18 @@ namespace PTB.Web
 
         private void LoadServiceConfiguration(IServiceCollection services)
         {
-            string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
-            string baseDir = Path.Combine(home, @"Archive\2019\BudgetProject\PTB_Home");
+            string home = string.Empty;
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
+            }
+            else
+            {
+                home = @"/mnt/c/Users/abilson/OneDrive\ -\ SPR\ Consulting";
+            }
+
+            string baseDir = Path.Combine(home, @"Archive/2019/BudgetProject/PTB_Home");
 
             var settingsText = File.ReadAllText(Path.Combine(baseDir, "settings.json"));
             var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);

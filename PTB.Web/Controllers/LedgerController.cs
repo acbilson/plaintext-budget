@@ -15,19 +15,18 @@ namespace PTB.Web.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class LedgerController : ControllerBase
+    public class LedgerController : BasePTBController
     {
-        private IPTBLogger _logger;
         private FileFolderService _fileFolderService;
         private LedgerService _ledgerService;
         private TitleRegexService _titleRegexService;
 
-        public LedgerController(FileFolderService fileFolderService, LedgerService ledgerService, TitleRegexService titleRegexService, IPTBLogger logger)
+        public LedgerController(FileFolderService fileFolderService, LedgerService ledgerService, TitleRegexService titleRegexService, IPTBLogger logger) : base(logger)
         {
             _fileFolderService = fileFolderService;
             _ledgerService = ledgerService;
             _titleRegexService = titleRegexService;
-            _logger = logger;
+            logger.SetContext(nameof(LedgerController));
         }
 
         // GET: api/Ledger/Read?fileName=checking&startIndex=0&count=10
@@ -68,20 +67,6 @@ namespace PTB.Web.Controllers
 
             Log($"Updated ledger: {Environment.NewLine} {ledger.ToString()}");
             return ledger;
-        }
-
-        private void LogError(string message)
-        {
-            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            var logMessage = new LogMessage(LoggingLevel.Error, message, nameof(LedgerController), now.ToString());
-            _logger.Log(logMessage);
-        }
-
-        private void Log(string message)
-        {
-            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            var logMessage = new LogMessage(LoggingLevel.Debug, message, nameof(LedgerController), now.ToString());
-            _logger.Log(logMessage);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PTB.Core;
 using PTB.Core.Logging;
 using PTB.Files;
 using PTB.Files.FolderAccess;
@@ -13,15 +12,14 @@ namespace PTB.Web.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class FolderController : ControllerBase
+    public class FolderController : BasePTBController
     {
-        private IPTBLogger _logger;
         private FileFolderService _fileFolderService;
 
-        public FolderController(FileFolderService fileFolderService, IPTBLogger logger)
+        public FolderController(FileFolderService fileFolderService, IPTBLogger logger) : base(logger)
         {
-            _logger = logger;
             _fileFolderService = fileFolderService;
+            logger.SetContext(nameof(FolderController));
         }
 
         // GET: api/Folder/GetFileFolders
@@ -53,22 +51,6 @@ namespace PTB.Web.Controllers
             var schema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
 
             return schema;
-        }
-
-
-        private void Log(string message)
-        {
-            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            var logMessage = new LogMessage(LoggingLevel.Debug, message, typeof(FolderController).Name, now.ToString());
-            _logger.Log(logMessage);
-        }
-
-        private void LogError(string message)
-        {
-
-            long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-            var logMessage = new LogMessage(LoggingLevel.Error, message, typeof(FolderController).Name, now.ToString());
-            _logger.Log(logMessage);
         }
     }
 }
