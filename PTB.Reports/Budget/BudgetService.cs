@@ -11,7 +11,7 @@ namespace PTB.Reports.Budget
 {
     public class BudgetService : BaseReportService
     {
-        public BudgetService(IPTBLogger logger, BudgetFileParser parser, BudgetSchema schema) : base(logger, parser, schema)
+        public BudgetService(IPTBLogger logger, BudgetReportParser parser, BudgetSchema schema) : base(logger, parser, schema)
         {
             _logger.SetContext(nameof(BudgetService));
         }
@@ -70,6 +70,8 @@ namespace PTB.Reports.Budget
         public BaseReadResponse Read(BudgetFile file, int index, int count)
         {
             var response = BaseReadResponse.Default;
+
+            response = base.Read(file, index, count);
 
             return response;
         }

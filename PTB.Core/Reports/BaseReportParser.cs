@@ -7,8 +7,8 @@ namespace PTB.Core.Base
 {
     public class BaseReportParser
     {
-        private FolderSchema _schema;
-        private IPTBLogger _logger;
+        protected FolderSchema _schema;
+        protected IPTBLogger _logger;
 
         public BaseReportParser(FolderSchema schema, IPTBLogger logger)
         {
@@ -26,7 +26,7 @@ namespace PTB.Core.Base
             return line.Substring(start, column.Size);
         }
 
-        public RowToStringResponse ParseRow(PTBRow row)
+        public virtual RowToStringResponse ParseRow(PTBRow row)
         {
             var response = RowToStringResponse.Default;
 
@@ -38,7 +38,7 @@ namespace PTB.Core.Base
             return response;
         }
 
-        public StringToRowResponse ParseLine(string line, int index)
+        public virtual StringToRowResponse ParseLine(string line, int index)
         {
             var response = StringToRowResponse.Default;
 

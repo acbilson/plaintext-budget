@@ -11,7 +11,12 @@ namespace PTB.Core.Reports
             set {_columnValue = value; }
         }
 
+        public bool IsHeaderColumn;
+
         public PTBReportColumn() { }
-        public PTBReportColumn(ColumnSchema schema): base(schema) { }
+        public PTBReportColumn(ColumnSchema schema): base(schema) {
+
+            IsHeaderColumn = false;
+        }
     }
 }

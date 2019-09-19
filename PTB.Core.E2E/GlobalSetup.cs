@@ -127,7 +127,7 @@ namespace PTB.Core.E2E
                 .AddSingleton<LedgerFileParser>()
                 .AddSingleton<CategoriesFileParser>()
                 .AddSingleton<TitleRegexFileParser>()
-                .AddSingleton<BudgetFileParser>()
+                .AddSingleton<BudgetReportParser>()
 
                 .AddScoped<FileFolderService>()
                 .AddScoped<ReportFolderService>()
