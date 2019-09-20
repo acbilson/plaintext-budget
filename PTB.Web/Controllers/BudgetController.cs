@@ -50,5 +50,25 @@ namespace PTB.Web.Controllers
             Log($"Sample budget: {response.ReadResult[randomIndex]}");
             return response.ReadResult;
         }
+
+        // PUT: api/Budget/Update
+        [HttpPut("[action]")]
+        public PTBRow Update([FromBody] PTBRow record)
+        {
+            var reportFolders = _reportFolderService.GetFolders();
+            var defaultBudgetFile = reportFolders.BudgetFolder.GetDefaultFile();
+            var response = _budgetService.Update(defaultBudgetFile, record.Index, record);
+
+            if (!response.Success)
+            {
+                string message = $"Failed to update budget record {defaultBudgetFile.ShortName} at index: {record.Index}. Message was {response.Message}";
+                LogError(message);
+                throw new WebException(message);
+            }
+
+            Log($"Updated budget record: {Environment.NewLine} {record.ToString()}");
+            return record;
+        }
+
     }
 }

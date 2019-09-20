@@ -138,7 +138,7 @@
         "Index": 1,
         "Size": 12,
         "Offset": 0,
-        "Editable": false
+        "Editable": true
       },
       {
         "ColumnName": "Subcategory",

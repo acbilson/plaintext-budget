@@ -44,8 +44,9 @@ namespace PTB.Core.E2E
             WithALogger();
             WithAServiceCollection();
 
-            // copies a fresh ledger each time since many e2e tests write to it
+            // copies a fresh ledger and budget each time since many e2e tests write to it
             CopyLedger();
+            CopyBudget();
 
             // reads all files
             WithFileFolders();
@@ -92,17 +93,24 @@ namespace PTB.Core.E2E
             File.Copy(srcPath, destPath, overwrite: true);
         }
 
+        public void CopyBudget()
+        {
+            string srcPath = Path.Combine(CleanSettings.HomeDirectory, $@"{ReportSchema.Budget.Folder}\budget-base{CleanSettings.FileExtension}");
+            string destPath = Path.Combine(CleanSettings.HomeDirectory, ReportSchema.Budget.Folder, ReportSchema.Budget.DefaultFileName + CleanSettings.FileExtension);
+            File.Copy(srcPath, destPath, overwrite: true);
+        }
+
         public void WithFileFolders()
         {
             var fileFolderService = Provider.GetService<FileFolderService>();
             FileFolders = fileFolderService.GetFolders();
         }
+
         public void WithReportFolders()
         {
             var reportFolderService = Provider.GetService<ReportFolderService>();
             ReportFolders = reportFolderService.GetFolders();
         }
-
 
         #endregion Initialize
 
@@ -188,6 +196,22 @@ namespace PTB.Core.E2E
             return response;
         }
 
+        public BaseUpdateResponse WhenABudgetIsUpdated(int index, PTBRow recordToUpdate)
+        {
+            var defaultBudgetFile = ReportFolders.BudgetFolder.GetDefaultFile();
+            var budgetService = Provider.GetService<BudgetService>();
+            var response = budgetService.Update(defaultBudgetFile, index, recordToUpdate);
+            return response;
+        }
+
+        public BaseUpdateResponse WhenABudgetRecordIsUpdated(int index, PTBRow recordToUpdate)
+        {
+            var defaultBudgetFile = ReportFolders.BudgetFolder.GetDefaultFile();
+            var budgetService = Provider.GetService<BudgetService>();
+            var response = budgetService.Update(defaultBudgetFile, index, recordToUpdate);
+            return response;
+        }
+
         #endregion Act - When
 
         #region Act - With
@@ -206,6 +230,14 @@ namespace PTB.Core.E2E
         {
             var ledger = GetLedgerOnLine(4);
             return ledger;
+        }
+
+        public List<PTBRow> WithAllBudgetRecords()
+        {
+            var defaultBudgetFile = ReportFolders.BudgetFolder.GetDefaultFile();
+            var budgetService = Provider.GetService<BudgetService>();
+            var response = budgetService.Read(defaultBudgetFile, 0, defaultBudgetFile.LineCount);
+            return response.ReadResult;
         }
 
         public List<PTBRow> WithAllLedgerEntries()

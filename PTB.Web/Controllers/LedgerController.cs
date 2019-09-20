@@ -51,7 +51,7 @@ namespace PTB.Web.Controllers
             return response.ReadResult;
         }
 
-        // GET: api/Ledger/Update
+        // PUT: api/Ledger/Update
         [HttpPut("[action]")]
         public PTBRow Update([FromBody] PTBRow ledger)
         {

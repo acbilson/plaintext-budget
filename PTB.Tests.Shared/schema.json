@@ -118,7 +118,7 @@
     ]
   },
   "Budget": {
-    "DefaultFileName": "budget_19-01-01_to_31",
+    "DefaultFileName": "budget_12-01-01_to_31",
     "Delimiter": " ",
     "CategorySeparator": "-",
     "SectionHeader": "Category",
@@ -138,7 +138,7 @@
         "Index": 1,
         "Size": 12,
         "Offset": 0,
-        "Editable": false
+        "Editable": true
       },
       {
         "ColumnName": "Subcategory",

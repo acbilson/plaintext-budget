@@ -2,6 +2,6 @@
 {
     public class BaseUpdateResponse : BaseResponse
     {
-        public static BaseUpdateResponse Default => new BaseUpdateResponse { Success = true, Message = string.Empty };
+        public new static BaseUpdateResponse Default => new BaseUpdateResponse { Success = true, Message = string.Empty };
     }
 }

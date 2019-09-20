@@ -34,8 +34,10 @@ namespace PTB.Reports.Budget
 
         private bool IsLastCategory(int index, int categoryCount) => index != categoryCount - 1;
 
-        public void Create(BudgetFile file, List<PTBRow> categories)
+        public BaseResponse Create(BudgetFile file, List<PTBRow> categories)
         {
+            var response = BaseResponse.Default;
+
             // consider adding to CategoriesService. Needs tests
             var groupedCategories = categories.GroupBy(
                 group => group["category"],
@@ -65,6 +67,10 @@ namespace PTB.Reports.Budget
                     }
                 }
             }
+
+            response.Success = true;
+
+            return response;
         }
     }
 }

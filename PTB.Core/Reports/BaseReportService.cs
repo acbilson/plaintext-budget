@@ -15,8 +15,6 @@ namespace PTB.Core.Reports
         ReportReadResponse Read(BasePTBFile file, int index, int count);
 
         BaseUpdateResponse Update(BasePTBFile file, int index, PTBRow row);
-
-        BaseAppendResponse Append(BasePTBFile file, PTBRow row);
     }
 
     public class BaseReportService : IPTBReportService
@@ -105,10 +103,6 @@ namespace PTB.Core.Reports
 
         protected int GetFileLineCount(string path) => Convert.ToInt32(new System.IO.FileInfo(path).Length / (_schema.LineSize + Environment.NewLine.Length));
 
-        public BaseAppendResponse Append(BasePTBFile file, PTBRow row)
-        {
-            throw new NotImplementedException();
-        }
 
         public ReportReadResponse Read(BasePTBFile file, int index, int count)
         {
@@ -163,7 +157,65 @@ namespace PTB.Core.Reports
 
         public BaseUpdateResponse Update(BasePTBFile file, int index, PTBRow row)
         {
-            throw new NotImplementedException();
+            var response = BaseUpdateResponse.Default;
+
+            ValidateUpdateRow(row, file.FileName);
+            
+            var parseResponse = _parser.ParseRow(row);
+
+            if (!parseResponse.Success)
+            {
+                response.Success = parseResponse.Success;
+                response.Message = parseResponse.Message;
+                return response;
+            }
+
+            using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.ReadWrite))
+            {
+                byte[] buffer = GetBuffer();
+                SetBufferStartIndex(stream, index);
+
+                // gets existing record prior to update
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string line = _encoding.GetString(buffer);
+                ValidateBuffer(buffer, file.FileName);
+                var stringToRowResponse = _parser.ParseLine(line, index);
+
+                if (!stringToRowResponse.Success)
+                {
+                    string message = $"Unable to retrieve budget record at ${index}. Message was {response.Message}";
+                    _logger.LogError(message);
+                    throw new ParseException(message);
+                }
+
+                // generates new row where only the editable columns are taken
+                List<PTBColumn> uneditableColumns = stringToRowResponse.Row.Columns.Where(column => column.Editable == false).ToList();
+                List<PTBColumn> editableColumns = row.Columns.Where(column => column.Editable == true).ToList();
+                uneditableColumns.AddRange(editableColumns);
+                PTBRow rowToUpdate = new PTBRow
+                {
+                    Index = index,
+                    Columns = uneditableColumns
+                };
+
+                // Writes the new row with only editable columns changed to the file
+                var rowToStringResponse = _parser.ParseRow(rowToUpdate);
+
+                if (!rowToStringResponse.Success)
+                {
+                    string message = $"Unable to reconvert budget record for update. Message was {response.Message}";
+                    _logger.LogError(message);
+                    throw new ParseException(message);
+                }
+
+                byte[] bufferToUpdate = _encoding.GetBytes(rowToStringResponse.Line + Environment.NewLine);
+                SetBufferStartIndex(stream, index);
+                stream.Write(bufferToUpdate, 0, buffer.Length);
+                stream.Flush();
+            }
+
+            return response;
+
         }
     }
 }
