@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Core.Base;
-using PTB.Core.E2E;
 using PTB.Files.Ledger;
 using PTB.Files.TitleRegex;
 using System.Collections.Generic;
 
-namespace PTB.Core.PTBSystem
+namespace PTB.E2E.PTBSystem
 {
     [TestClass]
     [TestCategory("integration")]

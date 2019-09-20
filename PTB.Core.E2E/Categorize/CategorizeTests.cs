@@ -2,7 +2,7 @@
 using PTB.Core.Base;
 using System.Collections.Generic;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E.Categorize
 {
     [TestClass]
     [TestCategory("integration")]

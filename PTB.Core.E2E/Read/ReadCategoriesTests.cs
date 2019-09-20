@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Reports.Categories;
 using PTB.Reports.FolderAccess;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E.Read
 {
     [TestClass]
     [TestCategory("integration")]

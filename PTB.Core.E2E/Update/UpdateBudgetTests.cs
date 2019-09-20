@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E.Update
 {
     [TestClass]
     [TestCategory("integration")]

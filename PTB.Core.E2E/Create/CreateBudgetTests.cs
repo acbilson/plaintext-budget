@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.E2E;
-using PTB.Core.Reports;
 using PTB.Reports.Budget;
 using PTB.Reports.FolderAccess;
-using System.Linq;
 
-namespace PTB.Reports.E2E
+namespace PTB.E2E.Create
 {
     [TestClass]
     [TestCategory("integration")]

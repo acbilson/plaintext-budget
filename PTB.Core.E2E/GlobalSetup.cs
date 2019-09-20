@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using PTB.Categories.Categories;
+using PTB.Core;
 using PTB.Core.Base;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
@@ -19,7 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E
 {
     [TestClass]
     public class GlobalSetup

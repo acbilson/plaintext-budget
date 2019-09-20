@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E.Update
 {
     [TestClass]
     [TestCategory("integration")]

@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Files.FolderAccess;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E.FileAccess
 {
     [TestClass]
     [TestCategory("integration")]

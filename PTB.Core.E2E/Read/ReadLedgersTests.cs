@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PTB.Files.Ledger;
 
-namespace PTB.Core.E2E
+namespace PTB.E2E.Read
 {
     [TestClass]
     [TestCategory("integration")]
