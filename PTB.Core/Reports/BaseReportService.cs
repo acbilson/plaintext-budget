@@ -148,7 +148,11 @@ namespace PTB.Core.Reports
                         throw new ParseException(message);
                     }
 
-                    response.ReadResult.Add(parseResponse.Row);
+                    if (parseResponse.Message != "Empty Line")
+                    {
+                        response.ReadResult.Add(parseResponse.Row);
+                    }
+
                     count--;
                     byteIndex += bytesRead;
                 }

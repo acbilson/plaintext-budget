@@ -2,6 +2,7 @@
 using PTB.Core.Logging;
 using PTB.Core.Reports;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PTB.Reports.Budget
 {
@@ -29,6 +30,13 @@ namespace PTB.Reports.Budget
             {
                 response.Success = false;
                 response.Message = "Line length does not match schema, which may indicate data corruption.";
+                return response;
+            }
+
+            if (IsEmptyLine(line))
+            {
+                response.Success = true;
+                response.Message = "Empty Line";
                 return response;
             }
 
@@ -60,6 +68,8 @@ namespace PTB.Reports.Budget
 
             return response;
         }
+
+        public bool IsEmptyLine(string line) => Regex.IsMatch(line, "^\\s+$");
 
         public bool IsSectionHeader(string line) => line.Contains(_schema.CategorySeparator);
     }
