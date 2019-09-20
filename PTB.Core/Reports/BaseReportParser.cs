@@ -45,14 +45,14 @@ namespace PTB.Core.Base
             if (!LineEndsWithWindowsNewLine(line))
             {
                 response.Success = false;
-                response.Message = "Line does not end with carriage return, which may indicate data corruption";
+                response.Message = ParseMessages.LINE_NO_CR;
                 return response;
             }
 
             if (!LineSizeMatchesSchema(line, _schema.LineSize))
             {
                 response.Success = false;
-                response.Message = "Line length does not match schema, which may indicate data corruption.";
+                response.Message = ParseMessages.LINE_LENGTH_MISMATCH_SCHEMA;
                 return response;
             }
 

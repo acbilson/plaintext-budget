@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PTB.Core.Base;
 using PTB.Core.E2E;
 using PTB.Core.Reports;
 using PTB.Reports.Budget;
@@ -45,10 +44,16 @@ namespace PTB.Reports.E2E
             Assert.IsTrue(actual.Success);
             Assert.AreEqual(1, actual.ReadResult[0].Columns.Count, "Should have a single column for section header row");
             Assert.AreEqual(2, actual.ReadResult[1].Columns.Count, "Should have two columns for subcategory row");
+            ShouldReadSubcategoryValues(actual);
+        }
 
-            var amazonRow = actual.GetRowBySubcategoryValue("Amazon Membership");
-            Assert.IsNotNull(amazonRow, "Should have row for Amazon Membership");
-            Assert.AreEqual("50.00", amazonRow["Amount"].TrimEnd(), "Should have set Amazon Membership budget to 50.00");
+        public void ShouldReadSubcategoryValues(ReportReadResponse actual)
+        {
+            string amazonCategory = "Amazon Membership";
+            string amazonAmount = "50.00";
+            var amazonRow = actual.GetRowBySubcategoryValue(amazonCategory);
+            Assert.IsNotNull(amazonRow, $"Should have row for {amazonCategory}");
+            Assert.AreEqual(amazonAmount, amazonRow["Amount"].TrimEnd(), $"Should have set {amazonCategory} budget to {amazonAmount}");
         }
     }
 }

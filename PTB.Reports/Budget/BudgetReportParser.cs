@@ -1,4 +1,5 @@
-﻿using PTB.Core.Base;
+﻿using PTB.Core;
+using PTB.Core.Base;
 using PTB.Core.Logging;
 using PTB.Core.Reports;
 using System.Linq;
@@ -22,21 +23,21 @@ namespace PTB.Reports.Budget
             if (!LineEndsWithWindowsNewLine(line))
             {
                 response.Success = false;
-                response.Message = "Line does not end with carriage return, which may indicate data corruption";
+                response.Message = ParseMessages.LINE_NO_CR;
                 return response;
             }
 
             if (!LineSizeMatchesSchema(line, _schema.LineSize))
             {
                 response.Success = false;
-                response.Message = "Line length does not match schema, which may indicate data corruption.";
+                response.Message = ParseMessages.LINE_LENGTH_MISMATCH_SCHEMA;
                 return response;
             }
 
             if (IsEmptyLine(line))
             {
                 response.Success = true;
-                response.Message = "Empty Line";
+                response.Message = ParseMessages.EMPTY_LINE;
                 return response;
             }
 
