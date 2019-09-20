@@ -32,7 +32,7 @@
             builder.Append(ColumnName);
             builder.Append(", ");
             builder.Append("Value: ");
-            builder.Append(ColumnValue.TrimStart());
+            builder.Append(ColumnValue.Trim());
             builder.Append(", ");
             builder.AppendLine($"I:{Index} O:{Offset}, S:{Size}, Edit:{Editable} )");
             return builder.ToString();
