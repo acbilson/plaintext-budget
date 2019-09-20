@@ -14,6 +14,7 @@ using PTB.Files.Statements;
 using PTB.Files.TitleRegex;
 using PTB.Report;
 using PTB.Reports.Categories;
+using PTB.Reports.FolderAccess;
 using System;
 using System.IO;
 
@@ -70,6 +71,7 @@ namespace PTB.Web
             .AddSingleton<TitleRegexFileParser>()
 
             .AddScoped<FileFolderService>()
+            .AddScoped<ReportFolderService>()
 
             .AddScoped<LedgerService>()
             .AddScoped<CategoriesService>()
