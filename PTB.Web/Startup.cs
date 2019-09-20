@@ -24,28 +24,19 @@ namespace PTB.Web
     public class Startup
     {
         private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private IHostingEnvironment _env;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
 
         private void LoadServiceConfiguration(IServiceCollection services)
         {
-            string home = string.Empty;
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
-            }
-            else
-            {
-                home = @"/mnt/c/Users/abilson/OneDrive\ -\ SPR\ Consulting";
-            }
-
-            string baseDir = Path.Combine(home, @"Archive/2019/BudgetProject/PTB_Home");
+            string baseDir = _env.ContentRootPath;
 
             var settingsText = File.ReadAllText(Path.Combine(baseDir, "settings.json"));
             var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
@@ -108,9 +99,9 @@ namespace PTB.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
 
@@ -139,7 +130,7 @@ namespace PTB.Web
 
                 spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
+                if (_env.IsDevelopment())
                 {
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                     //spa.UseAngularCliServer(npmScript: "start");
