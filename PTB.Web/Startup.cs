@@ -13,6 +13,7 @@ using PTB.Files.Ledger;
 using PTB.Files.Statements;
 using PTB.Files.TitleRegex;
 using PTB.Report;
+using PTB.Reports.Budget;
 using PTB.Reports.Categories;
 using PTB.Reports.FolderAccess;
 using System;
@@ -63,19 +64,23 @@ namespace PTB.Web
             .AddSingleton<LedgerSchema>(fileSchema.Ledger)
             .AddSingleton<TitleRegexSchema>(fileSchema.TitleRegex)
 
+            .AddSingleton<ReportSchema>(reportSchema)
+            .AddSingleton<BudgetSchema>(reportSchema.Budget)
             .AddSingleton<CategoriesSchema>(reportSchema.Categories)
 
             .AddSingleton<IStatementParser, PNCParser>()
             .AddSingleton<LedgerFileParser>()
             .AddSingleton<CategoriesFileParser>()
             .AddSingleton<TitleRegexFileParser>()
+            .AddSingleton<BudgetReportParser>()
 
             .AddScoped<FileFolderService>()
             .AddScoped<ReportFolderService>()
 
             .AddScoped<LedgerService>()
             .AddScoped<CategoriesService>()
-            .AddScoped<TitleRegexService>();
+            .AddScoped<TitleRegexService>()
+            .AddScoped<BudgetService>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

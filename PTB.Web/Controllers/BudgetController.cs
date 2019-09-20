@@ -7,6 +7,7 @@ using PTB.Reports.Budget;
 using PTB.Reports.FolderAccess;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace PTB.Web.Controllers
@@ -26,12 +27,15 @@ namespace PTB.Web.Controllers
             logger.SetContext(nameof(BudgetController));
         }
 
-        // GET: api/Budget/Read?fileName=checking&startIndex=0&count=10
+        // GET: api/Budget/Read?start=2019-01-01&end=2019-01-31
         [HttpGet("[action]")]
-        public List<PTBRow> Read(string fileName)
+        public List<PTBRow> Read(string start, string end)
         {
             var fileFolders = _reportFolderService.GetFolders();
-            var budgetFile = fileFolders.BudgetFolder.Files.First(file => file.ShortName == fileName);
+
+            DateTime startDate = DateTime.ParseExact(start, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var budgetFile = fileFolders.BudgetFolder.Files.First(file => file.StartDate == startDate && file.EndDate == endDate);
             var response = _budgetService.Read(budgetFile, 0, budgetFile.LineCount);
 
             if (!response.Success)
