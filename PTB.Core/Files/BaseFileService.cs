@@ -10,6 +10,15 @@ using System.Text;
 
 namespace PTB.Core.Files
 {
+    public interface IPTBFileService
+    {
+        BaseReadResponse Read(BasePTBFile file, int index, int count);
+
+        BaseUpdateResponse Update(BasePTBFile file, int index, PTBRow row);
+
+        BaseAppendResponse Append(BasePTBFile file, PTBRow row);
+    }
+
     public class BaseFileService : IPTBFileService
     {
         protected Encoding _encoding = Encoding.ASCII;

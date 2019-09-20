@@ -58,7 +58,7 @@ namespace PTB.Core.Base
 
             foreach (ColumnSchema columnSchema in _schema.Columns)
             {
-                var column = new PTBReportColumn(columnSchema);
+                var column = new ReportColumn(columnSchema);
                 column.ColumnValue = CalculateByteIndex(_schema.Delimiter.Length, line, column);
                 response.Row.Columns.Add(column);
             }

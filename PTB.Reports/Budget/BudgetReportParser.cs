@@ -35,7 +35,7 @@ namespace PTB.Reports.Budget
             if (IsSectionHeader(line))
             {
                 var headerColumn = _schema.Columns.First(c => c.ColumnName == _schema.SectionHeader);
-                var column = new PTBReportColumn(headerColumn);
+                var column = new ReportColumn(headerColumn);
                 column.IsHeaderColumn = true;
 
                 var value = CalculateByteIndex(_schema.Delimiter.Length, line, column);
@@ -50,11 +50,13 @@ namespace PTB.Reports.Budget
 
                 foreach (ColumnSchema columnSchema in nonHeaderColumns)
                 {
-                    var column = new PTBReportColumn(columnSchema);
+                    var column = new ReportColumn(columnSchema);
                     column.ColumnValue = CalculateByteIndex(_schema.Delimiter.Length, line, column);
                     response.Row.Columns.Add(column);
                 }
             }
+
+            response.Row.Index = index;
 
             return response;
         }

@@ -66,14 +66,5 @@ namespace PTB.Reports.Budget
                 }
             }
         }
-
-        public BaseReadResponse Read(BudgetFile file, int index, int count)
-        {
-            var response = BaseReadResponse.Default;
-
-            response = base.Read(file, index, count);
-
-            return response;
-        }
     }
 }

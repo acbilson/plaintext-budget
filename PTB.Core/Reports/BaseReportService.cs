@@ -10,7 +10,16 @@ using System.Text;
 
 namespace PTB.Core.Reports
 {
-    public class BaseReportService : IPTBFileService
+    public interface IPTBReportService
+    {
+        ReportReadResponse Read(BasePTBFile file, int index, int count);
+
+        BaseUpdateResponse Update(BasePTBFile file, int index, PTBRow row);
+
+        BaseAppendResponse Append(BasePTBFile file, PTBRow row);
+    }
+
+    public class BaseReportService : IPTBReportService
     {
         protected Encoding _encoding = Encoding.ASCII;
         protected IPTBLogger _logger;
@@ -101,9 +110,9 @@ namespace PTB.Core.Reports
             throw new NotImplementedException();
         }
 
-        public BaseReadResponse Read(BasePTBFile file, int index, int count)
+        public ReportReadResponse Read(BasePTBFile file, int index, int count)
         {
-            var response = BaseReadResponse.Default;
+            var response = ReportReadResponse.Default;
 
             if (!IndexStartsAtCorrectByte(index))
             {

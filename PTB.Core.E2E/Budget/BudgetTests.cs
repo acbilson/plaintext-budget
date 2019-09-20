@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PTB.Core.Base;
 using PTB.Core.E2E;
+using PTB.Core.Reports;
 using PTB.Reports.Budget;
 using PTB.Reports.FolderAccess;
 using System.Linq;
@@ -30,7 +32,7 @@ namespace PTB.Reports.E2E
         }
 
         [TestMethod]
-        public void ReadsBudget()
+        public void ReadsAndParsesBudget()
         {
             // Arrange
             BudgetFile budgetFile = ReportFolders.BudgetFolder.Files.First(file => file.StartDate == new System.DateTime(2018, 4, 1));
@@ -41,6 +43,12 @@ namespace PTB.Reports.E2E
 
             // Assert
             Assert.IsTrue(actual.Success);
+            Assert.AreEqual(1, actual.ReadResult[0].Columns.Count, "Should have a single column for section header row");
+            Assert.AreEqual(2, actual.ReadResult[1].Columns.Count, "Should have two columns for subcategory row");
+
+            var amazonRow = actual.GetRowBySubcategoryValue("Amazon Membership");
+            Assert.IsNotNull(amazonRow, "Should have row for Amazon Membership");
+            Assert.AreEqual("50.00", amazonRow["Amount"].TrimEnd(), "Should have set Amazon Membership budget to 50.00");
         }
     }
 }

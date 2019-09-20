@@ -2,7 +2,7 @@ using PTB.Core.Base;
 
 namespace PTB.Core.Reports
 {
-    public class PTBReportColumn : PTBColumn
+    public class ReportColumn : PTBColumn
     {
         // overrides string prepend to append instead for reporting purposes
         private string _columnValue;
@@ -13,8 +13,8 @@ namespace PTB.Core.Reports
 
         public bool IsHeaderColumn;
 
-        public PTBReportColumn() { }
-        public PTBReportColumn(ColumnSchema schema): base(schema) {
+        public ReportColumn() { }
+        public ReportColumn(ColumnSchema schema): base(schema) {
 
             IsHeaderColumn = false;
         }

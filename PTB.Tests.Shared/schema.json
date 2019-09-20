@@ -135,14 +135,14 @@
       },
       {
         "ColumnName": "Amount",
-        "Index": 2,
+        "Index": 1,
         "Size": 12,
         "Offset": 0,
         "Editable": false
       },
       {
         "ColumnName": "Subcategory",
-        "Index": 3,
+        "Index": 2,
         "Size": 30,
         "Offset": 12,
         "Editable": false
