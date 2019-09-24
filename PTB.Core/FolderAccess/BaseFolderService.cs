@@ -1,6 +1,7 @@
 ﻿using PTB.Core.Base;
 using PTB.Core.Logging;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -28,7 +29,9 @@ namespace PTB.Core.FolderAccess
 
         public T GetFile<T>(string fileName) where T : BasePTBFile, new()
         {
-            var path = System.IO.Path.Combine(_settings.HomeDirectory, _schema.Folder, fileName);
+            var path = Path.Combine(_settings.HomeDirectory, _schema.Folder, fileName);
+            if (!File.Exists(path)) throw new FileNotFoundException($"The {fileName} file could not be found at: {path}");
+
             var fileInfo = new System.IO.FileInfo(path);
             string message = string.Empty;
 
@@ -54,6 +57,8 @@ namespace PTB.Core.FolderAccess
         public PTBFolder<T> GetFolder<T>() where T : BasePTBFile, new()
         {
             var dirPath = System.IO.Path.Combine(_settings.HomeDirectory, _schema.Folder);
+            if (!Directory.Exists(dirPath)) throw new DirectoryNotFoundException($"The {_schema.Folder} folder could not be found at: {dirPath}");
+
             var fileNames = System.IO.Directory.GetFiles(dirPath);
 
             List<T> files = new List<T>();

@@ -35,14 +35,13 @@ namespace PTB.Core.Reports
         {
             if (HasByteOrderMark(buffer))
             {
-                string message = $"The {fileName} ledger has a byte order mark added by a utf-8 compatible editor. Please remove from the text file to continue.";
+                string message = string.Format(ParseMessages.LINE_BOM, fileName);
                 _logger.LogError(message);
                 throw new ParseException(message);
-            }
-
-            if (HasUnixNewLine(buffer))
+            } 
+            if (IsWindowsEnvironment() && HasUnixNewLine(buffer))
             {
-                string message = $"The {fileName} ledger has Unix new lines instead of Windows new lines. Please convert to Windows new lines to continue.";
+                string message = string.Format(ParseMessages.LINE_UNIX_NEWLINE, fileName);
                 _logger.LogError(message);
                 throw new ParseException(message);
             }
@@ -52,7 +51,7 @@ namespace PTB.Core.Reports
         {
             if (!IndexStartsAtCorrectByte(row.Index))
             {
-                string message = $"The start index {row.Index} to update file {fileName} does not match the index of any line. It should be divisible by {_schema.LineSize}";
+                string message = string.Format(ParseMessages.LINE_START_INDEX, row.Index, fileName, _schema.LineSize);
                 _logger.LogError(message);
                 throw new FileException(message);
             }
@@ -63,7 +62,7 @@ namespace PTB.Core.Reports
                     .Where(column => column.ColumnValue.Length != column.Size)
                     .Select(column => $"({column.ColumnName}, {column.ColumnValue})");
                 string columnsString = string.Join(Environment.NewLine, mismatchedColumns);
-                string message = $"The row at index {row.Index} has the following column size mismatches: {Environment.NewLine}{columnsString}";
+                string message = string.Format(ParseMessages.LINE_COLUMN_MISMATCH, row.Index, Environment.NewLine, columnsString);
                 _logger.LogError(message);
                 throw new FileException(message);
             }
@@ -82,6 +81,8 @@ namespace PTB.Core.Reports
         // Windows new line has both byte 13 (\n) and byte 10 (\r). Unix only has byte 13 (\n), so it will not contain byte 10 (\r)
         // editing text files on a Unix-based can convert the line endings. Fix by running the unixtodos command
         private bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
+
+        private bool IsWindowsEnvironment() => Environment.OSVersion.Platform == PlatformID.Win32NT;
 
         protected long GetLineNumber(long streamPosition, int lineSize) => streamPosition / (lineSize + System.Environment.NewLine.Length);
 
@@ -110,7 +111,8 @@ namespace PTB.Core.Reports
 
             if (!IndexStartsAtCorrectByte(index))
             {
-                string message = $"The start index {index} to read from file {file.FileName} does not match the index of any line. It should be divisible by {_schema.LineSize}";
+
+                string message = string.Format(ParseMessages.LINE_START_INDEX, index, file.FileName, _schema.LineSize);
                 _logger.LogError(message);
                 throw new FileException(message);
             }
@@ -138,11 +140,11 @@ namespace PTB.Core.Reports
                     if (!parseResponse.Success)
                     {
                         long lineNumber = GetLineNumber(stream.Position, _schema.LineSize);
-                        string message = $"Review file {file.FileName} for data corruption at line {lineNumber}. Message is: {parseResponse.Message}";
+                        string message = string.Format(ParseMessages.LINE_DATA_CORRUPTION, file.FileName, lineNumber, parseResponse.Message);
                         throw new ParseException(message);
                     }
 
-                    if (parseResponse.Message != "Empty Line")
+                    if (parseResponse.Message != ParseMessages.EMPTY_LINE)
                     {
                         response.ReadResult.Add(parseResponse.Row);
                     }

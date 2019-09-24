@@ -34,14 +34,18 @@ namespace PTB.Web
 
         public IConfiguration Configuration { get; }
 
-        private void LoadServiceConfiguration(IServiceCollection services)
+        private void LoadServiceConfiguration(IServiceCollection services, string baseDir)
         {
-            string baseDir = _env.ContentRootPath;
+            string settingsPath = Path.Combine(baseDir, "settings.json");
+            if (!File.Exists(settingsPath)) throw new FileNotFoundException($"Settings could not be found at: {settingsPath}");
 
-            var settingsText = File.ReadAllText(Path.Combine(baseDir, "settings.json"));
+            string schemaPath = Path.Combine(baseDir, "schema.json");
+            if (!File.Exists(schemaPath)) throw new FileNotFoundException($"Schema could not be found at: {schemaPath}");
+
+            var settingsText = File.ReadAllText(settingsPath);
             var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
 
-            var schemaText = File.ReadAllText(Path.Combine(baseDir, "schema.json"));
+            var schemaText = File.ReadAllText(schemaPath);
             var fileSchema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
             var reportSchema = JsonConvert.DeserializeObject<ReportSchema>(schemaText);
 
@@ -77,7 +81,8 @@ namespace PTB.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            LoadServiceConfiguration(services);
+            string baseDir = _env.ContentRootPath;
+            LoadServiceConfiguration(services, baseDir);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

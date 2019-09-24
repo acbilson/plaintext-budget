@@ -62,7 +62,8 @@ namespace PTB.E2E
             {
                 FileDelimiter = '_',
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean",
+                WindowsHomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean",
+                UnixHomeDirectory = @"/mnt/c/Users/abilson/SourceCode/PlaintextBudget/TestOutput/netcoreapp2.1/Clean",
                 LoggingLevel = LoggingLevel.Info
             };
             CleanSettings = settings;
@@ -74,7 +75,8 @@ namespace PTB.E2E
             {
                 FileDelimiter = '_',
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty",
+                WindowsHomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Dirty",
+                UnixHomeDirectory = @"/mnt/c/Users/abilson/SourceCode/PlaintextBudget/TestOutput/netcoreapp2.1/Clean",
                 LoggingLevel = LoggingLevel.Info
             };
             DirtySettings = settings;

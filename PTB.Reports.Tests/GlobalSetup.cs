@@ -28,7 +28,8 @@ namespace PTB.Reports.Tests
             {
                 FileDelimiter = '_',
                 FileExtension = ".txt",
-                HomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean"
+                WindowsHomeDirectory = @"C:\Users\abilson\SourceCode\PlaintextBudget\TestOutput\netcoreapp2.1\Clean",
+                UnixHomeDirectory = @"/mnt/c/Users/abilson/SourceCode/PlaintextBudget/TestOutput/netcoreapp2.1/Clean"
             };
         }
 

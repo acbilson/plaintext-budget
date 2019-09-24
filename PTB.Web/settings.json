@@ -1,5 +1,6 @@
 {
   "FileDelimiter": "_",
   "FileExtension": ".txt",
-  "HomeDirectory": "C:\\Users\\abilson\\OneDrive - SPR Consulting\\Archive\\2019\\BudgetProject\\PTB_Home"
+  "UnixHomeDirectory": "/mnt/c/Users/abilson/OneDrive - SPR Consulting/Archive/2019/BudgetProject/PTB_Home",
+  "WindowsHomeDirectory": "C:\\Users\\abilson\\OneDrive - SPR Consulting\\Archive\\2019\\BudgetProject\\PTB_Home"
 }
