@@ -15,5 +15,6 @@
         public const string LINE_START_INDEX = "The start index {0} to update file {1} does not match the index of any line. It should be divisible by {2}";
         public const string LINE_COLUMN_MISMATCH = "The row at index {0} has the following column size mismatches: {1}{2}";
         public const string LINE_DATA_CORRUPTION = "Review file {0} for data corruption at line {1}. Message is: {2}";
+        public const string LINE_INDEX_MISSING = "The start index {0} to update file {1} does not match the index of any line. It should be divisible by {2}";
     }
 }

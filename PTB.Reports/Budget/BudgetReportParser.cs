@@ -20,17 +20,15 @@ namespace PTB.Reports.Budget
         {
             var response = StringToRowResponse.Default;
 
-            if (!LineEndsWithWindowsNewLine(line))
-            {
-                response.Success = false;
-                response.Message = ParseMessages.LINE_NO_CR;
-                return response;
-            }
+            var validationResponse = _validator
+                .LineEndsWithNewLine(line)
+                .LineSizeMatchesSchema(line, _schema.LineSize)
+                .Response;
 
-            if (!LineSizeMatchesSchema(line, _schema.LineSize))
+            if (!validationResponse.Success)
             {
-                response.Success = false;
-                response.Message = ParseMessages.LINE_LENGTH_MISMATCH_SCHEMA;
+                response.Success = validationResponse.Success;
+                response.Message = validationResponse.Message;
                 return response;
             }
 

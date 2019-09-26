@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PTB.Core;
+using PTB.Core.Base;
 using PTB.Core.Logging;
 using PTB.Core.Statements;
 using PTB.Files;
@@ -63,6 +64,7 @@ namespace PTB.Web
             .AddSingleton<BudgetSchema>(reportSchema.Budget)
             .AddSingleton<CategoriesSchema>(reportSchema.Categories)
 
+            .AddSingleton<FileValidation>()
             .AddSingleton<IStatementParser, PNCParser>()
             .AddSingleton<LedgerFileParser>()
             .AddSingleton<CategoriesFileParser>()

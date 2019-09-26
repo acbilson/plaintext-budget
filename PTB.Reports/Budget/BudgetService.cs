@@ -11,7 +11,7 @@ namespace PTB.Reports.Budget
 {
     public class BudgetService : BaseReportService
     {
-        public BudgetService(IPTBLogger logger, BudgetReportParser parser, BudgetSchema schema) : base(logger, parser, schema)
+        public BudgetService(IPTBLogger logger, BudgetReportParser parser, BudgetSchema schema, FileValidation validator) : base(logger, parser, schema, validator)
         {
             _logger.SetContext(nameof(BudgetService));
         }

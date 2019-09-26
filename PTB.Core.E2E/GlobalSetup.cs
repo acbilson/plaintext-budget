@@ -134,6 +134,7 @@ namespace PTB.E2E
                 .AddSingleton<BudgetSchema>(ReportSchema.Budget)
                 .AddSingleton<CategoriesSchema>(ReportSchema.Categories)
 
+                .AddSingleton<FileValidation>()
                 .AddSingleton<IStatementParser, PNCParser>()
                 .AddSingleton<LedgerFileParser>()
                 .AddSingleton<CategoriesFileParser>()

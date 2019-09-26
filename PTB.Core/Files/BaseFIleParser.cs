@@ -9,17 +9,15 @@ namespace PTB.Core.Files
     {
         private FolderSchema _schema;
         private IPTBLogger _logger;
+        private FileValidation _validator;
 
-        public BaseFileParser(FolderSchema schema, IPTBLogger logger)
+        public BaseFileParser(FolderSchema schema, IPTBLogger logger, FileValidation validator)
         {
             _schema = schema;
             _logger = logger;
-            _logger.SetContext(nameof(BaseFileParser));
+            logger.SetContext(nameof(BaseFileParser));
+            _validator = validator;
         }
-
-        protected bool LineEndsWithWindowsNewLine(string line) => line.IndexOf(System.Environment.NewLine) == (line.Length - System.Environment.NewLine.Length);
-
-        protected bool LineSizeMatchesSchema(string line, int schemaSize) => line.Length == (schemaSize + System.Environment.NewLine.Length);
 
         protected string CalculateByteIndex(int delimiterLength, string line, ColumnSchema column)
         {
@@ -45,17 +43,15 @@ namespace PTB.Core.Files
         {
             var response = StringToRowResponse.Default;
 
-            if (!LineEndsWithWindowsNewLine(line))
-            {
-                response.Success = false;
-                response.Message = ParseMessages.LINE_NO_CR;
-                return response;
-            }
+            var validationResponse = _validator
+                .LineEndsWithNewLine(line)
+                .LineSizeMatchesSchema(line, _schema.LineSize)
+                .Response;
 
-            if (!LineSizeMatchesSchema(line, _schema.LineSize))
+            if (!validationResponse.Success)
             {
-                response.Success = false;
-                response.Message = ParseMessages.LINE_LENGTH_MISMATCH_SCHEMA;
+                response.Success = validationResponse.Success;
+                response.Message = validationResponse.Message;
                 return response;
             }
 

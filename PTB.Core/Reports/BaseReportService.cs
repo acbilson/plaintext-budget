@@ -23,49 +23,29 @@ namespace PTB.Core.Reports
         protected IPTBLogger _logger;
         protected BaseReportParser _parser;
         protected FolderSchema _schema;
+        protected FileValidation _validator;
 
-        public BaseReportService(IPTBLogger logger, BaseReportParser parser, FolderSchema schema)
+        public BaseReportService(IPTBLogger logger, BaseReportParser parser, FolderSchema schema, FileValidation validator)
         {
             _logger = logger;
             _schema = schema;
             _parser = parser;
+            _validator = validator;
         }
 
         protected void ValidateBuffer(byte[] buffer, string fileName)
         {
-            if (HasByteOrderMark(buffer))
-            {
-                string message = string.Format(ParseMessages.LINE_BOM, fileName);
-                _logger.LogError(message);
-                throw new ParseException(message);
-            } 
-            if (IsWindowsEnvironment() && HasUnixNewLine(buffer))
-            {
-                string message = string.Format(ParseMessages.LINE_UNIX_NEWLINE, fileName);
-                _logger.LogError(message);
-                throw new ParseException(message);
-            }
+            var response = _validator
+                .BufferHasByteOrderMark(buffer, fileName)
+                .BufferHasNewLine(buffer, fileName)
+                .Response;
         }
 
         protected void ValidateUpdateRow(PTBRow row, string fileName)
         {
-            if (!IndexStartsAtCorrectByte(row.Index))
-            {
-                string message = string.Format(ParseMessages.LINE_START_INDEX, row.Index, fileName, _schema.LineSize);
-                _logger.LogError(message);
-                throw new FileException(message);
-            }
-
-            if (!EveryValueMatchesColumnSize(row.Columns))
-            {
-                var mismatchedColumns = row.Columns
-                    .Where(column => column.ColumnValue.Length != column.Size)
-                    .Select(column => $"({column.ColumnName}, {column.ColumnValue})");
-                string columnsString = string.Join(Environment.NewLine, mismatchedColumns);
-                string message = string.Format(ParseMessages.LINE_COLUMN_MISMATCH, row.Index, Environment.NewLine, columnsString);
-                _logger.LogError(message);
-                throw new FileException(message);
-            }
+            var response = _validator
+                .LineValuesMatchColumnSize(row.Columns, row.Index)
+                .Response;
         }
 
         protected bool EveryValueMatchesColumnSize(List<PTBColumn> columns)
@@ -74,15 +54,6 @@ namespace PTB.Core.Reports
         }
 
         protected bool IsFirstLine(int bytesRead, int bufferLength) => bytesRead == bufferLength;
-
-        // the byte order mark (byteID 239) is added by some utf-8 compatible text editors. Can remove using Vim by :set nobomb; wq
-        private bool HasByteOrderMark(byte[] buffer) => buffer[0] == 239;
-
-        // Windows new line has both byte 13 (\n) and byte 10 (\r). Unix only has byte 13 (\n), so it will not contain byte 10 (\r)
-        // editing text files on a Unix-based can convert the line endings. Fix by running the unixtodos command
-        private bool HasUnixNewLine(byte[] buffer) => buffer.Any((b) => b == 10) == false;
-
-        private bool IsWindowsEnvironment() => Environment.OSVersion.Platform == PlatformID.Win32NT;
 
         protected long GetLineNumber(long streamPosition, int lineSize) => streamPosition / (lineSize + System.Environment.NewLine.Length);
 
@@ -104,17 +75,19 @@ namespace PTB.Core.Reports
 
         protected int GetFileLineCount(string path) => Convert.ToInt32(new System.IO.FileInfo(path).Length / (_schema.LineSize + Environment.NewLine.Length));
 
-
         public ReportReadResponse Read(BasePTBFile file, int index, int count)
         {
             var response = ReportReadResponse.Default;
 
-            if (!IndexStartsAtCorrectByte(index))
-            {
+            var validationResponse = _validator
+                .LineIndexExists(index, _schema.LineSize, file.FileName)
+                .Response;
 
-                string message = string.Format(ParseMessages.LINE_START_INDEX, index, file.FileName, _schema.LineSize);
-                _logger.LogError(message);
-                throw new FileException(message);
+            if (!validationResponse.Success)
+            {
+                response.Success = validationResponse.Success;
+                response.Message = validationResponse.Message;
+                return response;
             }
 
             using (var stream = new FileStream(file.FullPath, FileMode.Open, System.IO.FileAccess.Read))

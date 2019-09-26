@@ -19,7 +19,7 @@ namespace PTB.Core.Ledger.Tests
         public void ParsesCleanLines(string line, string date, string type, string amount, string subcategory, string title, string subject, string locked)
         {
             // Arrange
-            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
+            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object, new FileValidation(MockLogger.Object));
 
             // Act
             line += System.Environment.NewLine;
@@ -43,14 +43,14 @@ namespace PTB.Core.Ledger.Tests
         {
             // Arrange
             string line = "2019-07-01 C        20.00                           directdeposittransferarfobkckwebxfrxxxxxx9349       000191709 1";
-            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
+            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object, new FileValidation(MockLogger.Object));
 
             // Act
             StringToRowResponse response = parser.ParseLine(line, 0);
 
             // Assert
             Assert.IsFalse(response.Success);
-            Assert.AreEqual("Line does not end with carriage return, which may indicate data corruption", response.Message);
+            Assert.AreEqual(ParseMessages.LINE_NO_CR, response.Message);
         }
 
         [TestMethod]
@@ -58,14 +58,14 @@ namespace PTB.Core.Ledger.Tests
         {
             // Arrange
             string line = "2019-07-01 C       20.00                           directdeposittransferarfobkckwebxfrxxxxxx9349       000191709 1" + System.Environment.NewLine;
-            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object);
+            var parser = new BaseFileParser(Schema.Ledger, MockLogger.Object, new FileValidation(MockLogger.Object));
 
             // Act
             StringToRowResponse response = parser.ParseLine(line, 0);
 
             // Assert
             Assert.IsFalse(response.Success);
-            Assert.AreEqual("Line length does not match schema, which may indicate data corruption.", response.Message);
+            Assert.AreEqual(ParseMessages.LINE_LENGTH_MISMATCH_SCHEMA, response.Message);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace PTB.Files.Ledger
 {
     public class LedgerService : BaseFileService
     {
-        public LedgerService(IPTBLogger logger, LedgerFileParser parser, LedgerSchema schema) : base(logger, parser, schema)
+        public LedgerService(IPTBLogger logger, LedgerFileParser parser, LedgerSchema schema, FileValidation validator) : base(logger, parser, schema, validator)
         {
             _logger.SetContext(nameof(LedgerService));
         }

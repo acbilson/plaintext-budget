@@ -8,7 +8,7 @@ namespace PTB.Reports.Categories
 {
     public class CategoriesService : BaseReportService
     {
-        public CategoriesService(IPTBLogger logger, CategoriesFileParser parser, CategoriesSchema schema) : base(logger, parser, schema)
+        public CategoriesService(IPTBLogger logger, CategoriesFileParser parser, CategoriesSchema schema, FileValidation validator) : base(logger, parser, schema, validator)
         {
             _logger.SetContext(nameof(CategoriesService));
         }
