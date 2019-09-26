@@ -1,3 +1,8 @@
-(A) finish getting dotnet to run in wsl (update the way baseDir is set) +serve
 (C) display budget from page +budget
 (D) simplify file access into a single list instead of separate objects +folderaccess
+(C) host dotnet server in Docker container +docker
+(C) host Angular frontend in Docker container +docker
+(C) connect dotnet and Angular between two Docker containers +docker
+(D) break file access into separate project/server so data access is abstracted +docker +folderaccess
+(D) host abstracted data access in Docker container + docker 
+(D) wire all three components (web, data, api) together in three Docker containers (Kubernetes?) +docker
