@@ -25,5 +25,12 @@ namespace PTB.Files.FolderAccess
             fileDirectory.TitleRegexFolder = titleRegexFolderMgr.GetFolder();
             return fileDirectory;
         }
+
+        public FileSchema GetFileSchema()
+        {
+            var schemaText = System.IO.File.ReadAllText(System.IO.Path.Combine(_settings.HomeDirectory, "schema.json"));
+            var schema = Newtonsoft.Json.JsonConvert.DeserializeObject<FileSchema>(schemaText);
+            return schema;
+        }
     }
 }

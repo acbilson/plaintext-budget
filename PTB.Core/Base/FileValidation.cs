@@ -65,10 +65,14 @@ namespace PTB.Core.Base
 
         public FileValidation LineEndsWithNewLine(string line)
         {
-            return Validate(
-                () => line.IndexOf(System.Environment.NewLine) != (line.Length - System.Environment.NewLine.Length),
-                ParseMessages.LINE_NO_CR,
-                Severity.Warning);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                return Validate(
+                    () => line.IndexOf(System.Environment.NewLine) != (line.Length - System.Environment.NewLine.Length),
+                    ParseMessages.LINE_NO_CR,
+                    Severity.Warning);
+            }
+            return this;
         }
 
         public FileValidation LineSizeMatchesSchema(string line, int schemaSize)

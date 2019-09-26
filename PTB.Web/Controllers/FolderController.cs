@@ -45,13 +45,7 @@ namespace PTB.Web.Controllers
         [HttpGet("[action]")]
         public FileSchema GetFileSchema()
         {
-            string home = Environment.GetEnvironmentVariable("ONEDRIVECOMMERCIAL");
-            string baseDir = Path.Combine(home, @"Archive\2019\BudgetProject\PTB_Home");
-
-            var schemaText = System.IO.File.ReadAllText(Path.Combine(baseDir, "schema.json"));
-            var schema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
-
-            return schema;
+            return _fileFolderService.GetFileSchema();
         }
     }
 }
