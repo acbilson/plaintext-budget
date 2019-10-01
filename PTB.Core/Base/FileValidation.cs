@@ -95,7 +95,7 @@ namespace PTB.Core.Base
                 }
                 return false;
             }, string.Format(ParseMessages.LINE_INDEX_MISSING, index, fileName, lineSize),
-            Severity.Error);
+            Severity.Warning);
         }
 
         public FileValidation LineValuesMatchColumnSize(List<PTBColumn> columns, int index)

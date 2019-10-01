@@ -64,6 +64,7 @@ namespace PTB.Core.Files
         public BaseReadResponse Read(BasePTBFile file, int index, int count)
         {
             var response = BaseReadResponse.Default;
+            int randomLineCount = new Random().Next(1, count);
 
             var validationResponse = _validator
                 .LineIndexExists(index, _schema.LineSize, file.FileName)
@@ -81,6 +82,12 @@ namespace PTB.Core.Files
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0 && count > 0)
                 {
                     string line = _encoding.GetString(buffer);
+
+                    // log a random line for QC
+                    if (count == randomLineCount)
+                    {
+                        _logger.LogDebug($"The {randomLineCount} line read is: {line}");
+                    }
 
                     if (IsFirstLine(bytesRead, buffer.Length))
                     {
@@ -110,7 +117,7 @@ namespace PTB.Core.Files
             var response = BaseUpdateResponse.Default;
 
             ValidateUpdateRow(row, file.FileName);
-            
+
             var parseResponse = _parser.ParseRow(row);
 
             if (!parseResponse.Success)

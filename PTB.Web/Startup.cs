@@ -120,6 +120,8 @@ namespace PTB.Web
                 app.UseExceptionHandler("/Error");
             }
 
+            // maybe need this to use Angular in wwwroot
+            //app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
