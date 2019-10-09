@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { LedgerPageComponent } from './ledger-page/ledger-page.component';
-
-// ledger components
-import { LedgerTableComponent } from './ledger-table/ledger-table.component';
+import { LedgerTableComponent } from './ledger-page/ledger-table/ledger-table.component';
 
 // pipes
 import { PrependZerosPipe } from '../custom-pipes/prepend-zeros.pipe';
@@ -24,8 +22,8 @@ const routePaths: Route[] = [
   declarations: [
 
     // ledger components
-    LedgerPageComponent,
     LedgerTableComponent,
+    LedgerPageComponent,
 
     // pipes
     PrependZerosPipe,

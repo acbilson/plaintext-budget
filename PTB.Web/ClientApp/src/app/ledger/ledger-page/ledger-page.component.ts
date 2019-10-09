@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LedgerService } from '../../services/ledger/ledger.service';
 import { LoggingService } from '../../services/logging/logging.service';
+import { LedgerTableComponent } from './ledger-table/ledger-table.component';
 
 @Component({
   selector: 'app-ledger-page',
