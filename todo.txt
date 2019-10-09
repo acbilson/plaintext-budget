@@ -1,9 +1,8 @@
-(B) add logging to server health check +logging
-(C) connect dotnet and Angular between two Docker containers +docker
 (C) display budget from page +budget
+(C) connect dotnet and Angular between two Docker containers +docker
 (C) host Angular frontend in Docker container +docker
 (C) host dotnet server in Docker container +docker
-(D) break file access into separate project/server so data access is abstracted +docker +folderaccess
+(D) break file access into separate project/server so data access is abstracted +docker +folderaccess note: not sure this is useful
 (D) host abstracted data access in Docker container + docker 
 (D) simplify file access into a single list instead of separate objects +folderaccess
 (D) wire all three components (web, data, api) together in three Docker containers (Kubernetes?) +docker
