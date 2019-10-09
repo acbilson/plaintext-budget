@@ -1,9 +1,13 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, HostListener, Input } from '@angular/core';
-import { ILedgerEntry } from '../interfaces/ledger-entry';
-import { IRow } from '../interfaces/row';
-import { LedgerService } from '../../services/ledger/ledger.service';
-import { LoggingService } from '../../services/logging/logging.service';
+import { ILedgerEntry } from 'app/ledger/interfaces/ledger-entry';
+import { IRow } from 'app/ledger/interfaces/row';
+import { LedgerService } from 'app/services/ledger/ledger.service';
+import { LoggingService } from 'app/services/logging/logging.service';
+import { FileService } from 'app/services/file/file.service';
+import { IFolderSchema } from 'app/shared/interfaces/folder-schema';
+import { IFileSchema } from 'app/shared/interfaces/file-schema';
+
 
 @Component({
   selector: 'app-ledger-table',
