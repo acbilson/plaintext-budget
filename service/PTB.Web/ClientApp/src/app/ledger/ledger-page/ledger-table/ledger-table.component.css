@@ -1,0 +1,41 @@
+.ledger-index {
+    width: 10%;
+}
+
+.ledger-date {
+    width: 10%;
+}
+
+.ledger-type {
+    text-align: center;
+}
+
+.ledger-amount {
+    width: 10%;
+    text-align: right;
+}
+
+.ledger-amount-debit {
+    color: red;
+}
+
+.ledger-title {
+    width: 50%;
+}
+
+.ledger-title-input {
+    display: block; padding: 0; margin: 0; border: 0; width: 100%;
+}
+
+.ledger-subcategory {
+    width: 30%;
+}
+
+.ledger-subcategory-input {
+    display: block; padding: 0; margin: 0; border: 0; width: 100%;
+}
+
+.ledger-locked {
+    width: 5%;
+    text-align: center;
+}

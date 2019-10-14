@@ -1,0 +1,33 @@
+<p *ngIf="!ledgers"><em>Loading...</em></p>
+<table class="table" (scroll)="scrollHandler($event)">
+    <thead>
+        <tr>
+            <!-- <th scope="col">ID</th> -->
+            <th scope="col">Date</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Subcategory</th>
+            <th scope="col">Title</th>
+            <!-- <th scope="col">Locked</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let ledger of ledgers" scope="row">
+            <!-- <td class="ledger-index"><label>{{ledger.index | prependZeros }}</label></td> -->
+            <td class="ledger-date"><label>{{ledger.date.value | trim }}</label></td>
+            <td class="ledger-amount">
+                <div *ngIf="ledger.type == 'D'; then ledgerTypeThen else ledgerTypeElse"></div>
+                <ng-template #ledgerTypeThen><label class="ledger-amount-debit">{{ ledger.amount.value | trim | debit }}</label></ng-template>
+                <ng-template #ledgerTypeElse><label class="ledger-amount-credit">{{ ledger.amount.value | trim }}</label></ng-template>
+            </td>
+            <td class="ledger-subcategory">
+                <input class="ledger-subcategory-input" [value]="ledger.subcategory.value | trim" (change)="updateLedgerSubcategory(ledger.index, $event.target.value)" name="subcategory" type="text" />
+            </td>
+            <td class="ledger-title">
+                <div *ngIf="ledger.subject.value.trim() == ''; then ledgerTitleThen else ledgerTitleElse"></div>
+                <ng-template #ledgerTitleThen><input class="ledger-title-input" [value]="ledger.title.value | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
+                <ng-template #ledgerTitleElse><input class="ledger-title-input" [value]="ledger.subject.value | trim" (change)="updateLedgerSubject(ledger.index, $event.target.value)" name="title" type="text" /></ng-template>
+            </td>
+            <!-- <td class="ledger-locked"><label>{{ ledger.locked.value | trim }}</label></td> -->
+        </tr>
+    </tbody>
+</table>
