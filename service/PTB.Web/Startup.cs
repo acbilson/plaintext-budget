@@ -58,7 +58,7 @@ namespace PTB.Web
             var fileSchema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
             var reportSchema = JsonConvert.DeserializeObject<ReportSchema>(schemaText);
 
-            var logger = new PTBFileLogger(settings.LoggingLevel, baseDir);
+            var logger = new PTBFileLogger(settings.LoggingLevel, Path.Combine(baseDir, "logs"));
 
             services.AddSingleton<IPTBLogger>(logger)
 
