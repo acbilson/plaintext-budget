@@ -5,3 +5,9 @@ node_modules/
 obj/
 Resource/
 TestOutput/
+Budgets/
+Categories/
+Ledgers/
+Import/
+Regex/
+archive/

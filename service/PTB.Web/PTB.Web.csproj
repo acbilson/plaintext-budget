@@ -27,20 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="schema.json" />
-    <Content Remove="settings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="schema.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="settings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PTB.Core\PTB.Core.csproj" />
     <ProjectReference Include="..\PTB.Files\PTB.Files.csproj" />
     <ProjectReference Include="..\PTB.Reports\PTB.Reports.csproj" />
