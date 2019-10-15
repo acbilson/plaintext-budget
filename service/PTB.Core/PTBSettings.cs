@@ -2,6 +2,8 @@
 {
     public class PTBSettings
     {
+        public string HomeDirectory;
+        /*
         public string HomeDirectory
         {
             get
@@ -16,6 +18,7 @@
                 }
             }
         }
+        */
 
         public string WindowsHomeDirectory;
         public string UnixHomeDirectory;

@@ -52,6 +52,9 @@ namespace PTB.Web
             var settings = JsonConvert.DeserializeObject<PTBSettings>(settingsText);
 
             var schemaText = File.ReadAllText(schemaPath);
+
+            settings.HomeDirectory = Path.Combine(baseDir, "wwwroot");
+
             var fileSchema = JsonConvert.DeserializeObject<FileSchema>(schemaText);
             var reportSchema = JsonConvert.DeserializeObject<ReportSchema>(schemaText);
 
