@@ -1,7 +1,18 @@
 FROM node:12.11.1 AS build
-# step 1: mount node_modules folder so I don't need to rebuild dependencies on every run
-# step 2: run npm restore or npm update (or both?)
-# step 3: run npm build with options. Send to /dist
-# step 4: (optional) deploy to a new server, perhaps hosting as a static file 
-WORKDIR .
-CMD ["ls", "."]
+WORKDIR /src
+COPY . .
+RUN node -v && npm -v
+RUN npm install
+RUN npm run publish
+
+FROM nginx:alpine AS deploy
+# Remove default nginx website
+RUN rm -rf /usr/share/nginx/html/*
+
+# Add default nginx config
+COPY  ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+## From 'builder' copy website to default nginx public folder
+COPY --from=build /src/dist /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

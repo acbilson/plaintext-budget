@@ -44,9 +44,10 @@
   },
   "private": true,
   "scripts": {
-    "ng": "ng",
+    "version": "ng --version",
     "start": "ng serve --proxy-config proxy.config.json --extract-css --verbose",
     "build": "ng build --extract-css",
+    "publish": "ng build --prod --extract-css",
     "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
     "test": "ng test",
     "test-ci": "ng test --browsers=ChromeHeadlessCI",

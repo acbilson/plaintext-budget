@@ -7,6 +7,7 @@ import { RouterModule, Route } from '@angular/router';
 
 // app modules
 import { LedgerModule } from './ledger/ledger.module';
+import { BudgetModule } from './budget/budget.module';
 
 // components
 import { AppComponent } from './app.component';
@@ -38,6 +39,7 @@ const routePaths: Route[] = [
 
     // custom app modules
     LedgerModule,
+    BudgetModule,
 
     // always set last
     RouterModule.forRoot(routePaths)

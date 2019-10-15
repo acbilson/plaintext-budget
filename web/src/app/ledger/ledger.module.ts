@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { LedgerPageComponent } from './ledger-page/ledger-page.component';
 import { LedgerTableComponent } from './ledger-page/ledger-table/ledger-table.component';
+import { CategoryModalComponent } from './category-modal/category-modal.component';
 
 // pipes
 import { PrependZerosPipe } from '../custom-pipes/prepend-zeros.pipe';
@@ -24,6 +25,9 @@ const routePaths: Route[] = [
     // ledger components
     LedgerTableComponent,
     LedgerPageComponent,
+
+    // category components
+    CategoryModalComponent,
 
     // pipes
     PrependZerosPipe,
