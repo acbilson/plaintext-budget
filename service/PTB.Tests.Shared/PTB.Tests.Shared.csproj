@@ -47,8 +47,4 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy $(OutDir)schema.json $(OutDir)Clean\schema.json" />
-  </Target>
-
 </Project>

@@ -37,10 +37,15 @@ namespace PTB.Web
 
         private void LoadServiceConfiguration(IServiceCollection services, string baseDir)
         {
-            string settingsPath = Path.Combine(baseDir, "settings.json");
+            Console.WriteLine("Beginning service configuration...");
+            Console.WriteLine($"base directory is: {baseDir}");
+
+            string settingsPath = Path.Combine(baseDir, "wwwroot", "settings.json");
+            Console.WriteLine($"settings path is: {settingsPath}");
             if (!File.Exists(settingsPath)) throw new FileNotFoundException($"Settings could not be found at: {settingsPath}");
 
-            string schemaPath = Path.Combine(baseDir, "schema.json");
+            string schemaPath = Path.Combine(baseDir, "wwwroot", "schema.json");
+            Console.WriteLine($"schema path is: {schemaPath}");
             if (!File.Exists(schemaPath)) throw new FileNotFoundException($"Schema could not be found at: {schemaPath}");
 
             var settingsText = File.ReadAllText(settingsPath);
