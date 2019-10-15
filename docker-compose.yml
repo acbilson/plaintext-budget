@@ -2,5 +2,9 @@ version: '3.3'
 services:
   web:
     build: ./web
-  service:
+  server:
     build: ./service
+    volumes: 
+      - ./service/PTB.Web:/src
+    working_dir: /src
+    #command: dotnet publish -c Release -o /build
