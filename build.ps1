@@ -1,7 +1,7 @@
 param(
   [Parameter(Mandatory)]
   [ValidateNotNullOrEmpty()]
-  [ValidateSet("Start", "Stop")]
+  [ValidateSet("Start", "Stop", "Serve")]
   [String]$Action
 )
 
@@ -18,4 +18,10 @@ switch ($Action) {
     docker-compose down
 
   }
+
+  "Serve" {
+
+    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+  }
+
 }
