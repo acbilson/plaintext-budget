@@ -1,4 +1,5 @@
-(C) connect dotnet and Angular between two Docker containers +docker
+(B) connect dotnet and Angular between two Docker containers +docker
+(C) add volume to docker containers for local logging +docker
 (C) display budget from page +budget
 (D) break file access into separate project/server so data access is abstracted +docker +folderaccess note: not sure this is useful
 (D) host abstracted data access in Docker container + docker 
