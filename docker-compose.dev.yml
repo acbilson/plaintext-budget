@@ -1,13 +1,13 @@
 version: '3.3'
 services:
   web:
-    image: ptb-web-dev:latest
+    image: ptb-web-dev:12.11.1
     build: 
       dockerfile: Dockerfile-dev
     volumes:
       - ./web:/src
   server:
-    image: ptb-server-dev:latest
+    image: ptb-server-dev:2.1
     build: 
       dockerfile: Dockerfile-dev
     volumes:

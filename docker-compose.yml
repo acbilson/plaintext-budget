@@ -1,13 +1,13 @@
 version: '3.3'
 services:
   web:
-    image: ptb-web:latest
+    image: ptb-web:12.11.1
     build: 
       context: ./web
     ports: 
       - "4200:80"
   server:
-    image: ptb-server:latest
+    image: ptb-server:2.1
     build: 
       context: ./service
     ports:
