@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  server:
+    image: node:12.11.1
+    working_dir: /src
+    ports:
+      - "4200:3000"
+    volumes: 
+      - ./:/src
+    command: ["npm", "run", "start"]

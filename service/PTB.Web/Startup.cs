@@ -149,7 +149,7 @@ namespace PTB.Web
 
                 if (_env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                     //spa.UseAngularCliServer(npmScript: "start");
                 }
             });

@@ -1,4 +1,0 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1 AS build
-VOLUME /src
-WORKDIR /src
-# ENTRYPOINT ["dotnet", "watch", "run"]

@@ -1,14 +1,10 @@
 version: '3.3'
 services:
   web:
-    image: ptb-web-dev:12.11.1
-    build: 
-      dockerfile: Dockerfile-dev
+    image: node:12.11.1
     volumes:
       - ./web:/src
   server:
-    image: ptb-server-dev:2.1
-    build: 
-      dockerfile: Dockerfile-dev
+    image: mcr.microsoft.com/dotnet/core/sdk:2.1
     volumes:
       - ./service:/src
