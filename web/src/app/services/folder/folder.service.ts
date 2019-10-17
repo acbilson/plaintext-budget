@@ -6,14 +6,20 @@ import { IFileFolders } from '../../shared/interfaces/file-folders';
 import { TransformService } from '../transform/transform.service';
 import { IFileSchema } from '../../shared/interfaces/file-schema';
 import { LoggingService } from '../logging/logging.service';
+import { SchemaResponse } from 'app/interfaces/schema-response';
 
+import { FileSchema } from 'app/interfaces/file-schema';
+import { ReportSchema } from 'app/interfaces/report-schema';
+import { FolderResponse } from 'app/interfaces/folder-response';
+import { Folder } from 'app/interfaces/folder';
 
 @Injectable()
-export class FileService {
+export class FolderService {
 
   httpOptions: object;
   baseUrl: URL;
-  public fileSchema: IFileSchema;
+  public fileSchema: FileSchema[];
+  public reportSchema: ReportSchema[];
   private context: string;
 
   constructor(private http: HttpClient, private transform: TransformService, private logger: LoggingService) {
@@ -30,27 +36,11 @@ export class FileService {
     };
   }
 
-  getFileFolders(): Promise<IFileFolders> {
-    const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
-    return this.http.get<IFileFolders>(url.href).toPromise();
-  }
-
-  async getFileSchema(): Promise<IFileSchema> {
-
-    // only retrieves file schema once -- not true, but it's supposed to
-    console.log(this.fileSchema);
-    if (this.fileSchema === undefined) {
-      const url = new URL('api/Folder/GetFileSchema', this.baseUrl.href);
-      try {
-        this.fileSchema = await this.http.get<IFileSchema>(url.href).toPromise();
-        this.logger.logInfo(this.context, 'retrieves file schema from server');
-        return this.fileSchema;
-      } catch (error) {
-        this.logger.logError(this.context, error);
-      }
-    } else {
-        this.logger.logInfo(this.context, 'retrieves file schema from cache');
-        return Promise.resolve(this.fileSchema);
-    }
+  read(): Promise<Folder[]> {
+    const url = new URL('api/folder', this.baseUrl.href);
+    return this.http.get<FolderResponse>(url.href).toPromise()
+      .then((response: FolderResponse) => {
+        return response.folders;
+      });
   }
 }

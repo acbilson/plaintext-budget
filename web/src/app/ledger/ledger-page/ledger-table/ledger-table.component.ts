@@ -4,9 +4,10 @@ import { ILedgerEntry } from 'app/ledger/interfaces/ledger-entry';
 import { IRow } from 'app/ledger/interfaces/row';
 import { LedgerService } from 'app/services/ledger/ledger.service';
 import { LoggingService } from 'app/services/logging/logging.service';
-import { FileService } from 'app/services/file/file.service';
+import { SchemaService } from 'app/services/schema/schema.service';
 import { IFolderSchema } from 'app/shared/interfaces/folder-schema';
-import { IFileSchema } from 'app/shared/interfaces/file-schema';
+import { FileSchema } from 'app/interfaces/file-schema';
+import { scheduleMicroTask } from '@angular/core/src/util';
 
 @Component({
   selector: 'app-ledger-table',
@@ -17,19 +18,19 @@ export class LedgerTableComponent implements OnInit {
 
   public ledgerName: string;
   public ledgers: ILedgerEntry[];
-  public ledgerSchema: IFolderSchema;
+  public ledgerSchema: FileSchema;
 
   // logging
   private context: string;
 
   constructor(
     private ledgerService: LedgerService,
-    private fileService: FileService,
+    private schemaService: SchemaService,
     private logger: LoggingService,
     private route: ActivatedRoute,
   ) {
     this.ledgerService = ledgerService;
-    this.fileService = fileService;
+    this.schemaService = schemaService;
     this.route = route;
 
     this.ledgerName = null;
@@ -39,16 +40,16 @@ export class LedgerTableComponent implements OnInit {
 
   ngOnInit() {
     this.ledgerName = this.route.snapshot.paramMap.get('name');
-    this.getFileSchema().then(schema => this.ledgerSchema = schema.ledger);
+    this.getFileSchema().then(schema => this.ledgerSchema = schema.find(sch => sch.fileType === 'ledger'));
     this.readLedgers(this.ledgerName, 0, 25).then(ledgers => this.ledgers = ledgers);
   }
 
-  async getFileSchema(): Promise<IFileSchema> {
+  async getFileSchema(): Promise<FileSchema[]> {
 
-    let schema: IFileSchema;
+    let schema: FileSchema[];
 
     try {
-    schema = await this.fileService.getFileSchema();
+    schema = await this.schemaService.readFileSchema();
     } catch (error) {
       this.logger.logError(this.context, error);
     }
@@ -129,7 +130,7 @@ export class LedgerTableComponent implements OnInit {
     let ledgers = [];
 
     try {
-      ledgers = await this.ledgerService.readLedgers(fileName, startIndex, count);
+      ledgers = await this.ledgerService.read(fileName, startIndex, count);
     } catch (error) {
       this.logger.logError(this.context, `failed to retrieve ledgers with message: ${error.message}`);
     }

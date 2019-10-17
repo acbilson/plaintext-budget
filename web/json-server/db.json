@@ -10,10 +10,12 @@
         "defaultFileName": "ledger_some_name_01-01-01",
         "files": [
           {
-            "name": "ledger_some_name_01-01-01"
+            "name": "ledger_some_name_01-01-01",
+            "shortName": "checking"
           },
           {
-            "name": "ledger_some_name_02-02-02"
+            "name": "ledger_some_name_02-02-02",
+            "shortName": "saving"
           }
         ]
       },
@@ -23,7 +25,8 @@
         "defaultFileName": "budget_01-31",
         "files": [
           {
-            "name": "budget_01-31"
+            "name": "budget_01-31",
+            "shortName": "01-31"
           }
         ]
       }

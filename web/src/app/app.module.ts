@@ -16,7 +16,8 @@ import { HomeComponent } from './home/home.component';
 
 // services
 import { LoggingService } from './services/logging/logging.service';
-import { FileService } from './services/file/file.service';
+import { SchemaService } from './services/schema/schema.service';
+import { FolderService } from './services/folder/folder.service';
 
 // master routes
 const routePaths: Route[] = [
@@ -46,7 +47,8 @@ const routePaths: Route[] = [
   ],
   providers: [
     LoggingService,
-    FileService,
+    SchemaService,
+    FolderService,
   ],
   bootstrap: [AppComponent]
 })
