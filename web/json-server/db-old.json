@@ -1,0 +1,9 @@
+{
+  "api/Folder/GetFileFolders": [
+    { "name": "Ledgers", "defaultFileName": "ledger_fake", "files": [] },
+    { "name": "Budgets", "defaultFileName": "ledger_fake", "files": [] }
+  ],
+  "api/Folder/GetFileSchema": [
+    { "ledger": {}, "titleRegex": {}, "categories": {} }
+  ]
+}

@@ -7,10 +7,14 @@ services:
       - "4200:3000"
     volumes: 
       - ./:/src
+    depends_on:
+      - server
     command: ["npm", "run", "start"]
   server:
-    image: clue/json-server
+    image: abilson/ptb-json-server
+    build:
+      context: ./json-server
     ports:
       - "5000:80"
     volumes: 
-      - ./json-server/db.json:/data/db.json
+      - ./json-server:/data
