@@ -61,7 +61,7 @@ export class LoggingService {
     const levelName = this.getLevelName(level);
     console.log(`${levelName}-${context}: ${message}`);
 
-    const url = new URL('api/Logging/log', this.baseUrl.href);
+    const url = new URL('api/log', this.baseUrl.href);
     try {
       const response = await this.http.post(url.href, logMessage, this.httpOptions).toPromise();
     } catch (error) {

@@ -10,6 +10,7 @@ import { SchemaResponse } from 'app/interfaces/schema-response';
 
 import { FileSchema } from 'app/interfaces/file-schema';
 import { ReportSchema } from 'app/interfaces/report-schema';
+import { SchemaRef } from 'app/interfaces/schema-ref';
 
 @Injectable()
 export class SchemaService {
@@ -41,25 +42,12 @@ export class SchemaService {
 
   async readFileSchema(): Promise<FileSchema[]> {
 
-    // only retrieves file schema once -- not true, but it's supposed to
-    console.log(this.fileSchema);
-    if (this.fileSchema === undefined) {
       const url = new URL('api/schema', this.baseUrl.href);
+      return this.http.get<SchemaResponse>(url.href).toPromise()
+      .then((response: SchemaResponse) => {
 
-      try {
-        const response = await this.http.get<SchemaResponse>(url.href).toPromise();
-
-        this.fileSchema = response.files;
-        this.reportSchema = response.reports;
-
-        this.logger.logInfo(this.context, 'retrieves file schema from server');
-        return this.fileSchema;
-      } catch (error) {
-        this.logger.logError(this.context, error);
-      }
-    } else {
-      this.logger.logInfo(this.context, 'retrieves file schema from cache');
-      return Promise.resolve(this.fileSchema);
-    }
+        this.logger.logDebug(this.context, 'There were this many schemas in file:' + response.files);
+        return response.files;
+      });
   }
 }

@@ -40,7 +40,9 @@ export class LedgerService {
 
     return this.http.get<LedgerResponse>(url.href).toPromise()
       .then((ledgerResponse: LedgerResponse) => {
-        return this.http.get<SchemaResponse>(ledgerResponse.schema.link)
+
+        const schemaUrl = new URL(ledgerResponse.schema.link, this.baseUrl.href);
+        return this.http.get<SchemaResponse>(schemaUrl.href)
           .pipe(
             map((schemaResponse: SchemaResponse) => {
               const ledgerSchema = schemaResponse.files.find(sch => sch.fileType === 'ledger');

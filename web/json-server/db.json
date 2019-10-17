@@ -1,7 +1,7 @@
 {
   "folder": {
     "schema": {
-      "link": "/schema?name=folder"
+      "link": "/api/schema?name=folder"
     },
     "folders": [
       {
@@ -33,110 +33,108 @@
     ]
   },
   "schema": {
-    "schema": {
-      "files": [
-        {
-          "fileType": "ledger",
-          "lineSize": 142,
-          "columns": [
-            {
-              "index": 0,
-              "name": "Index",
-              "size": 1,
-              "offset": 0,
-              "editable": false
-            },
-            {
-              "index": 1,
-              "name": "Date",
-              "size": 10,
-              "offset": 1,
-              "editable": false
-            },
-            {
-              "index": 2,
-              "name": "Type",
-              "size": 1,
-              "offset": 2,
-              "editable": false
-            },
-            {
-              "index": 3,
-              "name": "Amount",
-              "size": 12,
-              "offset": 3,
-              "editable": false
-            },
-            {
-              "index": 4,
-              "name": "Subcategory",
-              "size": 30,
-              "offset": 4,
-              "editable": true
-            },
-            {
-              "index": 5,
-              "name": "Title",
-              "size": 30,
-              "offset": 5,
-              "editable": true
-            },
-            {
-              "index": 6,
-              "name": "Subject",
-              "size": 30,
-              "offset": 6,
-              "editable": true
-            },
-            {
-              "index": 7,
-              "name": "Locked",
-              "size": 1,
-              "offset": 7,
-              "editable": false
-            }
-          ]
-        }
-      ],
-      "reports": [
-        {
-          "fileType": "budget",
-          "lineSize": 61,
-          "columns": [
-            {
-              "index": 1,
-              "name": "Category",
-              "size": 30,
-              "offset": 0,
-              "editable": false
-            },
-            {
-              "index": 1,
-              "name": "Amount",
-              "size": 12,
-              "offset": 0,
-              "editable": true
-            },
-            {
-              "index": 2,
-              "name": "Subcategory",
-              "size": 30,
-              "offset": 12,
-              "editable": false
-            }
-          ]
-        }
-      ]
-    }
+    "files": [
+      {
+        "fileType": "ledger",
+        "lineSize": 142,
+        "columns": [
+          {
+            "index": 0,
+            "name": "Index",
+            "size": 1,
+            "offset": 0,
+            "editable": false
+          },
+          {
+            "index": 1,
+            "name": "Date",
+            "size": 10,
+            "offset": 1,
+            "editable": false
+          },
+          {
+            "index": 2,
+            "name": "Type",
+            "size": 1,
+            "offset": 2,
+            "editable": false
+          },
+          {
+            "index": 3,
+            "name": "Amount",
+            "size": 12,
+            "offset": 3,
+            "editable": false
+          },
+          {
+            "index": 4,
+            "name": "Subcategory",
+            "size": 30,
+            "offset": 4,
+            "editable": true
+          },
+          {
+            "index": 5,
+            "name": "Title",
+            "size": 30,
+            "offset": 5,
+            "editable": true
+          },
+          {
+            "index": 6,
+            "name": "Subject",
+            "size": 30,
+            "offset": 6,
+            "editable": true
+          },
+          {
+            "index": 7,
+            "name": "Locked",
+            "size": 1,
+            "offset": 7,
+            "editable": false
+          }
+        ]
+      }
+    ],
+    "reports": [
+      {
+        "fileType": "budget",
+        "lineSize": 61,
+        "columns": [
+          {
+            "index": 1,
+            "name": "Category",
+            "size": 30,
+            "offset": 0,
+            "editable": false
+          },
+          {
+            "index": 1,
+            "name": "Amount",
+            "size": 12,
+            "offset": 0,
+            "editable": true
+          },
+          {
+            "index": 2,
+            "name": "Subcategory",
+            "size": 30,
+            "offset": 12,
+            "editable": false
+          }
+        ]
+      }
+    ]
   },
   "ledger": {
     "schema": {
-      "link": "/schema?name=ledger"
+      "link": "/api/schema?name=ledger"
     },
     "rows": [
       {
         "id": 0,
-        "link": "/ledger?id=0",
+        "link": "/api/ledger?id=0",
         "values": [
           [
             1,
@@ -152,7 +150,7 @@
       },
       {
         "id": 1,
-        "link": "/ledger?id=1",
+        "link": "/api/ledger?id=1",
         "values": [
           [
             142,
@@ -170,12 +168,12 @@
   },
   "budget": {
     "schema": {
-      "link": "/schema?name=budget"
+      "link": "/api/schema?name=budget"
     },
     "rows": [
       {
         "id": 0,
-        "link": "/budget?id=0",
+        "link": "/api/budget?id=0",
         "values": [
           [
             1,
@@ -187,7 +185,7 @@
       },
       {
         "id": 1,
-        "link": "/budget?id=1",
+        "link": "/api/budget?id=1",
         "values": [
           [
             63,
@@ -198,5 +196,11 @@
         ]
       }
     ]
+  },
+  "log": {
+    "timestamp": "1571346227449",
+    "level": 0,
+    "context": "ledger-table",
+    "message": "read 25 ledgers from checking starting at index 0"
   }
 }
