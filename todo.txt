@@ -1,4 +1,4 @@
-(B) implement jsonp server for temporary data access +ui
+(B) add interfaces from json-server to ui +ui
 (B) deploy ui and jsonp server to aws +deploy
 (C) display budget from page +budget
 (D) break file access into separate project/server so data access is abstracted +docker +folderaccess note: not sure this is useful
