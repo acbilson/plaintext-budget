@@ -4,6 +4,8 @@ import { ILedgerColumn } from '../../ledger/interfaces/ledger-column';
 import { IColumnSchema } from '../../shared/interfaces/column-schema';
 import { IRow } from '../../ledger/interfaces/row';
 import { LoggingService } from '../logging/logging.service';
+import { Row } from 'app/interfaces/row';
+import { ColumnSchema } from 'app/interfaces/column-schema';
 
 @Injectable()
 export class TransformService {
@@ -15,21 +17,25 @@ export class TransformService {
     this.context = 'transform.service';
   }
 
-  rowsToLedgerEntries(rows: IRow[]): ILedgerEntry[] {
+  rowsToLedgerEntries(rows: Row[], ledgerSchema: ColumnSchema[]): ILedgerEntry[] {
 
     this.logger.logInfo(this.context, 'transforming rows to ledger entries');
     const ledgers: ILedgerEntry[] = [];
 
     rows.forEach((row) => {
+
+      const index = this.getLedgerColumnByName(row.values, ledgerSchema, 'index').value;
+
       const ledger: ILedgerEntry = {
-        'index': row.index,
-        'date': this.getLedgerColumnByName(row.columns, 'date'),
-        'amount': this.getLedgerColumnByName(row.columns, 'amount'),
-        'type': this.getLedgerColumnByName(row.columns, 'type'),
-        'subcategory': this.getLedgerColumnByName(row.columns, 'subcategory'),
-        'title': this.getLedgerColumnByName(row.columns, 'title'),
-        'subject': this.getLedgerColumnByName(row.columns, 'subject'),
-        'locked': this.getLedgerColumnByName(row.columns, 'locked')
+
+        'index': parseInt(index, 10),
+        'date': this.getLedgerColumnByName(row.values, ledgerSchema, 'date'),
+        'amount': this.getLedgerColumnByName(row.values, ledgerSchema, 'amount'),
+        'type': this.getLedgerColumnByName(row.values, ledgerSchema, 'type'),
+        'subcategory': this.getLedgerColumnByName(row.values, ledgerSchema, 'subcategory'),
+        'title': this.getLedgerColumnByName(row.values, ledgerSchema, 'title'),
+        'subject': this.getLedgerColumnByName(row.values, ledgerSchema, 'subject'),
+        'locked': this.getLedgerColumnByName(row.values, ledgerSchema, 'locked')
       };
 
       ledgers.push(ledger);
@@ -39,17 +45,18 @@ export class TransformService {
     return ledgers;
   }
 
-  getLedgerColumnByName(columns: IColumnSchema[], name: string): ILedgerColumn {
+  getLedgerColumnByName(values: Array<string>, ledgerSchema: ColumnSchema[], name: string): ILedgerColumn {
 
-    const column = columns.find(col => col.columnName.toLowerCase() === name);
+    const columnSchema = ledgerSchema.find(col => col.name.toLowerCase() === name);
+    const value = values[columnSchema.index - 1];
 
     return {
-      name: column.columnName,
-      value: column.columnValue,
-      index: column.index,
-      offset: column.offset,
-      size: column.size,
-      editable: column.editable
+      name: columnSchema.name,
+      value: value,
+      index: columnSchema.index,
+      offset: columnSchema.offset,
+      size: columnSchema.size,
+      editable: columnSchema.editable
     };
   }
 

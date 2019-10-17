@@ -6,6 +6,9 @@ import { IRow } from '../../ledger/interfaces/row';
 import { IColumnSchema } from '../../shared/interfaces/column-schema';
 import { TransformService } from '../transform/transform.service';
 
+import { LedgerResponse } from 'app/interfaces/ledger-response';
+import { SchemaResponse } from 'app/interfaces/schema-response';
+
 @Injectable()
 export class LedgerService {
 
@@ -31,13 +34,19 @@ export class LedgerService {
     return this.http.put<IRow>(url.href, row, this.httpOptions).toPromise();
   }
 
-  readLedgers(fileName: string, index: number, count: number): Promise<ILedgerEntry[]> {
-    const url = new URL(`api/Ledger/Read?fileName=${fileName}&startIndex=${index}&count=${count}`, this.baseUrl.href);
-    return this.http.get<IRow[]>(url.href)
-      .pipe(
-        map((ledgers: IRow[]) => {
-          return this.transform.rowsToLedgerEntries(ledgers);
-        })
-      ).toPromise();
+  read(fileName: string, id: number, count: number): Promise<ILedgerEntry[]> {
+
+    const url = new URL(`api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`, this.baseUrl.href);
+
+    return this.http.get<LedgerResponse>(url.href).toPromise()
+      .then((ledgerResponse: LedgerResponse) => {
+        return this.http.get<SchemaResponse>(ledgerResponse.schema.link)
+          .pipe(
+            map((schemaResponse: SchemaResponse) => {
+              const ledgerSchema = schemaResponse.files.find(sch => sch.fileType === 'ledger');
+              return this.transform.rowsToLedgerEntries(ledgerResponse.rows, ledgerSchema.columns);
+            })
+          ).toPromise();
+      });
   }
 }

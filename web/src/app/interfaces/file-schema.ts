@@ -1,7 +1,7 @@
-import { Column } from './column';
+import { ColumnSchema } from './column-schema';
 
 export interface FileSchema {
     'fileType': string;
     'lineSize': number;
-    'columns': Column[];
+    'columns': ColumnSchema[];
 }
