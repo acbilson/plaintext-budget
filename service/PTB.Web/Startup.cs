@@ -94,6 +94,9 @@ namespace PTB.Web
             string baseDir = _env.ContentRootPath;
             LoadServiceConfiguration(services, baseDir);
 
+            // changes routes to lower-case, which is cleaner
+            services.AddRouting(options => options.LowercaseUrls = true);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
