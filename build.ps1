@@ -1,27 +1,69 @@
 param(
-  [Parameter(Mandatory)]
+  [Parameter(Mandatory=$true,Position=0)]
   [ValidateNotNullOrEmpty()]
-  [ValidateSet("Start", "Stop", "Serve")]
-  [String]$Action
+  [ValidateSet("dev", "prod", "test")]
+  [String]$BuildType,
+
+  [Parameter(Mandatory=$true,Position=1)]
+  [ValidateNotNullOrEmpty()]
+  [ValidateSet("build", "start", "stop")]
+  [String]$BuildAction,
+
+  [Parameter(Mandatory=$false,Position=2)]
+  [String]$Target=""
+
 )
 
-switch ($Action) {
+switch ($BuildType) {
 
-  "Start" {
+  "dev" {
 
-    # runs both web and server in detached mode
-    docker-compose up -d
+    switch ($BuildAction) {
+
+      "build" {
+
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build $Target
+      }
+      "start" {
+      
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d $Target
+      }
+      "stop" {
+
+        docker-compose down
+      }
+    }
   }
+  "prod" {
+    switch ($BuildAction) {
 
-  "Stop" {
+      "build" {
 
-    docker-compose down
+        docker-compose -f docker-compose.yml build $Target
+      }
+      "start" {
 
+        docker-compose -f docker-compose.yml up -d $Target
+      }
+      "stop" {
+
+        docker-compose down
+      }
+    }
   }
+  "test" {
 
-  "Serve" {
+    switch ($BuildAction) {
 
-    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+      "build" {
+
+      }
+      "start" {
+
+      }
+      "stop" {
+
+      }
+    }
   }
-
 }

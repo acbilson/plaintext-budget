@@ -1,16 +1,26 @@
-version: '3.3'
+version: '3.4'
 services:
+
   web:
-    image: ptb-web:12.11.1
-    build: 
+    image: abilson/ptb-web
+    build:
       context: ./web
-    ports: 
+      target: prod
+    ports:
       - "4200:80"
+
   server:
-    image: ptb-server:2.1
-    build: 
+    image: abilson/ptb-server
+    build:
       context: ./service
+      target: prod
     ports:
       - "5000:80"
-    volumes: 
-      - ./logs:/app/logs
+
+  json-server:
+    image: abilson/ptb-json-server
+    build:
+      context: ./web/json-server
+      target: prod
+    ports:
+      - "5000:80"
