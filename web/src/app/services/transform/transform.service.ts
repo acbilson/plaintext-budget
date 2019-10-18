@@ -48,7 +48,7 @@ export class TransformService {
   getLedgerColumnByName(values: Array<string>, ledgerSchema: ColumnSchema[], name: string): ILedgerColumn {
 
     const columnSchema = ledgerSchema.find(col => col.name.toLowerCase() === name);
-    const value = values[columnSchema.index - 1];
+    const value = values[columnSchema.index];
 
     return {
       name: columnSchema.name,

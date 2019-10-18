@@ -42,6 +42,8 @@ export class LedgerTableComponent implements OnInit {
     this.ledgerName = this.route.snapshot.paramMap.get('name');
     this.getFileSchema().then(schema => this.ledgerSchema = schema.find(sch => sch.fileType === 'ledger'));
     this.readLedgers(this.ledgerName, 0, 25).then(ledgers => this.ledgers = ledgers);
+    console.log('First ledgers are:');
+    console.log(this.ledgers);
   }
 
   async getFileSchema(): Promise<FileSchema[]> {

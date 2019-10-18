@@ -45,6 +45,8 @@ export class LedgerService {
         return this.http.get<SchemaResponse>(schemaUrl.href)
           .pipe(
             map((schemaResponse: SchemaResponse) => {
+              console.log('Schema response is:');
+              console.log(schemaResponse);
               const ledgerSchema = schemaResponse.files.find(sch => sch.fileType === 'ledger');
               return this.transform.rowsToLedgerEntries(ledgerResponse.rows, ledgerSchema.columns);
             })

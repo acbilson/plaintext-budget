@@ -4,7 +4,8 @@ services:
     image: node:12.11.1
     working_dir: /src
     ports:
-      - "4200:3000"
+      - "4200:80"
+      - "49153:49153"
     volumes: 
       - ./:/src
     depends_on:
