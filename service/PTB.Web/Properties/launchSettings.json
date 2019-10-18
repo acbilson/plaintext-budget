@@ -1,0 +1,28 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:62546",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "PTB.Web": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\abilson\\OneDrive - SPR Consulting\\Archive\\2019\\BudgetProject\\PTB_Home",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "HOME_DIRECTORY": "C:\\Users\\abilson\\OneDrive - SPR Consulting\\Archive\\2019\\BudgetProject\\PTB_Home",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}

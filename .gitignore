@@ -13,3 +13,4 @@ Import/
 Regex/
 archive/
 logs/
+*.csproj.user
