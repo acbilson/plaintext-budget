@@ -1,17 +1,15 @@
 version: '3.3'
 services:
   server:
-    image: ptb-server
-    build:
-      context: ./web/json-server
-    working_dir: /src
+    image: mcr.microsoft.com/dotnet/core/sdk:2.1
+    working_dir: /src/PTB.Web
     ports:
-      - "5000:80"
+      - "5000:5000"
     volumes: 
       - ./service:/src
     command: ["dotnet", "watch", "run"]
   web:
-    image: ptb-web
+    image: node:12.11.1
     working_dir: /src
     ports:
       - "4200:3000"

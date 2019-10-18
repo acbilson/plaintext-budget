@@ -1,6 +1,6 @@
-FROM node:12.11.1-alpine
+FROM node:latest
 RUN npm install -g json-server
 WORKDIR /data
-COPY db.json json-server.json routes.json /data/
+VOLUME /data
 EXPOSE 80
 ENTRYPOINT ["json-server", "db.json"]

@@ -15,6 +15,7 @@ services:
     image: abilson/ptb-json-server
     build:
       context: ./json-server
+      dockerfile: ./Dockerfile-dev
     ports:
       - "5000:80"
     volumes: 
