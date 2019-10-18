@@ -2,7 +2,7 @@ version: '3.4'
 services:
 
   web:
-    image: abilson/ptb-web
+    image: abilson/ptb-web:nginx-alpine
     build:
       context: ./web
       target: prod
@@ -10,7 +10,7 @@ services:
       - "4200:80"
 
   server:
-    image: abilson/ptb-server
+    image: abilson/ptb-server:2.1
     build:
       context: ./service
       target: prod
@@ -18,7 +18,7 @@ services:
       - "5000:80"
 
   json-server:
-    image: abilson/ptb-json-server
+    image: abilson/ptb-json-server:12.11.1-alpine
     build:
       context: ./web/json-server
       target: prod
