@@ -9,13 +9,13 @@ import { ConfigService } from 'app/services/config/config.service';
 export class LoggingService {
 
   httpOptions: object;
-  baseUrl: URL;
+  config: ServiceConfig;
   level: LoggingLevel;
 
-  constructor(private http: HttpClient, private config: ConfigService) {
+  constructor(private http: HttpClient, private configService: ConfigService) {
     this.http = http;
-    this.config = config;
-    this.baseUrl = this.config.apiUrl;
+    this.configService = configService;
+    this.config = this.configService.getConfig();
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -64,11 +64,10 @@ export class LoggingService {
     const levelName = this.getLevelName(level);
     console.log(`${levelName}-${context}: ${message}`);
 
-    const url = new URL('api/log', this.baseUrl.href);
     try {
+      console.log('base url is: ' + this.config.apiUrl.href);
+      const url = new URL('api/log', this.config.apiUrl.href);
       const response = await this.http.post(url.href, logMessage, this.httpOptions).toPromise();
-      console.log('sent logs for ' + this.config.apiUrl.href);
-      console.log(response);
     } catch (error) {
       console.log(`logger errored in context: ${context} with message: ${message}`);
       console.log(error);

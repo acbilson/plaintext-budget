@@ -15,13 +15,13 @@ import { ConfigService } from '../config/config.service';
 export class LedgerService {
 
   httpOptions: object;
-  baseUrl: URL;
+  config: ServiceConfig;
 
-  constructor(private http: HttpClient, private config: ConfigService, private transform: TransformService) {
+  constructor(private http: HttpClient, private configService: ConfigService, private transform: TransformService) {
     this.http = http;
     this.transform = transform;
-    this.config = config;
-    this.baseUrl = this.config.apiUrl;
+    this.configService = configService;
+    this.config = this.configService.getConfig();
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export class LedgerService {
   }
 
   updateLedger(ledger: ILedgerEntry): Promise<IRow> {
-    const url = new URL('api/Ledger/Update', this.baseUrl.href);
+    const url = new URL('api/Ledger/Update', this.config.apiUrl.href);
     const row = this.transform.ledgerToRow(ledger);
     console.log(row);
     return this.http.put<IRow>(url.href, row, this.httpOptions).toPromise();
@@ -39,12 +39,12 @@ export class LedgerService {
 
   read(fileName: string, id: number, count: number): Promise<ILedgerEntry[]> {
 
-    const url = new URL(`api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`, this.baseUrl.href);
+    const url = new URL(`api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`, this.config.apiUrl.href);
 
     return this.http.get<LedgerResponse>(url.href).toPromise()
       .then((ledgerResponse: LedgerResponse) => {
 
-        const schemaUrl = new URL(ledgerResponse.schema.link, this.baseUrl.href);
+        const schemaUrl = new URL(ledgerResponse.schema.link, this.config.apiUrl.href);
         return this.http.get<SchemaResponse>(schemaUrl.href)
           .pipe(
             map((schemaResponse: SchemaResponse) => {

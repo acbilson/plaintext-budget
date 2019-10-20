@@ -9,13 +9,13 @@ import { ConfigService } from '../config/config.service';
 export class BudgetService {
 
   httpOptions: object;
-  baseUrl: URL;
+  config: ServiceConfig;
 
-  constructor(private http: HttpClient, private config: ConfigService, private transform: TransformService) {
+  constructor(private http: HttpClient, private configService: ConfigService, private transform: TransformService) {
     this.http = http;
     this.transform = transform;
-    this.config = config;
-    this.baseUrl = this.config.apiUrl;
+    this.configService = configService;
+    this.config = this.configService.getConfig();
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export class BudgetService {
   }
 
   getFileFolders(): Promise<IFileFolders> {
-    const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
+    const url = new URL('api/Folder/GetFileFolders', this.config.apiUrl.href);
     return this.http.get<IFileFolders>(url.href).toPromise();
   }
 }

@@ -18,18 +18,23 @@ import { ConfigService } from '../config/config.service';
 export class SchemaService {
 
   httpOptions: object;
-  baseUrl: URL;
+  config: ServiceConfig;
   public fileSchema: FileSchema[];
   public reportSchema: ReportSchema[];
   private context: string;
 
-  constructor(private http: HttpClient, private config: ConfigService, private transform: TransformService, private logger: LoggingService) {
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+    private transform: TransformService,
+    private logger: LoggingService
+    ) {
     this.http = http;
     this.transform = transform;
     this.logger = logger;
     this.context = 'file-service';
-    this.config = config;
-    this.baseUrl = this.config.apiUrl;
+    this.configService = configService;
+    this.config = this.configService.getConfig();
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -39,13 +44,13 @@ export class SchemaService {
   }
 
   getFileFolders(): Promise<IFileFolders> {
-    const url = new URL('api/Folder/GetFileFolders', this.baseUrl.href);
+    const url = new URL('api/Folder/GetFileFolders', this.config.apiUrl.href);
     return this.http.get<IFileFolders>(url.href).toPromise();
   }
 
   async readFileSchema(): Promise<FileSchema[]> {
 
-      const url = new URL('api/schema', this.baseUrl.href);
+      const url = new URL('api/schema', this.config.apiUrl.href);
       return this.http.get<SchemaResponse>(url.href).toPromise()
       .then((response: SchemaResponse) => {
 

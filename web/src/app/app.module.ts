@@ -1,8 +1,9 @@
 // angular core modules
+import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule, Route } from '@angular/router';
 
 // app modules
@@ -20,6 +21,8 @@ import { SchemaService } from './services/schema/schema.service';
 import { FolderService } from './services/folder/folder.service';
 import { ServiceConfig } from './interfaces/service-config';
 import { ConfigService } from './services/config/config.service';
+import { map, catchError } from 'rxjs/operators';
+import { Observable, ObservableInput } from 'rxjs/Observable';
 
 // master routes
 const routePaths: Route[] = [
@@ -27,11 +30,19 @@ const routePaths: Route[] = [
   { path: '**', component: HomeComponent },
 ];
 
-
-// master service config
-const configService: ConfigService = {
-  apiUrl: new URL('http://18.217.77.174')
-};
+/* works in theory, but not for me
+function load(http: HttpClient, config: ConfigService): (() => Promise<boolean>) {
+  return (): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (a: boolean) => void): void => {
+      http.get<ServiceConfig>('assets/app-config.json').toPromise()
+        .then( (cfg: ServiceConfig) => {
+          config.config = cfg;
+          resolve(true);
+         } );
+    });
+  };
+}
+*/
 
 @NgModule({
   declarations: [
@@ -54,11 +65,16 @@ const configService: ConfigService = {
     RouterModule.forRoot(routePaths)
   ],
   providers: [
+    ConfigService,
+    /* matches commented code block above
+    {provide: APP_INITIALIZER,
+    useFactory: load,
+  deps: [HttpClient, ConfigService], multi: true},
+    */
     LoggingService,
     SchemaService,
-    FolderService,
-    {provide: ConfigService, useValue: configService }
-  ],
+    FolderService
+],
   bootstrap: [AppComponent]
 })
 
