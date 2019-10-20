@@ -1,5 +1,5 @@
 # development
-FROM node:12.11.1-alpine AS dev
+FROM node:12.11.1 AS dev
 WORKDIR /srv/PTB.Web
 EXPOSE 80
 

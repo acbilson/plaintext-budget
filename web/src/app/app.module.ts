@@ -18,12 +18,20 @@ import { HomeComponent } from './home/home.component';
 import { LoggingService } from './services/logging/logging.service';
 import { SchemaService } from './services/schema/schema.service';
 import { FolderService } from './services/folder/folder.service';
+import { ServiceConfig } from './interfaces/service-config';
+import { ConfigService } from './services/config/config.service';
 
 // master routes
 const routePaths: Route[] = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: '**', component: HomeComponent },
 ];
+
+
+// master service config
+const configService: ConfigService = {
+  apiUrl: new URL('http://18.217.77.174')
+};
 
 @NgModule({
   declarations: [
@@ -49,6 +57,7 @@ const routePaths: Route[] = [
     LoggingService,
     SchemaService,
     FolderService,
+    {provide: ConfigService, useValue: configService }
   ],
   bootstrap: [AppComponent]
 })

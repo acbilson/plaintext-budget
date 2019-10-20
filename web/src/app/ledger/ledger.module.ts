@@ -9,6 +9,7 @@ import { CategoryModalComponent } from './category-modal/category-modal.componen
 import { PrependZerosPipe } from '../custom-pipes/prepend-zeros.pipe';
 import { TrimPipe } from '../custom-pipes/trim.pipe';
 import { DebitPipe } from '../custom-pipes/debit.pipe';
+import { ServiceConfig } from 'app/interfaces/service-config';
 
 // services
 import { LedgerService } from '../services/ledger/ledger.service';

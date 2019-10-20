@@ -12,6 +12,8 @@ import { FileSchema } from 'app/interfaces/file-schema';
 import { ReportSchema } from 'app/interfaces/report-schema';
 import { FolderResponse } from 'app/interfaces/folder-response';
 import { Folder } from 'app/interfaces/folder';
+import { ServiceConfig } from 'app/interfaces/service-config';
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class FolderService {
@@ -22,12 +24,13 @@ export class FolderService {
   public reportSchema: ReportSchema[];
   private context: string;
 
-  constructor(private http: HttpClient, private transform: TransformService, private logger: LoggingService) {
+  constructor(private http: HttpClient, private config: ConfigService, private transform: TransformService, private logger: LoggingService) {
     this.http = http;
     this.transform = transform;
     this.logger = logger;
     this.context = 'file-service';
-    this.baseUrl = new URL('http://localhost:5000');
+    this.config = config;
+    this.baseUrl = this.config.apiUrl;
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

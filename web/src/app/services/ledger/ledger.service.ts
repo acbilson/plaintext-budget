@@ -8,6 +8,8 @@ import { TransformService } from '../transform/transform.service';
 
 import { LedgerResponse } from 'app/interfaces/ledger-response';
 import { SchemaResponse } from 'app/interfaces/schema-response';
+import { ServiceConfig } from 'app/interfaces/service-config';
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class LedgerService {
@@ -15,10 +17,11 @@ export class LedgerService {
   httpOptions: object;
   baseUrl: URL;
 
-  constructor(private http: HttpClient, private transform: TransformService) {
+  constructor(private http: HttpClient, private config: ConfigService, private transform: TransformService) {
     this.http = http;
     this.transform = transform;
-    this.baseUrl = new URL('http://localhost:5000');
+    this.config = config;
+    this.baseUrl = this.config.apiUrl;
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

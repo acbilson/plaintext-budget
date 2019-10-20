@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LogMessage } from './log-message';
 import { LoggingLevel } from './logging-level';
+import { ServiceConfig } from 'app/interfaces/service-config';
+import { ConfigService } from 'app/services/config/config.service';
 
 @Injectable()
 export class LoggingService {
@@ -10,9 +12,10 @@ export class LoggingService {
   baseUrl: URL;
   level: LoggingLevel;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private config: ConfigService) {
     this.http = http;
-    this.baseUrl = new URL('http://localhost:5000');
+    this.config = config;
+    this.baseUrl = this.config.apiUrl;
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -64,6 +67,8 @@ export class LoggingService {
     const url = new URL('api/log', this.baseUrl.href);
     try {
       const response = await this.http.post(url.href, logMessage, this.httpOptions).toPromise();
+      console.log('sent logs for ' + this.config.apiUrl.href);
+      console.log(response);
     } catch (error) {
       console.log(`logger errored in context: ${context} with message: ${message}`);
       console.log(error);
