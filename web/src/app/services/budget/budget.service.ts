@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IFileFolders } from '../../shared/interfaces/file-folders';
-import { TransformService } from '../transform/transform.service';
+import { TransformService } from 'app/services/transform/transform.service';
 import { ServiceConfig } from 'app/interfaces/service-config';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from 'app/services/config/config.service';
 
 @Injectable()
 export class BudgetService {
-
   httpOptions: object;
   config: ServiceConfig;
 
-  constructor(private http: HttpClient, private configService: ConfigService, private transform: TransformService) {
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+    private transform: TransformService
+  ) {
     this.http = http;
     this.transform = transform;
     this.configService = configService;
@@ -22,10 +24,5 @@ export class BudgetService {
         'Access-Control-Allow-Origin': '*'
       })
     };
-  }
-
-  getFileFolders(): Promise<IFileFolders> {
-    const url = new URL('api/Folder/GetFileFolders', this.config.apiUrl.href);
-    return this.http.get<IFileFolders>(url.href).toPromise();
   }
 }

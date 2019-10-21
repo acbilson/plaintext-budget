@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BudgetService } from '../../services/budget/budget.service';
-import { LoggingService } from '../../services/logging/logging.service';
+import { BudgetService } from 'app/services/budget/budget.service';
+import { LoggingService } from 'app/services/logging/logging.service';
 
 @Component({
   selector: 'app-budget-page',
@@ -8,14 +8,16 @@ import { LoggingService } from '../../services/logging/logging.service';
   styleUrls: ['./budget-page.component.css']
 })
 export class BudgetPageComponent implements OnInit {
-
   private context: string;
 
-  constructor(private budgetService: BudgetService, private logger: LoggingService) {
+  constructor(
+    private budgetService: BudgetService,
+    private logger: LoggingService
+  ) {
     this.budgetService = budgetService;
     this.logger = logger;
     this.context = 'budget-page';
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

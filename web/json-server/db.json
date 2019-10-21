@@ -194,9 +194,9 @@
     ]
   },
   "log": {
-    "timestamp": "1571547075578",
+    "timestamp": "1571683805450",
     "level": 0,
     "context": "ledger-table",
-    "message": "read 25 ledgers from checking starting at index 0"
+    "message": "read 25 ledgers from saving starting at index 0"
   }
 }

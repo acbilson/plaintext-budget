@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { ILedgerEntry } from '../../ledger/interfaces/ledger-entry';
-import { IRow } from '../../ledger/interfaces/row';
-import { IColumnSchema } from '../../shared/interfaces/column-schema';
-import { TransformService } from '../transform/transform.service';
-
+import { TransformService } from 'app/services/transform/transform.service';
 import { LedgerResponse } from 'app/interfaces/ledger-response';
 import { SchemaResponse } from 'app/interfaces/schema-response';
 import { ServiceConfig } from 'app/interfaces/service-config';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from 'app/services/config/config.service';
+import { Row } from 'app/interfaces/row';
+import { LedgerEntry } from 'app/interfaces/ledger-entry';
 
 @Injectable()
 export class LedgerService {
-
   httpOptions: object;
   config: ServiceConfig;
 
-  constructor(private http: HttpClient, private configService: ConfigService, private transform: TransformService) {
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+    private transform: TransformService
+  ) {
     this.http = http;
     this.transform = transform;
     this.configService = configService;
@@ -30,30 +31,43 @@ export class LedgerService {
     };
   }
 
-  updateLedger(ledger: ILedgerEntry): Promise<IRow> {
+  updateLedger(ledger: LedgerEntry): Promise<Row> {
     const url = new URL('api/Ledger/Update', this.config.apiUrl.href);
     const row = this.transform.ledgerToRow(ledger);
     console.log(row);
-    return this.http.put<IRow>(url.href, row, this.httpOptions).toPromise();
+    return this.http.put<Row>(url.href, row, this.httpOptions).toPromise();
   }
 
-  read(fileName: string, id: number, count: number): Promise<ILedgerEntry[]> {
+  read(fileName: string, id: number, count: number): Promise<LedgerEntry[]> {
+    const url = new URL(
+      `api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`,
+      this.config.apiUrl.href
+    );
 
-    const url = new URL(`api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`, this.config.apiUrl.href);
-
-    return this.http.get<LedgerResponse>(url.href).toPromise()
+    return this.http
+      .get<LedgerResponse>(url.href)
+      .toPromise()
       .then((ledgerResponse: LedgerResponse) => {
-
-        const schemaUrl = new URL(ledgerResponse.schema.link, this.config.apiUrl.href);
-        return this.http.get<SchemaResponse>(schemaUrl.href)
+        const schemaUrl = new URL(
+          ledgerResponse.schema.link,
+          this.config.apiUrl.href
+        );
+        return this.http
+          .get<SchemaResponse>(schemaUrl.href)
           .pipe(
             map((schemaResponse: SchemaResponse) => {
               console.log('Schema response is:');
               console.log(schemaResponse);
-              const ledgerSchema = schemaResponse.files.find(sch => sch.fileType === 'ledger');
-              return this.transform.rowsToLedgerEntries(ledgerResponse.rows, ledgerSchema.columns);
+              const ledgerSchema = schemaResponse.files.find(
+                sch => sch.fileType === 'ledger'
+              );
+              return this.transform.rowsToLedgerEntries(
+                ledgerResponse.rows,
+                ledgerSchema.columns
+              );
             })
-          ).toPromise();
+          )
+          .toPromise();
       });
   }
 }

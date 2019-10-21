@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ILedgerEntry } from '../../ledger/interfaces/ledger-entry';
-import { ILedgerColumn } from '../../ledger/interfaces/ledger-column';
-import { IColumnSchema } from '../../shared/interfaces/column-schema';
-import { IRow } from '../../ledger/interfaces/row';
-import { LoggingService } from '../logging/logging.service';
-import { Row } from 'app/interfaces/row';
+import { LedgerEntry } from 'app/interfaces/ledger-entry';
+import { LedgerColumn } from 'app/interfaces/ledger-column';
 import { ColumnSchema } from 'app/interfaces/column-schema';
+import { Row } from 'app/interfaces/row';
+import { LoggingService } from 'app/services/logging/logging.service';
 
 @Injectable()
 export class TransformService {
-
   private context: string;
 
   constructor(private logger: LoggingService) {
@@ -17,25 +14,37 @@ export class TransformService {
     this.context = 'transform.service';
   }
 
-  rowsToLedgerEntries(rows: Row[], ledgerSchema: ColumnSchema[]): ILedgerEntry[] {
-
+  rowsToLedgerEntries(
+    rows: Row[],
+    ledgerSchema: ColumnSchema[]
+  ): LedgerEntry[] {
     this.logger.logInfo(this.context, 'transforming rows to ledger entries');
-    const ledgers: ILedgerEntry[] = [];
+    const ledgers: LedgerEntry[] = [];
 
-    rows.forEach((row) => {
+    rows.forEach(row => {
+      const index = this.getLedgerColumnByName(
+        row.values,
+        ledgerSchema,
+        'index'
+      ).value;
 
-      const index = this.getLedgerColumnByName(row.values, ledgerSchema, 'index').value;
-
-      const ledger: ILedgerEntry = {
-
-        'index': parseInt(index, 10),
-        'date': this.getLedgerColumnByName(row.values, ledgerSchema, 'date'),
-        'amount': this.getLedgerColumnByName(row.values, ledgerSchema, 'amount'),
-        'type': this.getLedgerColumnByName(row.values, ledgerSchema, 'type'),
-        'subcategory': this.getLedgerColumnByName(row.values, ledgerSchema, 'subcategory'),
-        'title': this.getLedgerColumnByName(row.values, ledgerSchema, 'title'),
-        'subject': this.getLedgerColumnByName(row.values, ledgerSchema, 'subject'),
-        'locked': this.getLedgerColumnByName(row.values, ledgerSchema, 'locked')
+      const ledger: LedgerEntry = {
+        index: parseInt(index, 10),
+        date: this.getLedgerColumnByName(row.values, ledgerSchema, 'date'),
+        amount: this.getLedgerColumnByName(row.values, ledgerSchema, 'amount'),
+        type: this.getLedgerColumnByName(row.values, ledgerSchema, 'type'),
+        subcategory: this.getLedgerColumnByName(
+          row.values,
+          ledgerSchema,
+          'subcategory'
+        ),
+        title: this.getLedgerColumnByName(row.values, ledgerSchema, 'title'),
+        subject: this.getLedgerColumnByName(
+          row.values,
+          ledgerSchema,
+          'subject'
+        ),
+        locked: this.getLedgerColumnByName(row.values, ledgerSchema, 'locked')
       };
 
       ledgers.push(ledger);
@@ -45,9 +54,14 @@ export class TransformService {
     return ledgers;
   }
 
-  getLedgerColumnByName(values: Array<string>, ledgerSchema: ColumnSchema[], name: string): ILedgerColumn {
-
-    const columnSchema = ledgerSchema.find(col => col.name.toLowerCase() === name);
+  getLedgerColumnByName(
+    values: Array<string>,
+    ledgerSchema: ColumnSchema[],
+    name: string
+  ): LedgerColumn {
+    const columnSchema = ledgerSchema.find(
+      col => col.name.toLowerCase() === name
+    );
     const value = values[columnSchema.index];
 
     return {
@@ -60,34 +74,22 @@ export class TransformService {
     };
   }
 
-  ledgerToRow(ledger: ILedgerEntry): IRow {
-
+  ledgerToRow(ledger: LedgerEntry): Row {
     this.logger.logInfo(this.context, 'transforming ledgers entries to rows');
 
-    const row: IRow = {
-      index: ledger.index,
-      columns: [
-        this.getColumn(ledger.date),
-        this.getColumn(ledger.amount),
-        this.getColumn(ledger.type),
-        this.getColumn(ledger.subcategory),
-        this.getColumn(ledger.subject),
-        this.getColumn(ledger.locked),
-        this.getColumn(ledger.title)
+    const row: Row = {
+      id: ledger.index,
+      link: null,
+      values: [
+        ledger.date.value,
+        ledger.amount.value,
+        ledger.type.value,
+        ledger.subcategory.value,
+        ledger.subject.value,
+        ledger.locked.value,
+        ledger.title.value
       ]
     };
     return row;
-  }
-
-  getColumn(column: ILedgerColumn): IColumnSchema {
-    const newColumn: IColumnSchema = {
-      columnName: column.name,
-      columnValue: column.value,
-      index: column.index,
-      offset: column.offset,
-      size: column.size,
-      editable: column.editable
-    };
-    return newColumn;
   }
 }

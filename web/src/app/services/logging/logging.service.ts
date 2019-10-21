@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LogMessage } from './log-message';
-import { LoggingLevel } from './logging-level';
+import { LogMessage } from 'app/services/logging/log-message';
+import { LoggingLevel } from 'app/services/logging/logging-level';
 import { ServiceConfig } from 'app/interfaces/service-config';
 import { ConfigService } from 'app/services/config/config.service';
 
 @Injectable()
 export class LoggingService {
-
   httpOptions: object;
   config: ServiceConfig;
   level: LoggingLevel;
@@ -30,22 +29,22 @@ export class LoggingService {
     switch (level) {
       case LoggingLevel.Info:
         levelName = 'Info';
-      break;
+        break;
 
       case LoggingLevel.Debug:
         levelName = 'DBug';
-      break;
+        break;
 
       case LoggingLevel.Warning:
         levelName = 'Warn';
-      break;
+        break;
 
       case LoggingLevel.Error:
         levelName = 'Erro';
-      break;
+        break;
 
       default:
-      break;
+        break;
     }
 
     return levelName;
@@ -67,40 +66,38 @@ export class LoggingService {
     try {
       console.log('base url is: ' + this.config.apiUrl.href);
       const url = new URL('api/log', this.config.apiUrl.href);
-      const response = await this.http.post(url.href, logMessage, this.httpOptions).toPromise();
+      const response = await this.http
+        .post(url.href, logMessage, this.httpOptions)
+        .toPromise();
     } catch (error) {
-      console.log(`logger errored in context: ${context} with message: ${message}`);
+      console.log(
+        `logger errored in context: ${context} with message: ${message}`
+      );
       console.log(error);
     }
   }
 
   async logInfo(context: string, message: string) {
-
     if (this.level <= LoggingLevel.Info) {
       this.log(LoggingLevel.Info, context, message);
     }
   }
 
   async logDebug(context: string, message: string) {
-
     if (this.level <= LoggingLevel.Debug) {
       this.log(LoggingLevel.Debug, context, message);
     }
   }
 
   async logWarning(context: string, message: string) {
-
     if (this.level <= LoggingLevel.Warning) {
       this.log(LoggingLevel.Warning, context, message);
     }
   }
 
   async logError(context: string, message: string) {
-
     if (this.level <= LoggingLevel.Error) {
       this.log(LoggingLevel.Error, context, message);
     }
   }
-
-
 }

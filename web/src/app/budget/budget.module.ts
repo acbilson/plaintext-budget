@@ -1,27 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
-import { BudgetPageComponent } from './budget-page/budget-page.component';
-import { BudgetFormComponent } from './budget-form/budget-form.component';
+import { BudgetPageComponent } from 'app/budget/budget-page/budget-page.component';
+import { BudgetFormComponent } from 'app/budget/budget-page/budget-form/budget-form.component';
 
 const routePaths: Route[] = [
   { path: 'budget/:name', component: BudgetPageComponent },
-  { path: 'budget', component: BudgetPageComponent },
+  { path: 'budget', component: BudgetPageComponent }
 ];
 
 @NgModule({
   declarations: [
-
     // ledger components
     BudgetFormComponent,
-    BudgetPageComponent,
+    BudgetPageComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routePaths)
-  ],
-  providers: [
-  ]
+  imports: [CommonModule, RouterModule.forChild(routePaths)],
+  providers: []
 })
-
-export class BudgetModule { }
+export class BudgetModule {}

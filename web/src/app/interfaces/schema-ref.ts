@@ -1,3 +1,3 @@
 export interface SchemaRef {
-  'link': string;
+  link: string;
 }

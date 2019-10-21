@@ -1,23 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IPTBFile } from '../../shared/interfaces/ptbfile';
-import { IPTBFolder } from '../../shared/interfaces/ptbfolder';
-import { IFileFolders } from '../../shared/interfaces/file-folders';
-import { TransformService } from '../transform/transform.service';
-import { IFileSchema } from '../../shared/interfaces/file-schema';
-import { LoggingService } from '../logging/logging.service';
-import { SchemaResponse } from 'app/interfaces/schema-response';
+import { TransformService } from 'app/services/transform/transform.service';
+import { LoggingService } from 'app/services/logging/logging.service';
 
 import { FileSchema } from 'app/interfaces/file-schema';
 import { ReportSchema } from 'app/interfaces/report-schema';
 import { FolderResponse } from 'app/interfaces/folder-response';
 import { Folder } from 'app/interfaces/folder';
 import { ServiceConfig } from 'app/interfaces/service-config';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from 'app/services/config/config.service';
 
 @Injectable()
 export class FolderService {
-
   httpOptions: object;
   config: ServiceConfig;
   public fileSchema: FileSchema[];
@@ -29,7 +23,7 @@ export class FolderService {
     private configService: ConfigService,
     private transform: TransformService,
     private logger: LoggingService
-    ) {
+  ) {
     this.http = http;
     this.transform = transform;
     this.logger = logger;
@@ -46,7 +40,9 @@ export class FolderService {
 
   read(): Promise<Folder[]> {
     const url = new URL('api/folder', this.config.apiUrl.href);
-    return this.http.get<FolderResponse>(url.href).toPromise()
+    return this.http
+      .get<FolderResponse>(url.href)
+      .toPromise()
       .then((response: FolderResponse) => {
         return response.folders;
       });

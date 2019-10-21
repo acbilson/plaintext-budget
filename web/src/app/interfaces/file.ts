@@ -1,4 +1,4 @@
 export interface File {
-    'name': string;
-    'shortName': string;
+  name: string;
+  shortName: string;
 }
