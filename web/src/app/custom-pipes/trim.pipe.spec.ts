@@ -4,8 +4,8 @@ import { TrimPipe } from './trim.pipe';
 describe('TrimPipe', () => {
   it('trims spaces', () => {
     // Arrange
-    let pipe = new TrimPipe();
-    let subcategory = '   TestCategory  ';
+    const pipe = new TrimPipe();
+    const subcategory = '   TestCategory  ';
 
     // Act
     const newSubcategory = pipe.transform(subcategory);

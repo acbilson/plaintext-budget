@@ -1,5 +1,7 @@
 {
   "folder": {
+    "success": true,
+    "message": "",
     "schema": {
       "link": "/api/schema?name=folder"
     },
@@ -33,6 +35,8 @@
     ]
   },
   "schema": {
+    "success": true,
+    "message": "",
     "files": [
       {
         "fileType": "ledger",
@@ -128,6 +132,8 @@
     ]
   },
   "ledger": {
+    "success": true,
+    "message": "",
     "schema": {
       "link": "/api/schema?name=ledger"
     },
@@ -163,6 +169,8 @@
     ]
   },
   "budget": {
+    "success": true,
+    "message": "",
     "schema": {
       "link": "/api/schema?name=budget"
     },
@@ -194,9 +202,7 @@
     ]
   },
   "log": {
-    "timestamp": "1571683805450",
-    "level": 0,
-    "context": "ledger-table",
-    "message": "read 25 ledgers from saving starting at index 0"
+    "success": true,
+    "message": ""
   }
 }

@@ -4,8 +4,8 @@ import { DebitPipe } from './debit.pipe';
 describe('DebitPipe', () => {
   it('debits a string amount', () => {
     // Arrange
-    let pipe = new DebitPipe();
-    let amount = '80.12';
+    const pipe = new DebitPipe();
+    const amount = '80.12';
 
     // Act
     const newAmount = pipe.transform(amount);

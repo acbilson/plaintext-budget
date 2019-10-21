@@ -5,7 +5,7 @@ import { LoggingService } from 'app/services/logging/logging.service';
 
 import { FileSchema } from 'app/interfaces/file-schema';
 import { ReportSchema } from 'app/interfaces/report-schema';
-import { FolderResponse } from 'app/interfaces/folder-response';
+import { FolderResponse } from 'app/interfaces/response/folder-response';
 import { Folder } from 'app/interfaces/folder';
 import { ServiceConfig } from 'app/interfaces/service-config';
 import { ConfigService } from 'app/services/config/config.service';

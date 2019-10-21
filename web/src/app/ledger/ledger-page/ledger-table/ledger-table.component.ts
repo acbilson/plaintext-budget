@@ -53,7 +53,8 @@ export class LedgerTableComponent implements OnInit {
     let schema: FileSchema[];
 
     try {
-      schema = await this.schemaService.readFileSchema();
+      const res = await this.schemaService.read();
+      schema = res.files;
     } catch (error) {
       this.logger.logError(this.context, error);
     }

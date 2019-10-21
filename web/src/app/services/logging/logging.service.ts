@@ -4,24 +4,21 @@ import { LogMessage } from 'app/services/logging/log-message';
 import { LoggingLevel } from 'app/services/logging/logging-level';
 import { ServiceConfig } from 'app/interfaces/service-config';
 import { ConfigService } from 'app/services/config/config.service';
+import { BaseResponse } from 'app/interfaces/response/base-response';
+import { reject } from 'q';
 
 @Injectable()
 export class LoggingService {
-  httpOptions: object;
   config: ServiceConfig;
   level: LoggingLevel;
+  context: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.http = http;
     this.configService = configService;
     this.config = this.configService.getConfig();
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
-    this.level = LoggingLevel.Info;
+    this.context = 'log-service';
+    this.level = this.config.loggingLevel;
   }
 
   private getLevelName(level: LoggingLevel): string {
@@ -63,18 +60,23 @@ export class LoggingService {
     const levelName = this.getLevelName(level);
     console.log(`${levelName}-${context}: ${message}`);
 
-    try {
-      console.log('base url is: ' + this.config.apiUrl.href);
-      const url = new URL('api/log', this.config.apiUrl.href);
-      const response = await this.http
-        .post(url.href, logMessage, this.httpOptions)
-        .toPromise();
-    } catch (error) {
-      console.log(
-        `logger errored in context: ${context} with message: ${message}`
+    const url = new URL('api/log', this.config.apiUrl.href);
+    const response = await this.http
+      .post<BaseResponse>(url.href, logMessage, this.config.httpOptions)
+      .toPromise()
+      .then(
+        res => {
+          if (!res.success) {
+            console.log(this.context, res.message);
+            reject(res.message);
+          }
+          return res;
+        },
+        error => {
+          console.log(this.context, error);
+          return error;
+        }
       );
-      console.log(error);
-    }
   }
 
   async logInfo(context: string, message: string) {
