@@ -61,6 +61,7 @@ export class LoggingService {
     console.log(`${levelName}-${context}: ${message}`);
 
     const url = new URL('api/log', this.config.apiUrl.href);
+
     const response = await this.http
       .post<BaseResponse>(url.href, logMessage, this.config.httpOptions)
       .toPromise()

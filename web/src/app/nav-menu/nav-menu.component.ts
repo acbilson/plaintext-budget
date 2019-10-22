@@ -53,7 +53,8 @@ export class NavMenuComponent implements OnInit {
   async getFileFolders(): Promise<Folder[]> {
     let fileFolders: Folder[];
     try {
-      fileFolders = await this.folderService.read();
+      const response = await this.folderService.read();
+      fileFolders = response.folders.filter(fol => fol.fileType === 'ledger');
     } catch (error) {
       this.logger.logError(this.context, error);
     }

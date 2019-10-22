@@ -9,42 +9,23 @@ import { FolderResponse } from 'app/interfaces/response/folder-response';
 import { Folder } from 'app/interfaces/folder';
 import { ServiceConfig } from 'app/interfaces/service-config';
 import { ConfigService } from 'app/services/config/config.service';
+import { ApiService } from '../api/api-service';
 
 @Injectable()
-export class FolderService {
-  httpOptions: object;
-  config: ServiceConfig;
-  public fileSchema: FileSchema[];
-  public reportSchema: ReportSchema[];
-  private context: string;
+export class FolderService extends ApiService {
+  protected transform: TransformService;
 
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService,
-    private transform: TransformService,
-    private logger: LoggingService
+    protected http: HttpClient,
+    protected configService: ConfigService,
+    protected loggingService: LoggingService
   ) {
-    this.http = http;
-    this.transform = transform;
-    this.logger = logger;
-    this.context = 'file-service';
-    this.configService = configService;
-    this.config = this.configService.getConfig();
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
+    super(http, configService, loggingService);
+    this.setLoggingContext('file-service');
   }
 
-  read(): Promise<Folder[]> {
-    const url = new URL('api/folder', this.config.apiUrl.href);
-    return this.http
-      .get<FolderResponse>(url.href)
-      .toPromise()
-      .then((response: FolderResponse) => {
-        return response.folders;
-      });
+  read(): Promise<FolderResponse> {
+    const response = this.baseRead<FolderResponse>('api/folder');
+    return response;
   }
 }

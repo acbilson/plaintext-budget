@@ -13,42 +13,21 @@ import { Folder } from 'app/interfaces/folder';
 import { Observable } from 'rxjs/Observable';
 import { resolve } from 'url';
 import { reject } from 'q';
+import { ApiService } from '../api/api-service';
 
 @Injectable()
-export class SchemaService {
-  private config: ServiceConfig;
-  private context: string;
-
+export class SchemaService extends ApiService {
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService,
-    private logger: LoggingService
+    protected http: HttpClient,
+    protected configService: ConfigService,
+    protected loggingService: LoggingService
   ) {
-    this.http = http;
-    this.logger = logger;
-    this.context = 'schema-service';
-    this.configService = configService;
-    this.config = this.configService.getConfig();
+    super(http, configService, loggingService);
+    this.setLoggingContext('schema-service');
   }
 
   async read(): Promise<SchemaResponse> {
-    const url = new URL('api/schema', this.config.apiUrl.href);
-    const response = await this.http
-      .get<SchemaResponse>(url.href)
-      .toPromise()
-      .then(
-        res => {
-          if (!res.success) {
-            this.logger.logDebug(this.context, res.message);
-            reject(res.message);
-          }
-          return res;
-        },
-        error => {
-          this.logger.logError(this.context, error);
-          return error;
-        }
-      );
+    const response = await this.baseRead<SchemaResponse>('api/schema');
     return response;
   }
 }

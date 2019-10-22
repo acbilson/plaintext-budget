@@ -8,27 +8,26 @@ import { ServiceConfig } from 'app/interfaces/service-config';
 import { ConfigService } from 'app/services/config/config.service';
 import { Row } from 'app/interfaces/row';
 import { LedgerEntry } from 'app/interfaces/ledger-entry';
+import { LoggingService } from '../logging/logging.service';
 
 @Injectable()
 export class LedgerService {
   httpOptions: object;
   config: ServiceConfig;
+  context: string;
 
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
-    private transform: TransformService
+    private transform: TransformService,
+    private logger: LoggingService
   ) {
     this.http = http;
     this.transform = transform;
     this.configService = configService;
     this.config = this.configService.getConfig();
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      })
-    };
+    this.logger = logger;
+    this.context = 'ledger-service';
   }
 
   updateLedger(ledger: LedgerEntry): Promise<Row> {
@@ -47,27 +46,34 @@ export class LedgerService {
     return this.http
       .get<LedgerResponse>(url.href)
       .toPromise()
-      .then((ledgerResponse: LedgerResponse) => {
-        const schemaUrl = new URL(
-          ledgerResponse.schema.link,
-          this.config.apiUrl.href
-        );
-        return this.http
-          .get<SchemaResponse>(schemaUrl.href)
-          .pipe(
-            map((schemaResponse: SchemaResponse) => {
-              console.log('Schema response is:');
-              console.log(schemaResponse);
-              const ledgerSchema = schemaResponse.files.find(
-                sch => sch.fileType === 'ledger'
-              );
-              return this.transform.rowsToLedgerEntries(
-                ledgerResponse.rows,
-                ledgerSchema.columns
-              );
-            })
-          )
-          .toPromise();
-      });
+      .then(
+        res => {
+          const schemaUrl = new URL(res.schema.link, this.config.apiUrl.href);
+          return this.http
+            .get<SchemaResponse>(schemaUrl.href)
+            .pipe(
+              map(
+                schemaRes => {
+                  const ledgerSchema = schemaRes.files.find(
+                    sch => sch.fileType === 'ledger'
+                  );
+                  return this.transform.rowsToLedgerEntries(
+                    res.rows,
+                    ledgerSchema.columns
+                  );
+                },
+                schemaError => {
+                  this.logger.logError(this.context, schemaError);
+                  return schemaError;
+                }
+              )
+            )
+            .toPromise();
+        },
+        error => {
+          this.logger.logError(this.context, error);
+          return error;
+        }
+      );
   }
 }

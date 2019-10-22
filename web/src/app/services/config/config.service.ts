@@ -12,12 +12,12 @@ export class ConfigService {
     this.config = {
       apiUrl: new URL('http://localhost:5000'),
       httpOptions: {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      })
-    },
-    loggingLevel: LoggingLevel.Info
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        })
+      },
+      loggingLevel: LoggingLevel.Info
     };
   }
 
