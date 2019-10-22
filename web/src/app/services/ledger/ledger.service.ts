@@ -9,71 +9,66 @@ import { ConfigService } from 'app/services/config/config.service';
 import { Row } from 'app/interfaces/row';
 import { LedgerEntry } from 'app/interfaces/ledger-entry';
 import { LoggingService } from '../logging/logging.service';
+import { ApiService } from '../api/api-service';
+import { BaseResponse } from 'app/interfaces/response/base-response';
 
 @Injectable()
-export class LedgerService {
-  httpOptions: object;
-  config: ServiceConfig;
-  context: string;
-
+export class LedgerService extends ApiService {
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService,
-    private transform: TransformService,
-    private logger: LoggingService
+    protected http: HttpClient,
+    protected configService: ConfigService,
+    protected transform: TransformService,
+    protected loggingService: LoggingService
   ) {
-    this.http = http;
+    super(http, configService, loggingService);
     this.transform = transform;
-    this.configService = configService;
-    this.config = this.configService.getConfig();
-    this.logger = logger;
     this.context = 'ledger-service';
   }
 
-  updateLedger(ledger: LedgerEntry): Promise<Row> {
-    const url = new URL('api/Ledger/Update', this.config.apiUrl.href);
+  async update(ledger: LedgerEntry): Promise<BaseResponse> {
     const row = this.transform.ledgerToRow(ledger);
-    console.log(row);
-    return this.http.put<Row>(url.href, row, this.httpOptions).toPromise();
+    const response = await this.baseUpdate('api/ledger', row);
+    return response;
   }
 
-  read(fileName: string, id: number, count: number): Promise<LedgerEntry[]> {
-    const url = new URL(
-      `api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`,
-      this.config.apiUrl.href
+  async read(
+    fileName: string,
+    id: number,
+    count: number
+  ): Promise<LedgerEntry[]> {
+    const response = this.baseRead<LedgerResponse>(
+      `api/ledger?_fileName=${fileName}&_start=${id}&_limit=${count}`
     );
 
-    return this.http
-      .get<LedgerResponse>(url.href)
-      .toPromise()
-      .then(
-        res => {
-          const schemaUrl = new URL(res.schema.link, this.config.apiUrl.href);
-          return this.http
-            .get<SchemaResponse>(schemaUrl.href)
-            .pipe(
-              map(
-                schemaRes => {
-                  const ledgerSchema = schemaRes.files.find(
-                    sch => sch.fileType === 'ledger'
-                  );
-                  return this.transform.rowsToLedgerEntries(
-                    res.rows,
-                    ledgerSchema.columns
-                  );
-                },
-                schemaError => {
-                  this.logger.logError(this.context, schemaError);
-                  return schemaError;
-                }
-              )
+    const finalResponse = await response.then(
+      res => {
+        const schemaUrl = new URL(res.schema.link, this.config.apiUrl.href);
+        return this.http
+          .get<SchemaResponse>(schemaUrl.href)
+          .pipe(
+            map(
+              schemaRes => {
+                const ledgerSchema = schemaRes.files.find(
+                  sch => sch.fileType === 'ledger'
+                );
+                return this.transform.rowsToLedgerEntries(
+                  res.rows,
+                  ledgerSchema.columns
+                );
+              },
+              schemaError => {
+                this.logger.logError(this.context, schemaError);
+                return schemaError;
+              }
             )
-            .toPromise();
-        },
-        error => {
-          this.logger.logError(this.context, error);
-          return error;
-        }
-      );
+          )
+          .toPromise();
+      },
+      error => {
+        this.logger.logError(this.context, error);
+        return error;
+      }
+    );
+    return finalResponse;
   }
 }

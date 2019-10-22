@@ -4,24 +4,18 @@ import { TransformService } from 'app/services/transform/transform.service';
 import { ServiceConfig } from 'app/interfaces/service-config';
 import { ConfigService } from 'app/services/config/config.service';
 import { LoggingService } from '../logging/logging.service';
+import { ApiService } from '../api/api-service';
 
 @Injectable()
-export class BudgetService {
-  httpOptions: object;
-  config: ServiceConfig;
-  context: string;
-
+export class BudgetService extends ApiService {
   constructor(
-    private http: HttpClient,
-    private configService: ConfigService,
-    private transform: TransformService,
-    private logger: LoggingService
+    protected http: HttpClient,
+    protected configService: ConfigService,
+    protected loggingService: LoggingService,
+    protected transform: TransformService
   ) {
-    this.http = http;
+    super(http, configService, loggingService);
     this.transform = transform;
-    this.configService = configService;
-    this.config = this.configService.getConfig();
     this.context = 'budget-service';
-    this.logger = logger;
   }
 }

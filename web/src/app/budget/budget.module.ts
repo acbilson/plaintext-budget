@@ -4,6 +4,8 @@ import { RouterModule, Route } from '@angular/router';
 import { BudgetPageComponent } from 'app/budget/budget-page/budget-page.component';
 import { BudgetFormComponent } from 'app/budget/budget-page/budget-form/budget-form.component';
 
+import { BudgetService } from 'app/services/budget/budget.service';
+
 const routePaths: Route[] = [
   { path: 'budget/:name', component: BudgetPageComponent },
   { path: 'budget', component: BudgetPageComponent }
@@ -16,6 +18,6 @@ const routePaths: Route[] = [
     BudgetPageComponent
   ],
   imports: [CommonModule, RouterModule.forChild(routePaths)],
-  providers: []
+  providers: [BudgetService]
 })
 export class BudgetModule {}

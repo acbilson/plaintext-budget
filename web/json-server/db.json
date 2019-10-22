@@ -202,7 +202,9 @@
     ]
   },
   "log": {
-    "success": true,
-    "message": ""
+    "timestamp": "1571777962894",
+    "level": 0,
+    "context": "ledger-table",
+    "message": "read 25 ledgers from null starting at index 0"
   }
 }

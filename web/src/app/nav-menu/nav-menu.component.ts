@@ -12,18 +12,9 @@ import { Folder } from 'app/interfaces/folder';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent implements OnInit {
-  isExpanded = false;
-  public fileFolders: Folder[];
-
-  // ledgers
-  public defaultLedgerName: string;
-  public ledgerLinks: NavLink[];
-
-  // budget
-  public defaultBudgetName: string;
-
-  // logging
+  public folders: Folder[];
   private context: string;
+  public isExpanded = false;
 
   constructor(
     private schemaService: SchemaService,
@@ -33,73 +24,34 @@ export class NavMenuComponent implements OnInit {
     this.folderService = folderService;
     this.schemaService = schemaService;
     this.logger = logger;
-    this.fileFolders = null;
-    this.ledgerLinks = [];
-    this.defaultBudgetName = 'budget';
-
+    this.folders = [];
     this.context = 'nav-menu';
   }
 
   ngOnInit() {
-    this.getFileFolders()
-      .then(fileFolders => {
-        this.getDefaultLedgerName(fileFolders);
-        this.getDefaultBudgetName(fileFolders);
-        this.generateNavLinks(fileFolders);
-      })
+    this.getFolders()
+      .then(
+        folders => {
+          this.folders = folders;
+        },
+        error => {
+          this.logger.logError(this.context, error);
+          return error;
+        }
+      )
       .catch(error => this.logger.logError(this.context, error));
   }
 
-  async getFileFolders(): Promise<Folder[]> {
-    let fileFolders: Folder[];
+  async getFolders(): Promise<Folder[]> {
+    let folders: Folder[];
     try {
       const response = await this.folderService.read();
-      fileFolders = response.folders.filter(fol => fol.fileType === 'ledger');
+      folders = response.folders;
     } catch (error) {
       this.logger.logError(this.context, error);
     }
 
-    return fileFolders;
-  }
-
-  getDefaultBudgetName(fileFolders: Folder[]): void {
-    // this.defaultBudgetName = fileFolders.budgetFolder.files.find(
-    //   file => file.fileName === fileFolders.budgetFolder.defaultFileName + '.txt').shortName;
-    this.defaultBudgetName = '19-01-01:31';
-    this.logger.logInfo(
-      this.context,
-      `set default budget to ${this.defaultBudgetName}`
-    );
-  }
-
-  getDefaultLedgerName(fileFolders: Folder[]): void {
-    this.defaultLedgerName =
-      fileFolders.find(fold => fold.fileType === 'ledger') + '.txt';
-    this.logger.logInfo(
-      this.context,
-      `set default ledger to ${this.defaultLedgerName}`
-    );
-  }
-
-  generateNavLinks(folders: Folder[]): void {
-    const ledgerFolder = folders.find(fold => fold.fileType === 'ledger');
-    this.logger.logInfo(
-      this.context,
-      `creating ${ledgerFolder.files.length} links`
-    );
-
-    ledgerFolder.files.forEach(file => {
-      const navLink: NavLink = {
-        path: '/ledger',
-        name: file.shortName,
-        text: file.shortName
-      };
-      this.ledgerLinks.push(navLink);
-      this.logger.logDebug(
-        this.context,
-        `NavLink={path:${navLink.path},name:${navLink.name},text:${navLink.text}}`
-      );
-    });
+    return folders;
   }
 
   collapse() {

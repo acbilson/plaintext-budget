@@ -7,6 +7,7 @@ import { LoggingService } from 'app/services/logging/logging.service';
 import { SchemaService } from 'app/services/schema/schema.service';
 import { FileSchema } from 'app/interfaces/file-schema';
 import { scheduleMicroTask } from '@angular/core/src/util';
+import { BaseResponse } from 'app/interfaces/response/base-response';
 
 @Component({
   selector: 'app-ledger-table',
@@ -69,15 +70,12 @@ export class LedgerTableComponent implements OnInit {
   async updateLedgerSubcategory(
     index: string,
     subcategory: string
-  ): Promise<Row> {
-    let updatedLedger: Row;
-
+  ): Promise<any> {
     try {
       const ledger = this.getLedgerByIndex(index);
       ledger.subcategory.value = subcategory;
       ledger.locked.value = '1';
-
-      updatedLedger = await this.ledgerService.updateLedger(ledger);
+      const response: BaseResponse = await this.ledgerService.update(ledger);
     } catch (error) {
       this.logger.logError(
         this.context,
@@ -89,18 +87,15 @@ export class LedgerTableComponent implements OnInit {
       this.context,
       `updated ledger ${index} with subcategory ${subcategory}`
     );
-    return updatedLedger;
   }
 
-  async updateLedgerSubject(index: string, subject: string): Promise<Row> {
-    let updatedLedger: Row;
-
+  async updateLedgerSubject(index: string, subject: string): Promise<any> {
     try {
       const ledger = this.getLedgerByIndex(index);
       ledger.subject.value = subject;
       ledger.locked.value = '1';
 
-      updatedLedger = await this.ledgerService.updateLedger(ledger);
+      const response: BaseResponse = await this.ledgerService.update(ledger);
     } catch (error) {
       this.logger.logError(
         this.context,
@@ -112,7 +107,6 @@ export class LedgerTableComponent implements OnInit {
       this.context,
       `updated ledger ${index} with subject ${subject}`
     );
-    return updatedLedger;
   }
 
   @HostListener('document:scroll', ['$event'])

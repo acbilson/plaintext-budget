@@ -12,28 +12,25 @@
         </div>
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
-            <ul class='nav navbar-nav'>
-                <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                    <a [routerLink]='["/"]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-home'></span> Home
-                    </a>
-                </li>
-                <li>
-                    <a [routerLink]='["/ledger", defaultLedgerName]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-list-alt'></span> Ledger
-                    </a>
-                </li>
-                <li *ngFor="let link of ledgerLinks" class="subnav" [routerLinkActive]='["link-active"]'
-                    [routerLinkActiveOptions]='{ exact: true }'>
-                    <a [routerLink]='[link.path, link.name]'>{{ link.text }}</a>
-                </li>
-                <li>
-                    <a [routerLink]='["/budget", defaultBudgetName]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-list-alt'></span> Budget
-                    </a>
-                </li>
+            <ng-template ngFor let-folder [ngForOf]="folders">
+                <ul class='nav navbar-nav'>
 
-            </ul>
+                    <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                        <a [routerLink]='["/" + folder.fileType]' (click)='collapse()'>
+                            <span class='glyphicon glyphicon-list-alt'></span> {{ folder.folderName }}
+                        </a>
+                    </li>
+
+                    <ng-template ngFor let-file [ngForOf]="folder.files">
+                        <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                            <a [routerLink]='["/" + folder.fileType, file.shortName]' (click)='collapse()'>
+                                <span class='glyphicon glyphicon-list'></span> {{ file.shortName }}
+                            </a>
+                        </li>
+                    </ng-template>
+
+                </ul>
+            </ng-template>
         </div>
     </div>
 </div>

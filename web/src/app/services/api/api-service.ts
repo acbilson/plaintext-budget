@@ -51,4 +51,26 @@ export class ApiService {
 
     return response;
   }
+  async baseUpdate(action: string, body: object): Promise<BaseResponse> {
+    const url = new URL(action, this.config.apiUrl.href);
+
+    const response = await this.http
+      .put<BaseResponse>(url.href, body, this.config.httpOptions)
+      .toPromise()
+      .then(
+        res => {
+          if (!res.success) {
+            this.logger.logDebug(this.context, res.message);
+            reject(res.message);
+          }
+          return res;
+        },
+        err => {
+          this.logger.logError(this.context, err);
+          return err;
+        }
+      );
+
+    return response;
+  }
 }
