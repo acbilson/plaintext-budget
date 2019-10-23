@@ -1,3 +1,12 @@
-<p>
-  budget-form works!
-</p>
+<div>
+  <div class="budget-entry" *ngFor="let entry of budgetEntries">
+    <div *ngIf="entry.type==BudgetEntryType.Header">
+      <label class="budget-category">{{ entry.category.value }}</label>
+    </div>
+    <div *ngIf="entry.type==BudgetEntryType.Row">
+      <input [id]="entry.id" class="budget-amount" [value]="entry.amount.value" (change)="onEdit($event)" />
+      <label class="budget-subcategory">{{ entry.subcategory.value }}</label>
+    </div>
+  </div>
+  <button class="budget-button-save" type="submit" (click)="onSave(budgetEntries)">Save</button>
+</div>

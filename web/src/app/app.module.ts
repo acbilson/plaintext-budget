@@ -2,7 +2,6 @@
 import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule, Route } from '@angular/router';
 
@@ -54,7 +53,6 @@ function load(http: HttpClient, config: ConfigService): (() => Promise<boolean>)
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
-    FormsModule,
 
     // custom app modules
     LedgerModule,

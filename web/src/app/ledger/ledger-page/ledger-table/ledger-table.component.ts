@@ -63,16 +63,16 @@ export class LedgerTableComponent implements OnInit {
     return schema;
   }
 
-  private getLedgerByIndex(index: string): LedgerEntry {
-    return this.ledgers.find(ledger => ledger.index === parseInt(index, 10));
+  private getLedgerById(id: string): LedgerEntry {
+    return this.ledgers.find(ledger => ledger.id === parseInt(id, 10));
   }
 
   async updateLedgerSubcategory(
-    index: string,
+    id: string,
     subcategory: string
   ): Promise<any> {
     try {
-      const ledger = this.getLedgerByIndex(index);
+      const ledger = this.getLedgerById(id);
       ledger.subcategory.value = subcategory;
       ledger.locked.value = '1';
       const response: BaseResponse = await this.ledgerService.update(ledger);
@@ -85,13 +85,13 @@ export class LedgerTableComponent implements OnInit {
 
     this.logger.logInfo(
       this.context,
-      `updated ledger ${index} with subcategory ${subcategory}`
+      `updated ledger ${id} with subcategory ${subcategory}`
     );
   }
 
-  async updateLedgerSubject(index: string, subject: string): Promise<any> {
+  async updateLedgerSubject(id: string, subject: string): Promise<any> {
     try {
-      const ledger = this.getLedgerByIndex(index);
+      const ledger = this.getLedgerById(id);
       ledger.subject.value = subject;
       ledger.locked.value = '1';
 
@@ -105,7 +105,7 @@ export class LedgerTableComponent implements OnInit {
 
     this.logger.logInfo(
       this.context,
-      `updated ledger ${index} with subject ${subject}`
+      `updated ledger ${id} with subject ${subject}`
     );
   }
 
@@ -119,13 +119,11 @@ export class LedgerTableComponent implements OnInit {
 
     if (position >= bottom) {
       // index of the last leger entry in the row
-      const lastIndex = this.ledgers[this.ledgers.length - 1].index;
-
-      // adds ledger size plus carriage return to skip returning the last row again
-      const finalIndex = lastIndex + this.ledgerSchema.lineSize + 2;
+      const lastId = this.ledgers[this.ledgers.length - 1].id;
+      const nextId = lastId + 1;
       const ledgerCount = 10;
 
-      this.readLedgers(this.ledgerName, finalIndex, ledgerCount)
+      this.readLedgers(this.ledgerName, nextId, ledgerCount)
         .then(ledgers => {
           this.ledgers = this.ledgers.concat(ledgers);
         })
@@ -140,7 +138,7 @@ export class LedgerTableComponent implements OnInit {
 
   async readLedgers(
     fileName: string,
-    startIndex: number,
+    startId: number,
     count: number
   ): Promise<LedgerEntry[]> {
     this.logger.logInfo(this.context, `reading logs from ledger ${fileName}`);
@@ -148,7 +146,7 @@ export class LedgerTableComponent implements OnInit {
     let ledgers = [];
 
     try {
-      ledgers = await this.ledgerService.read(fileName, startIndex, count);
+      ledgers = await this.ledgerService.read(fileName, startId, count);
     } catch (error) {
       this.logger.logError(
         this.context,
@@ -158,7 +156,7 @@ export class LedgerTableComponent implements OnInit {
 
     this.logger.logInfo(
       this.context,
-      `read ${count} ledgers from ${fileName} starting at index ${startIndex}`
+      `read ${count} ledgers from ${fileName} starting at index ${startId}`
     );
     return ledgers;
   }

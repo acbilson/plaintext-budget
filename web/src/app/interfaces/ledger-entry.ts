@@ -1,7 +1,7 @@
 import { LedgerColumn } from './ledger-column';
 
 export interface LedgerEntry {
-  index: number;
+  id: number;
   date: LedgerColumn;
   type: LedgerColumn;
   amount: LedgerColumn;

@@ -11,13 +11,11 @@ import { reject } from 'q';
 export class LoggingService {
   config: ServiceConfig;
   level: LoggingLevel;
-  context: string;
 
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.http = http;
     this.configService = configService;
     this.config = this.configService.getConfig();
-    this.context = 'log-service';
     this.level = this.config.loggingLevel;
   }
 
@@ -68,13 +66,13 @@ export class LoggingService {
       .then(
         res => {
           if (!res.success) {
-            console.log(this.context, res.message);
+            console.log(context, res.message);
             reject(res.message);
           }
           return res;
         },
         error => {
-          console.log(this.context, error);
+          console.log(context, error);
           return error;
         }
       );

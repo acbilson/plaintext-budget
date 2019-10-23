@@ -4,6 +4,10 @@ import { LedgerColumn } from 'app/interfaces/ledger-column';
 import { ColumnSchema } from 'app/interfaces/column-schema';
 import { Row } from 'app/interfaces/row';
 import { LoggingService } from 'app/services/logging/logging.service';
+import { BudgetColumn } from 'app/interfaces/budget-column';
+import { BudgetEntryType } from 'app/interfaces/budget-entry-type';
+import { BudgetEntry } from 'app/interfaces/budget-entry';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class TransformService {
@@ -29,7 +33,7 @@ export class TransformService {
       ).value;
 
       const ledger: LedgerEntry = {
-        index: parseInt(index, 10),
+        id: parseInt(index, 10),
         date: this.getLedgerColumnByName(row.values, ledgerSchema, 'date'),
         amount: this.getLedgerColumnByName(row.values, ledgerSchema, 'amount'),
         type: this.getLedgerColumnByName(row.values, ledgerSchema, 'type'),
@@ -78,7 +82,7 @@ export class TransformService {
     this.logger.logInfo(this.context, 'transforming ledgers entries to rows');
 
     const row: Row = {
-      id: ledger.index,
+      id: ledger.id,
       link: null,
       values: [
         ledger.date.value,
@@ -91,5 +95,67 @@ export class TransformService {
       ]
     };
     return row;
+  }
+
+  rowsToBudgetEntries(
+    rows: Row[],
+    columnSchemas: ColumnSchema[]
+  ): BudgetEntry[] {
+    if (!rows) {
+      this.logger.logError(this.context, 'No rows were supplied for transform');
+    }
+    if (!columnSchemas || columnSchemas.length === 0) {
+      this.logger.logError(
+        this.context,
+        'No column schemas were supplied for transform'
+      );
+    }
+
+    this.logger.logInfo(this.context, 'transforming rows to budget entries');
+    const budgetEntries: BudgetEntry[] = [];
+
+    rows.forEach(row => {
+      const columns: BudgetColumn[] = this.getColumns(row, columnSchemas);
+
+      const entry: BudgetEntry = {
+        id: row.id,
+        index: columns.find(col => col.name === 'Index'),
+        category: columns.find(col => col.name === 'Category'),
+        subcategory: columns.find(col => col.name === 'Subcategory'),
+        amount: columns.find(col => col.name === 'Amount'),
+        type: this.getEntryType(columns)
+      };
+
+      budgetEntries.push(entry);
+    });
+
+    return budgetEntries;
+  }
+
+  getColumns(row: Row, columnSchemas: ColumnSchema[]): BudgetColumn[] {
+    const columns: BudgetColumn[] = [];
+
+    columnSchemas.forEach(sch => {
+      const column: BudgetColumn = {
+        index: row[sch.index],
+        name: sch.name,
+        editable: sch.editable,
+        offset: sch.offset,
+        size: sch.size,
+        value: row.values[sch.index]
+      };
+
+      columns.push(column);
+    });
+
+    return columns;
+  }
+
+  getEntryType(columns: BudgetColumn[]): BudgetEntryType {
+    if (columns.find(col => col.name === 'Category').value) {
+      return BudgetEntryType.Header;
+    } else {
+      return BudgetEntryType.Row;
+    }
   }
 }

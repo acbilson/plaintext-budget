@@ -28,7 +28,15 @@
         "files": [
           {
             "name": "budget_01-31",
-            "shortName": "01-31"
+            "shortName": "19-01-01:31"
+          },
+          {
+            "name": "budget_01-31",
+            "shortName": "19-02-01:28"
+          },
+          {
+            "name": "budget_01-31",
+            "shortName": "19-03-01:31"
           }
         ]
       }
@@ -107,6 +115,13 @@
         "lineSize": 61,
         "columns": [
           {
+            "index": 0,
+            "name": "Index",
+            "size": 0,
+            "offset": 0,
+            "editable": false
+          },
+          {
             "index": 1,
             "name": "Category",
             "size": 30,
@@ -114,18 +129,18 @@
             "editable": false
           },
           {
-            "index": 1,
-            "name": "Amount",
-            "size": 12,
-            "offset": 0,
-            "editable": true
-          },
-          {
             "index": 2,
             "name": "Subcategory",
             "size": 30,
-            "offset": 12,
+            "offset": 0,
             "editable": false
+          },
+          {
+            "index": 3,
+            "name": "Amount",
+            "size": 12,
+            "offset": 30,
+            "editable": true
           }
         ]
       }
@@ -143,13 +158,13 @@
         "link": "/api/ledger?id=0",
         "values": [
           1,
-          "19-01-01",
-          "D",
-          "80.00",
+          "2019-05-17",
+          "C",
+          "4000.00",
           "",
-          "Test Debit - Title",
-          "Test Debit - Subject",
-          0
+          "Online Transfer",
+          "onlinetransferfrom0000004600333325",
+          1
         ]
       },
       {
@@ -157,12 +172,12 @@
         "link": "/api/ledger?id=1",
         "values": [
           142,
-          "19-01-02",
+          "2019-05-17",
           "C",
-          "20.00",
-          "Income",
-          "Test Credit - Title",
-          "Test Credit - Subject",
+          "5.01",
+          "Coffee",
+          "Intelligentsia",
+          "5059debitcardpurchasetstintelligentsia",
           0
         ]
       }
@@ -179,32 +194,68 @@
         "id": 0,
         "link": "/api/budget?id=0",
         "values": [
-          [
-            1,
-            "Master Column",
-            "",
-            ""
-          ]
+          1,
+          "Charity",
+          "",
+          ""
         ]
       },
       {
         "id": 1,
         "link": "/api/budget?id=1",
         "values": [
-          [
-            63,
-            "",
-            "Income",
-            "20.00"
-          ]
+          61,
+          "",
+          "Neighborhood Campus",
+          "397.00"
+        ]
+      },
+      {
+        "id": 2,
+        "link": "/api/budget?id=2",
+        "values": [
+          122,
+          "",
+          "Rock the World",
+          "20.00"
+        ]
+      },
+      {
+        "id": 3,
+        "link": "/api/budget?id=3",
+        "values": [
+          183,
+          "Income",
+          "",
+          ""
+        ]
+      },
+      {
+        "id": 4,
+        "link": "/api/budget?id=4",
+        "values": [
+          244,
+          "",
+          "SPR Consulting",
+          "3000.00"
+        ]
+      },
+      {
+        "id": 5,
+        "link": "/api/budget?id=5",
+        "values": [
+          305,
+          "",
+          "Optimum Joy",
+          "500.00"
         ]
       }
     ]
   },
   "log": {
-    "timestamp": "1571777962894",
+    "timestamp": "1571863631045",
     "level": 0,
-    "context": "ledger-table",
-    "message": "read 25 ledgers from null starting at index 0"
+    "context": "budget-service",
+    "message": "updating budget"
   }
 }
