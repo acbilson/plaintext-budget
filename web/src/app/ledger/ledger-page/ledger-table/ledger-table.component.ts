@@ -43,11 +43,11 @@ export class LedgerTableComponent implements OnInit {
       schema =>
         (this.ledgerSchema = schema.find(sch => sch.fileType === 'ledger'))
     );
-    this.readLedgers(this.ledgerName, 0, 25).then(
-      ledgers => (this.ledgers = ledgers)
-    );
-    console.log('First ledgers are:');
-    console.log(this.ledgers);
+    this.readLedgers(this.ledgerName, 0, 25).then(ledgers => {
+      this.ledgers = ledgers;
+      console.log('First ledgers are:');
+      console.log(this.ledgers);
+    });
   }
 
   async getFileSchema(): Promise<FileSchema[]> {
@@ -67,10 +67,7 @@ export class LedgerTableComponent implements OnInit {
     return this.ledgers.find(ledger => ledger.id === parseInt(id, 10));
   }
 
-  async updateLedgerSubcategory(
-    id: string,
-    subcategory: string
-  ): Promise<any> {
+  async updateLedgerSubcategory(id: string, subcategory: string): Promise<any> {
     try {
       const ledger = this.getLedgerById(id);
       ledger.subcategory.value = subcategory;

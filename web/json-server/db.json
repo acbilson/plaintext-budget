@@ -253,9 +253,9 @@
     ]
   },
   "log": {
-    "timestamp": "1572026995290",
+    "timestamp": "1572029705713",
     "level": 0,
     "context": "ledger-table",
-    "message": "reading logs from ledger checking"
+    "message": "reading logs from ledger null"
   }
 }
