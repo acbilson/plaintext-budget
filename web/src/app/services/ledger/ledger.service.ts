@@ -42,7 +42,7 @@ export class LedgerService extends ApiService {
 
     const finalResponse = await response.then(
       res => {
-        const schemaUrl = new URL(res.schema.link, this.config.apiUrl.href);
+        const schemaUrl = new URL(res.schema.link, this.config.apiUrl);
         return this.http
           .get<SchemaResponse>(schemaUrl.href)
           .pipe(

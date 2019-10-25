@@ -15,8 +15,8 @@ export class LoggingService {
   constructor(private http: HttpClient, private configService: ConfigService) {
     this.http = http;
     this.configService = configService;
-    this.config = this.configService.getConfig();
-    this.level = this.config.loggingLevel;
+    this.config = null;
+    this.level = LoggingLevel.Info;
   }
 
   private getLevelName(level: LoggingLevel): string {
@@ -45,7 +45,19 @@ export class LoggingService {
     return levelName;
   }
 
+  private async readConfig() {
+    if (!this.config) {
+      console.log('reading config from logging-service');
+      await this.configService.getConfig().then(conf => {
+        this.config = conf;
+        this.level = conf.loggingLevel;
+      });
+    }
+  }
+
   private async log(level: LoggingLevel, context: string, message: string) {
+    await this.readConfig();
+
     const now = new Date().getTime();
 
     const logMessage: LogMessage = {
@@ -58,7 +70,7 @@ export class LoggingService {
     const levelName = this.getLevelName(level);
     console.log(`${levelName}-${context}: ${message}`);
 
-    const url = new URL('api/log', this.config.apiUrl.href);
+    const url = new URL('api/log', this.config.apiUrl);
 
     const response = await this.http
       .post<BaseResponse>(url.href, logMessage, this.config.httpOptions)

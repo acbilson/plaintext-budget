@@ -22,15 +22,25 @@ export class ApiService {
     this.http = http;
     this.configService = configService;
     this.logger = loggingService;
-    this.config = this.configService.getConfig();
   }
 
   setLoggingContext(context: string) {
     this.context = context;
   }
 
+  private async readConfig() {
+    if (!this.config) {
+      console.log('reading config from api-service');
+      await this.configService.getConfig().then(conf => {
+        this.config = conf;
+      });
+    }
+  }
+
   async baseRead<T extends BaseResponse>(action: string): Promise<T> {
-    const url = new URL(action, this.config.apiUrl.href);
+    await this.readConfig();
+
+    const url = new URL(action, this.config.apiUrl);
 
     const response: T = await this.http
       .get<T>(url.href)
@@ -52,7 +62,9 @@ export class ApiService {
     return response;
   }
   async baseUpdate(action: string, body: object): Promise<BaseResponse> {
-    const url = new URL(action, this.config.apiUrl.href);
+    await this.readConfig();
+
+    const url = new URL(action, this.config.apiUrl);
 
     const response = await this.http
       .put<BaseResponse>(url.href, body, this.config.httpOptions)

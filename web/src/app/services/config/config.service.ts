@@ -10,7 +10,7 @@ export class ConfigService {
   constructor(private http: HttpClient) {
     this.http = http;
     this.config = {
-      apiUrl: new URL('http://localhost:5000'),
+      apiUrl: 'http://localhost:3000',
       httpOptions: {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -21,7 +21,17 @@ export class ConfigService {
     };
   }
 
-  getConfig(): ServiceConfig {
-    return this.config;
+  async getConfig(): Promise<ServiceConfig> {
+    const config = await this.http
+      .get<ServiceConfig>('assets/app-config.json')
+      .toPromise();
+
+    if (config) {
+      config.httpOptions = this.config.httpOptions;
+      console.log(config);
+      return config;
+    } else {
+      return this.config;
+    }
   }
 }

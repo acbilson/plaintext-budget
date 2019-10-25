@@ -1,7 +1,7 @@
 import { LoggingLevel } from 'app/services/logging/logging-level';
 
 export interface ServiceConfig {
-  apiUrl: URL;
+  apiUrl: string;
   httpOptions: object;
   loggingLevel: LoggingLevel;
 }

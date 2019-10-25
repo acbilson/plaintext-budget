@@ -32,7 +32,7 @@ export class BudgetService extends ApiService {
 
     const finalResponse = await response.then(
       res => {
-        const schemaUrl = new URL(res.schema.link, this.config.apiUrl.href);
+        const schemaUrl = new URL(res.schema.link, this.config.apiUrl);
         this.logger.logInfo(
           this.context,
           `retrieving schema at ${schemaUrl.href}`
