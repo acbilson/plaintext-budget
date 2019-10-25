@@ -9,6 +9,7 @@ services:
       - "49153:49153"
     volumes: 
       - ./web:/srv
+    restart: always
     command: ["npm", "run", "start"]
 
   server:
@@ -17,6 +18,7 @@ services:
       target: dev
     volumes: 
       - ./service:/srv
+    restart: always
     command: ["dotnet", "watch", "run"]
 
   json-server:
@@ -25,5 +27,6 @@ services:
       target: dev
     volumes: 
       - ./web/json-server:/srv
+    restart: always
     command: ["json-server", "db.json"]
 

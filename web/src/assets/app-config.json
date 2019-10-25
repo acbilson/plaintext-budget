@@ -1,4 +1,4 @@
 {
-    "apiUrl": "http://localhost:5000",
+    "apiUrl": "http://52.14.0.4:5000",
     "loggingLevel": 1
 }

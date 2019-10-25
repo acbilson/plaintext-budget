@@ -2,7 +2,7 @@
 FROM node:12.11.1-alpine AS dev
 RUN npm install -g json-server
 WORKDIR /srv
-EXPOSE 3000
+EXPOSE 5000
 
 # production
 FROM dev AS prod

@@ -23,4 +23,4 @@ services:
       context: ./web/json-server
       target: prod
     ports:
-      - "5000:3000"
+      - "5000:5000"

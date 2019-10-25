@@ -253,9 +253,9 @@
     ]
   },
   "log": {
-    "timestamp": "1572019353536",
+    "timestamp": "1572019725891",
     "level": 0,
-    "context": "ledger-table",
-    "message": "reading logs from ledger null"
+    "context": "budget-form",
+    "message": "reading from budget 19-01-01:31"
   }
 }
