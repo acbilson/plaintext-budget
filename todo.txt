@@ -1,4 +1,4 @@
-(B) finish service api refactor +admin
+(B) get asset load of app config working so I can host on S3 and easily edit api hostname +deploy
 (C) display budget from page +budget
 (D) break file access into separate project/server so data access is abstracted +docker +folderaccess note: not sure this is useful
 (D) host abstracted data access in Docker container +docker 

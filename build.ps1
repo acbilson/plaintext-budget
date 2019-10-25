@@ -1,7 +1,7 @@
 param(
 [Parameter(Mandatory=$true,Position=0)]
   [ValidateNotNullOrEmpty()]
-  [ValidateSet("build", "start", "stop")]
+  [ValidateSet("build", "start", "stop", "restart")]
   [String]$BuildAction,
 
   [Parameter(Mandatory=$true,Position=1)]
@@ -10,8 +10,10 @@ param(
   [String]$BuildType,
 
   
-  [Parameter(Mandatory=$false,Position=2)]
-  [String]$Target=""
+  [Parameter(Mandatory=$true,Position=2)]
+  [ValidateNotNullOrEmpty()]
+  [ValidateSet("web", "server", "json-server")]
+  [String]$Target
 )
 
 switch ($BuildAction) {
@@ -66,4 +68,27 @@ switch ($BuildAction) {
 
     docker-compose down
   } # stop
+
+  "restart" {
+
+    switch ($BuildType) {
+
+      "prod" {
+
+        docker-compose restart $Target
+      }
+
+      "dev" {
+
+        docker-compose `
+        -f docker-compose.yml `
+        -f docker-compose.dev.yml `
+        restart $Target
+      }
+
+      "test" {
+
+      }
+    }
+  } # restart
 }
