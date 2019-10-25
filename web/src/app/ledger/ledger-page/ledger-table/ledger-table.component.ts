@@ -21,6 +21,7 @@ export class LedgerTableComponent implements OnInit {
 
   // logging
   private context: string;
+  private firstRun = true;
 
   constructor(
     private ledgerService: LedgerService,
@@ -45,8 +46,7 @@ export class LedgerTableComponent implements OnInit {
     );
     this.readLedgers(this.ledgerName, 0, 25).then(ledgers => {
       this.ledgers = ledgers;
-      console.log('First ledgers are:');
-      console.log(this.ledgers);
+      this.logFirstRandomEntry(this.ledgers);
     });
   }
 
@@ -156,5 +156,13 @@ export class LedgerTableComponent implements OnInit {
       `read ${count} ledgers from ${fileName} starting at index ${startId}`
     );
     return ledgers;
+  }
+
+  private logFirstRandomEntry(entries: object[]) {
+    if (this.firstRun) {
+      const indexOfEntryToLog = Math.floor(Math.random() * entries.length);
+      const objectToLog = JSON.stringify(entries[indexOfEntryToLog], null, 1);
+      this.logger.logDebug(this.context, objectToLog);
+    }
   }
 }

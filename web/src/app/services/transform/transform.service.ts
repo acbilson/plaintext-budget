@@ -7,7 +7,6 @@ import { LoggingService } from 'app/services/logging/logging.service';
 import { BudgetColumn } from 'app/interfaces/budget-column';
 import { BudgetEntryType } from 'app/interfaces/budget-entry-type';
 import { BudgetEntry } from 'app/interfaces/budget-entry';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class TransformService {
@@ -22,43 +21,32 @@ export class TransformService {
     rows: Row[],
     ledgerSchema: ColumnSchema[]
   ): LedgerEntry[] {
-    this.logger.logInfo(this.context, 'transforming rows to ledger entries');
+    if (!rows) { this.logger.logError(this.context, 'No rows were supplied for ledger transform'); }
+    if (!ledgerSchema) { this.logger.logError(this.context, 'No ledger schema was supplied for ledger transform'); }
+    this.logger.logInfo( this.context, `transforming ${rows.length} rows to ledger entries`);
     const ledgers: LedgerEntry[] = [];
 
     rows.forEach(row => {
-      const index = this.getLedgerColumnByName(
-        row.values,
-        ledgerSchema,
-        'index'
-      ).value;
+      const index = this.getLedgerColumnByName(row.values, ledgerSchema, 'index').value;
 
       const ledger: LedgerEntry = {
         id: parseInt(index, 10),
         date: this.getLedgerColumnByName(row.values, ledgerSchema, 'date'),
         amount: this.getLedgerColumnByName(row.values, ledgerSchema, 'amount'),
         type: this.getLedgerColumnByName(row.values, ledgerSchema, 'type'),
-        subcategory: this.getLedgerColumnByName(
-          row.values,
-          ledgerSchema,
-          'subcategory'
-        ),
+        subcategory: this.getLedgerColumnByName(row.values, ledgerSchema, 'subcategory'),
         title: this.getLedgerColumnByName(row.values, ledgerSchema, 'title'),
-        subject: this.getLedgerColumnByName(
-          row.values,
-          ledgerSchema,
-          'subject'
-        ),
+        subject: this.getLedgerColumnByName(row.values, ledgerSchema, 'subject'),
         locked: this.getLedgerColumnByName(row.values, ledgerSchema, 'locked')
       };
 
       ledgers.push(ledger);
     });
 
-    // this.logger.logDebug(this.context, JSON.stringify(ledgers[0]));
     return ledgers;
   }
 
-  getLedgerColumnByName(
+  private getLedgerColumnByName(
     values: Array<string>,
     ledgerSchema: ColumnSchema[],
     name: string
@@ -101,17 +89,13 @@ export class TransformService {
     rows: Row[],
     columnSchemas: ColumnSchema[]
   ): BudgetEntry[] {
-    if (!rows) {
-      this.logger.logError(this.context, 'No rows were supplied for transform');
-    }
+    if (!rows) { this.logger.logError(this.context, 'No rows were supplied for transform'); }
     if (!columnSchemas || columnSchemas.length === 0) {
-      this.logger.logError(
-        this.context,
-        'No column schemas were supplied for transform'
+      this.logger.logError( this.context, 'No column schemas were supplied for transform'
       );
     }
 
-    this.logger.logInfo(this.context, 'transforming rows to budget entries');
+    this.logger.logInfo(this.context, `transforming ${rows.length} rows to budget entries`);
     const budgetEntries: BudgetEntry[] = [];
 
     rows.forEach(row => {
@@ -132,7 +116,7 @@ export class TransformService {
     return budgetEntries;
   }
 
-  getColumns(row: Row, columnSchemas: ColumnSchema[]): BudgetColumn[] {
+  private getColumns(row: Row, columnSchemas: ColumnSchema[]): BudgetColumn[] {
     const columns: BudgetColumn[] = [];
 
     columnSchemas.forEach(sch => {
@@ -151,7 +135,7 @@ export class TransformService {
     return columns;
   }
 
-  getEntryType(columns: BudgetColumn[]): BudgetEntryType {
+  private getEntryType(columns: BudgetColumn[]): BudgetEntryType {
     if (columns.find(col => col.name === 'Category').value) {
       return BudgetEntryType.Header;
     } else {
