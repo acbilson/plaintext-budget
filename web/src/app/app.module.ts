@@ -19,6 +19,7 @@ import { LoggingService } from 'app/services/logging/logging.service';
 import { SchemaService } from 'app/services/schema/schema.service';
 import { FolderService } from 'app/services/folder/folder.service';
 import { ConfigService } from 'app/services/config/config.service';
+import { ImportModule } from './import/import.module';
 
 // master routes
 const routePaths: Route[] = [
@@ -42,6 +43,7 @@ const routePaths: Route[] = [
     // custom app modules
     LedgerModule,
     BudgetModule,
+    ImportModule,
 
     // always set last
     RouterModule.forRoot(routePaths)

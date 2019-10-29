@@ -28,7 +28,7 @@ export class ApiService {
     this.context = context;
   }
 
-  private async readConfig() {
+  async readConfig() {
     if (!this.config) {
       console.log('reading config from api-service');
       await this.configService.getConfig().then(conf => {

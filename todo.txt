@@ -1,4 +1,5 @@
-(B) simplify file access into a single list instead of separate objects +folderaccess
+(B) implement ledger file upload +import
+(C) simplify file access into a single list instead of separate objects +folderaccess
 (D) break file access into separate project/server so data access is abstracted +docker +folderaccess note: not sure this is useful
 (D) host abstracted data access in Docker container +docker 
-add circuit breaker pattern https://itnext.io/understand-circuitbreaker-design-pattern-with-simple-practical-example-92a752615b42
+(C) add circuit breaker pattern https://itnext.io/understand-circuitbreaker-design-pattern-with-simple-practical-example-92a752615b42

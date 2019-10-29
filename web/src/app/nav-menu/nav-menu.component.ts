@@ -13,6 +13,14 @@ import { Folder } from 'app/interfaces/folder';
 })
 export class NavMenuComponent implements OnInit {
   public folders: Folder[];
+  private defaultFolders: Folder[] = [
+    {
+      defaultFileName: '',
+      fileType: 'import',
+      files: [],
+      folderName: 'Import'
+    }
+  ];
   private context: string;
   public isExpanded = false;
 
@@ -24,7 +32,7 @@ export class NavMenuComponent implements OnInit {
     this.folderService = folderService;
     this.schemaService = schemaService;
     this.logger = logger;
-    this.folders = [];
+    this.folders = this.defaultFolders;
     this.context = 'nav-menu';
   }
 
@@ -32,7 +40,7 @@ export class NavMenuComponent implements OnInit {
     this.getFolders()
       .then(
         folders => {
-          this.folders = folders;
+          this.folders = this.folders.concat(folders);
         },
         error => {
           this.logger.logError(this.context, error);
