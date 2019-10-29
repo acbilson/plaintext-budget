@@ -37,6 +37,39 @@ export class ApiService {
     }
   }
 
+  async baseHealth(healthUrl: URL): Promise<string> {
+    const response = await this.http
+      .get<BaseResponse>(healthUrl.href)
+      .toPromise()
+      .then(
+        res => {
+          if (!res.success) {
+            this.logger.logDebug(
+              this.context,
+              `${healthUrl.href} failed health check with message: ${res.message}`
+            );
+
+            return res;
+          }
+        },
+        err => {
+          this.logger.logError(
+            this.context,
+            `${healthUrl.href} errored in health check with message: ${err}`
+          );
+          return err;
+        }
+      )
+      .catch(error => {
+        this.logger.logError(
+          this.context,
+          `${healthUrl.href} errored in health check with message: ${error}`
+        );
+      });
+
+    return response.success ? 'Healthy' : 'Unhealthy';
+  }
+
   async baseRead<T extends BaseResponse>(action: string): Promise<T> {
     await this.readConfig();
 

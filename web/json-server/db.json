@@ -162,8 +162,8 @@
           "C",
           "4000.00",
           "",
-          "Online Transfer",
           "onlinetransferfrom0000004600333325",
+          "Online Transfer",
           1
         ]
       },
@@ -173,11 +173,39 @@
         "values": [
           142,
           "2019-05-17",
-          "C",
+          "D",
           "5.01",
           "Coffee",
-          "Intelligentsia",
           "5059debitcardpurchasetstintelligentsia",
+          "Intelligentsia",
+          0
+        ]
+      },
+      {
+        "id": 2,
+        "link": "/api/ledger?id=2",
+        "values": [
+          284,
+          "2019-05-19",
+          "D",
+          "119.00",
+          "Groceries",
+          "5059debitcardpurchasetraderjoes",
+          "Trader Joes",
+          0
+        ]
+      },
+      {
+        "id": 3,
+        "link": "/api/ledger?id=3",
+        "values": [
+          426,
+          "2019-05-21",
+          "D",
+          "49.00",
+          "",
+          "",
+          "5059debitcardpurchasesteakandeggs",
           0
         ]
       }
@@ -253,9 +281,9 @@
     ]
   },
   "log": {
-    "timestamp": "1572033260316",
+    "timestamp": "1572354179541",
     "level": 1,
     "context": "ledger-table",
-    "message": "{\n \"id\": 142,\n \"date\": {\n  \"name\": \"Date\",\n  \"value\": \"2019-05-17\",\n  \"index\": 1,\n  \"offset\": 1,\n  \"size\": 10,\n  \"editable\": false\n },\n \"amount\": {\n  \"name\": \"Amount\",\n  \"value\": \"5.01\",\n  \"index\": 3,\n  \"offset\": 3,\n  \"size\": 12,\n  \"editable\": false\n },\n \"type\": {\n  \"name\": \"Type\",\n  \"value\": \"C\",\n  \"index\": 2,\n  \"offset\": 2,\n  \"size\": 1,\n  \"editable\": false\n },\n \"subcategory\": {\n  \"name\": \"Subcategory\",\n  \"value\": \"Coffee\",\n  \"index\": 4,\n  \"offset\": 4,\n  \"size\": 30,\n  \"editable\": true\n },\n \"title\": {\n  \"name\": \"Title\",\n  \"value\": \"Intelligentsia\",\n  \"index\": 5,\n  \"offset\": 5,\n  \"size\": 30,\n  \"editable\": true\n },\n \"subject\": {\n  \"name\": \"Subject\",\n  \"value\": \"5059debitcardpurchasetstintelligentsia\",\n  \"index\": 6,\n  \"offset\": 6,\n  \"size\": 30,\n  \"editable\": true\n },\n \"locked\": {\n  \"name\": \"Locked\",\n  \"value\": 0,\n  \"index\": 7,\n  \"offset\": 7,\n  \"size\": 1,\n  \"editable\": false\n }\n}"
+    "message": "{\n \"id\": 284,\n \"date\": {\n  \"name\": \"Date\",\n  \"value\": \"2019-05-19\",\n  \"index\": 1,\n  \"offset\": 1,\n  \"size\": 10,\n  \"editable\": false\n },\n \"amount\": {\n  \"name\": \"Amount\",\n  \"value\": \"119.00\",\n  \"index\": 3,\n  \"offset\": 3,\n  \"size\": 12,\n  \"editable\": false\n },\n \"type\": {\n  \"name\": \"Type\",\n  \"value\": \"D\",\n  \"index\": 2,\n  \"offset\": 2,\n  \"size\": 1,\n  \"editable\": false\n },\n \"subcategory\": {\n  \"name\": \"Subcategory\",\n  \"value\": \"Groceries\",\n  \"index\": 4,\n  \"offset\": 4,\n  \"size\": 30,\n  \"editable\": true\n },\n \"title\": {\n  \"name\": \"Title\",\n  \"value\": \"5059debitcardpurchasetraderjoes\",\n  \"index\": 5,\n  \"offset\": 5,\n  \"size\": 30,\n  \"editable\": true\n },\n \"subject\": {\n  \"name\": \"Subject\",\n  \"value\": \"Trader Joes\",\n  \"index\": 6,\n  \"offset\": 6,\n  \"size\": 30,\n  \"editable\": true\n },\n \"locked\": {\n  \"name\": \"Locked\",\n  \"value\": 0,\n  \"index\": 7,\n  \"offset\": 7,\n  \"size\": 1,\n  \"editable\": false\n }\n}"
   }
 }
