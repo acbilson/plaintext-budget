@@ -36,6 +36,8 @@ Then start those containers:
 ```./build.ps1 start dev json-server```
 ```./build.ps1 start dev web```
 
+You can see the json-server at http://localhost:5000 and the web frontend at http://localhost:4200
+
 I've had sporadic success setting up this configuration to recompile my changes dynamically, so it's often necessary to
 restart the server to view my changes.
 

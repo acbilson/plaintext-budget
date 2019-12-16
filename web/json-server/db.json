@@ -281,8 +281,10 @@
     ]
   },
   "log": {
-    "success": true,
-    "message": ""
+    "timestamp": "1576522108891",
+    "level": 1,
+    "context": "ledger-table",
+    "message": "{\n \"id\": 142,\n \"date\": {\n  \"name\": \"Date\",\n  \"value\": \"2019-05-17\",\n  \"index\": 1,\n  \"offset\": 1,\n  \"size\": 10,\n  \"editable\": false\n },\n \"amount\": {\n  \"name\": \"Amount\",\n  \"value\": \"5.01\",\n  \"index\": 3,\n  \"offset\": 3,\n  \"size\": 12,\n  \"editable\": false\n },\n \"type\": {\n  \"name\": \"Type\",\n  \"value\": \"D\",\n  \"index\": 2,\n  \"offset\": 2,\n  \"size\": 1,\n  \"editable\": false\n },\n \"subcategory\": {\n  \"name\": \"Subcategory\",\n  \"value\": \"Coffee\",\n  \"index\": 4,\n  \"offset\": 4,\n  \"size\": 30,\n  \"editable\": true\n },\n \"title\": {\n  \"name\": \"Title\",\n  \"value\": \"5059debitcardpurchasetstintelligentsia\",\n  \"index\": 5,\n  \"offset\": 5,\n  \"size\": 30,\n  \"editable\": true\n },\n \"subject\": {\n  \"name\": \"Subject\",\n  \"value\": \"Intelligentsia\",\n  \"index\": 6,\n  \"offset\": 6,\n  \"size\": 30,\n  \"editable\": true\n },\n \"locked\": {\n  \"name\": \"Locked\",\n  \"value\": 0,\n  \"index\": 7,\n  \"offset\": 7,\n  \"size\": 1,\n  \"editable\": false\n }\n}"
   },
   "import": {}
 }
